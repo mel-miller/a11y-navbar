@@ -5,6 +5,10 @@
 var a11yMenubar = (function () {
   "use strict";
   
+  const options = {
+    "id" : id
+  }
+  
   const keyCode = {
     'TAB':      9,
     'RETURN':   13,
@@ -20,16 +24,34 @@ var a11yMenubar = (function () {
     'DOWN':     40,
   };
   
-  // constructor
-  function allyMenubar(id) {
-    
+  
+  function allyMenubar() {
+    this.init();
   }
   
   function init(id) {
     
   }
   
+  function destroy(id) {
+    
+  }
+  
+  function addAttributes() {
+    
+  }
+  
+  function openSubmenu() {
+    
+  }
+  
+  function closeSubmenu() {
+    
+  }
+  
   return {
-    "init" : init
+    "init" : init,
+    "destroy" : destroy
   };
+  }
 })();
