@@ -2,14 +2,14 @@
  * @file a11yMenubar.js
  */
 
-var a11yMenubar = (function () {
+var a11yMenubar = (function (document) {
   "use strict";
   
-  const options = {
+  var options = {
     "id" : id
   }
   
-  const keyCode = {
+  var keyCode = {
     'TAB':      9,
     'RETURN':   13,
     'ESC':      27,
@@ -24,16 +24,17 @@ var a11yMenubar = (function () {
     'DOWN':     40,
   };
   
-  
-  function allyMenubar() {
-    this.init();
-  }
-  
   function init(id) {
+    var navElem = document.getElementById(id);
+    var menubar = navElem.getElementByTagName('ul');
     
+    // Ideally there should only be one ul in navElem, but may as well loop.
+    for (let i = 0; i < menubar.length; i++) {
+      
+    }
   }
   
-  function destroy(id) {
+  function destroy() {
     
   }
   
@@ -52,6 +53,6 @@ var a11yMenubar = (function () {
   return {
     "init" : init,
     "destroy" : destroy
-  };
   }
-})();
+  
+})(document);
