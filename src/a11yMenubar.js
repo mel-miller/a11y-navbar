@@ -24,13 +24,17 @@ var a11yMenubar = (function (document) {
     'DOWN':     40,
   };
   
-  function init(id) {
+  function init(id, ariaLabel='') {
     var navElem = document.getElementById(id);
     var menubar = navElem.getElementByTagName('ul');
     
     // Ideally there should only be one ul in navElem, but may as well loop.
     for (let i = 0; i < menubar.length; i++) {
+      // Set role.
+      menubar[i].setAttribute('role', 'menubar');
       
+      // Set aria-label.
+      menubar[i].setAttribute('aria-label', ariaLabel);
     }
   }
   
