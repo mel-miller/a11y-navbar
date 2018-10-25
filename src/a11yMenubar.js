@@ -2,31 +2,26 @@
  * @file a11yMenubar.js
  */
 
-var a11yMenubar = (function (document) {
-  "use strict";
+class a11yMenubar {
   
-  var options = {
-    "id" : id
-  }
-  
-  var keyCode = {
-    'TAB':      9,
-    'RETURN':   13,
-    'ESC':      27,
-    'SPACE':    32,
-    'PAGEUP':   33,
-    'PAGEDOWN': 34,
-    'END':      35,
-    'HOME':     36,
-    'LEFT':     37,
-    'UP':       38,
-    'RIGHT':    39,
-    'DOWN':     40,
-  };
-  
-  function init(id, ariaLabel='') {
-    var navElem = document.getElementById(id);
-    var menubar = navElem.getElementByTagName('ul');
+  constructor(id, ariaLabel='') {
+    this._keyCode = {
+      'TAB':      9,
+      'RETURN':   13,
+      'ESC':      27,
+      'SPACE':    32,
+      'PAGEUP':   33,
+      'PAGEDOWN': 34,
+      'END':      35,
+      'HOME':     36,
+      'LEFT':     37,
+      'UP':       38,
+      'RIGHT':    39,
+      'DOWN':     40,
+    };
+    
+    let navElem = document.getElementById(id);
+    let menubar = navElem.getElementByTagName('ul');
     
     // Ideally there should only be one ul in navElem, but may as well loop.
     for (let i = 0; i < menubar.length; i++) {
@@ -38,25 +33,20 @@ var a11yMenubar = (function (document) {
     }
   }
   
-  function destroy() {
+  destroy() {
     
   }
   
-  function addAttributes() {
+  addAttributes() {
     
   }
   
-  function openSubmenu() {
+  openSubmenu() {
     
   }
   
-  function closeSubmenu() {
+  closeSubmenu() {
     
   }
   
-  return {
-    "init" : init,
-    "destroy" : destroy
-  }
-  
-})(document);
+};
