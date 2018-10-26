@@ -44,6 +44,12 @@ class a11yMenubar {
           menu[k].setAttribute('role', 'menu');
         }
       }
+      
+      let liElem = menubar[i].querySelectorAll('li');
+      
+      for (let l = 0; l < liElem.length; l++) {
+        liElem[l].setAttribute('role', 'none');
+      }
     }
   }
   

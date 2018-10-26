@@ -39,12 +39,19 @@ var a11yMenubar = function () {
       for (var j = 0; j < menuitem.length; j++) {
         menuitem[j].setAttribute('role', 'menuitem');
         menuitem[j].setAttribute('tabindex', '-1');
-        var liElem = menuitem[j].parentNode;
-        var menu = liElem.querySelectorAll('a + ul');
+        var _liElem = menuitem[j].parentNode;
+
+        var menu = _liElem.querySelectorAll('a + ul');
 
         for (var k = 0; k < menu.length; k++) {
           menu[k].setAttribute('role', 'menu');
         }
+      }
+
+      var liElem = menubar[i].querySelectorAll('li');
+
+      for (var l = 0; l < liElem.length; l++) {
+        liElem[l].setAttribute('role', 'none');
       }
     }
   }
