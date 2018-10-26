@@ -11,12 +11,6 @@ const presets = [
       },
       "useBuiltIns": "usage",
     },
-  ],
-  [
-    "minify",
-    {
-      "mangle": true
-    }
   ]
 ];
 

@@ -1,1 +1,69 @@
-"use strict";function _classCallCheck(a,b){if(!(a instanceof b))throw new TypeError("Cannot call a class as a function")}function _defineProperties(a,b){for(var c,d=0;d<b.length;d++)c=b[d],c.enumerable=c.enumerable||!1,c.configurable=!0,"value"in c&&(c.writable=!0),Object.defineProperty(a,c.key,c)}function _createClass(a,b,c){return b&&_defineProperties(a.prototype,b),c&&_defineProperties(a,c),a}var a11yMenubar=function(){function a(b){var c=1<arguments.length&&void 0!==arguments[1]?arguments[1]:"";_classCallCheck(this,a),this._keyCode={TAB:9,RETURN:13,ESC:27,SPACE:32,PAGEUP:33,PAGEDOWN:34,END:35,HOME:36,LEFT:37,UP:38,RIGHT:39,DOWN:40};for(var d=document.getElementById(b),e=d.getElementByTagName("ul"),f=0;f<e.length;f++)e[f].setAttribute("role","menubar"),e[f].setAttribute("aria-label",c)}return _createClass(a,[{key:"destroy",value:function a(){}},{key:"addAttributes",value:function a(){}},{key:"openSubmenu",value:function a(){}},{key:"closeSubmenu",value:function a(){}}]),a}();
+"use strict";
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var a11yMenubar = function () {
+  function a11yMenubar(id) {
+    var domObj = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document;
+    var ariaLabel = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
+
+    _classCallCheck(this, a11yMenubar);
+
+    this._keyCode = {
+      'TAB': 9,
+      'RETURN': 13,
+      'ESC': 27,
+      'SPACE': 32,
+      'PAGEUP': 33,
+      'PAGEDOWN': 34,
+      'END': 35,
+      'HOME': 36,
+      'LEFT': 37,
+      'UP': 38,
+      'RIGHT': 39,
+      'DOWN': 40
+    };
+    var navElem = domObj.getElementById(id);
+    var menubar = navElem.querySelectorAll('nav > ul');
+    navElem.setAttribute('aria-label', ariaLabel);
+
+    for (var i = 0; i < menubar.length; i++) {
+      menubar[i].setAttribute('role', 'menubar');
+      menubar[i].setAttribute('aria-label', ariaLabel);
+      var menuitem = menubar[i].querySelectorAll('li > a');
+
+      for (var j = 0; j < menuitem.length; j++) {
+        menuitem[j].setAttribute('role', 'menuitem');
+        menuitem[j].setAttribute('tabindex', '-1');
+        var liElem = menuitem[j].parentNode;
+        var menu = liElem.querySelectorAll('a + ul');
+
+        for (var k = 0; k < menu.length; k++) {
+          menu[k].setAttribute('role', 'menu');
+        }
+      }
+    }
+  }
+
+  _createClass(a11yMenubar, [{
+    key: "destroy",
+    value: function destroy() {}
+  }, {
+    key: "addAttributes",
+    value: function addAttributes() {}
+  }, {
+    key: "openSubmenu",
+    value: function openSubmenu() {}
+  }, {
+    key: "closeSubmenu",
+    value: function closeSubmenu() {}
+  }]);
+
+  return a11yMenubar;
+}();
+
+;

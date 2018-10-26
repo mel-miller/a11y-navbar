@@ -1,5 +1,6 @@
 /**
  * @file demo.js
  */
-
-document.on
+window.addEventListener("load", function(event) {
+  var test = new a11yMenubar('main-nav', document, 'Main Navigation');
+});

@@ -4,7 +4,7 @@
 
 class a11yMenubar {
   
-  constructor(id, ariaLabel='') {
+  constructor(id, domObj=document, ariaLabel='') {
     this._keyCode = {
       'TAB':      9,
       'RETURN':   13,
@@ -20,16 +20,30 @@ class a11yMenubar {
       'DOWN':     40,
     };
     
-    let navElem = document.getElementById(id);
-    let menubar = navElem.getElementByTagName('ul');
+    let navElem = domObj.getElementById(id);
+    let menubar = navElem.querySelectorAll('nav > ul');
     
-    // Ideally there should only be one ul in navElem, but may as well loop.
+    navElem.setAttribute('aria-label', ariaLabel);
+    
+    // Ideally there should only be one immediate descendant ul in navElem, but may as well loop.
     for (let i = 0; i < menubar.length; i++) {
-      // Set role.
       menubar[i].setAttribute('role', 'menubar');
-      
-      // Set aria-label.
       menubar[i].setAttribute('aria-label', ariaLabel);
+      
+      let menuitem = menubar[i].querySelectorAll('li > a');
+      
+      for (let j = 0; j < menuitem.length; j++) {
+        menuitem[j].setAttribute('role', 'menuitem');
+        menuitem[j].setAttribute('tabindex', '-1');
+        
+        // Check for submenus.
+        let liElem = menuitem[j].parentNode;
+        let menu = liElem.querySelectorAll('a + ul');
+        
+        for (let k = 0; k < menu.length; k++) {
+          menu[k].setAttribute('role', 'menu');
+        }
+      }
     }
   }
   
