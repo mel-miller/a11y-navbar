@@ -40,6 +40,7 @@ var a11yMenubar = function () {
         var tabIndex = j == 0 ? 0 : -1;
         menuitem[j].setAttribute('role', 'menuitem');
         menuitem[j].setAttribute('tabindex', tabIndex);
+        menuitem[j].addEventListener('keydown', this.handleKeydownMenuitem.bind(this));
         var _liElem = menuitem[j].parentNode;
 
         var menu = _liElem.querySelectorAll('a + ul');
@@ -67,8 +68,10 @@ var a11yMenubar = function () {
     key: "destroy",
     value: function destroy() {}
   }, {
-    key: "addAttributes",
-    value: function addAttributes() {}
+    key: "handleKeydownMenuitem",
+    value: function handleKeydownMenuitem(event) {
+      console.log(this);
+    }
   }, {
     key: "openSubmenu",
     value: function openSubmenu() {}

@@ -40,6 +40,9 @@ class a11yMenubar {
         menuitem[j].setAttribute('role', 'menuitem');
         menuitem[j].setAttribute('tabindex', tabIndex);
         
+        // Testing 'this' binding on handler.
+        menuitem[j].addEventListener('keydown', this.handleKeydownMenuitem.bind(this));
+        
         // Check for submenus.
         let liElem = menuitem[j].parentNode;
         let menu = liElem.querySelectorAll('a + ul');
@@ -68,19 +71,19 @@ class a11yMenubar {
     }
   }
   
-  destroy() {
+  destroy () {
     // Remove all attributes/behaviors, etc. from constructor.
   }
   
-  addAttributes() {
+  handleKeydownMenuitem (event) {
+    console.log(this);
+  };
+  
+  openSubmenu () {
     
   }
   
-  openSubmenu() {
-    
-  }
-  
-  closeSubmenu() {
+  closeSubmenu () {
     
   }
   
