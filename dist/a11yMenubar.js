@@ -37,8 +37,9 @@ var a11yMenubar = function () {
       var menuitem = menubar[i].querySelectorAll('li > a');
 
       for (var j = 0; j < menuitem.length; j++) {
+        var tabIndex = j == 0 ? 0 : -1;
         menuitem[j].setAttribute('role', 'menuitem');
-        menuitem[j].setAttribute('tabindex', '-1');
+        menuitem[j].setAttribute('tabindex', tabIndex);
         var _liElem = menuitem[j].parentNode;
 
         var menu = _liElem.querySelectorAll('a + ul');
@@ -47,6 +48,8 @@ var a11yMenubar = function () {
           var menuLiElem = menu[k].parentNode;
           var aElem = menuLiElem.querySelector('a');
           var aElemText = aElem.textContent;
+          aElem.setAttribute('aria-haspopup', 'true');
+          aElem.setAttribute('aria-expanded', 'false');
           menu[k].setAttribute('role', 'menu');
           menu[k].setAttribute('aria-label', aElemText);
         }
