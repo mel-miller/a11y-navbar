@@ -44,7 +44,11 @@ var a11yMenubar = function () {
         var menu = _liElem.querySelectorAll('a + ul');
 
         for (var k = 0; k < menu.length; k++) {
+          var menuLiElem = menu[k].parentNode;
+          var aElem = menuLiElem.querySelector('a');
+          var aElemText = aElem.textContent;
           menu[k].setAttribute('role', 'menu');
+          menu[k].setAttribute('aria-label', aElemText);
         }
       }
 

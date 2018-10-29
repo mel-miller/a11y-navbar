@@ -41,8 +41,15 @@ class a11yMenubar {
         let menu = liElem.querySelectorAll('a + ul');
         
         for (let k = 0; k < menu.length; k++) {
+          // Get aria-label from anchor sibing.
+          let menuLiElem = menu[k].parentNode;
+          let aElem = menuLiElem.querySelector('a');
+          let aElemText = aElem.textContent;
+          
           menu[k].setAttribute('role', 'menu');
+          menu[k].setAttribute('aria-label', aElemText);
         }
+        
       }
       
       let liElem = menubar[i].querySelectorAll('li');
