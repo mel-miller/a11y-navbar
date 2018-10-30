@@ -5,13 +5,12 @@
 class a11yMenubar {
   
   constructor(id, domObj=document, ariaLabel='') {
+    // Define members.
     this._keyCode = {
       'TAB':      9,
       'RETURN':   13,
       'ESC':      27,
       'SPACE':    32,
-      'PAGEUP':   33,
-      'PAGEDOWN': 34,
       'END':      35,
       'HOME':     36,
       'LEFT':     37,
@@ -41,7 +40,7 @@ class a11yMenubar {
         menuitem[j].setAttribute('tabindex', tabIndex);
         
         // Testing 'this' binding on handler.
-        menuitem[j].addEventListener('keydown', this.handleKeydownMenuitem.bind(this));
+        menuitem[j].addEventListener('keydown', this.handleKeydownMenubar.bind(this));
         
         // Check for submenus.
         let liElem = menuitem[j].parentNode;
@@ -75,9 +74,28 @@ class a11yMenubar {
     // Remove all attributes/behaviors, etc. from constructor.
   }
   
-  handleKeydownMenuitem (event) {
-    console.log(this);
+  handleKeydownMenubar (event) {
+    if (event.defaultPrevented) {
+      return;
+    }
+    
+    console.log(event.key);
+    console.log(event.which);
+    console.log(event.keyCode);
+    
+    let key = event.key || event.keyCode;
+    
+    switch (key) {
+      
+    }
   };
+  
+  handleKeydownSubmenu (event) {
+    if (event.defaultPrevented) {
+      return;
+    }
+    
+  }
   
   openSubmenu () {
     
@@ -85,6 +103,30 @@ class a11yMenubar {
   
   closeSubmenu () {
     
+  }
+  
+  normalizeKey (key) {
+    let normalizedKey = null;
+    
+    switch (key) {
+      case 'Tab':
+      case 9:
+        normalizedKey = this._keyCode.TAB;
+        break;
+      
+      case 'Return':
+      case 13:
+        normalizedKey = this._keyCode.RETURN;
+        break;
+      
+      case 'Escape':
+      case 'Esc':
+      case 13:
+        normalizedKey = this._keyCode.ESC;
+        break;
+    }
+    
+    return normalizedKey;
   }
   
 };

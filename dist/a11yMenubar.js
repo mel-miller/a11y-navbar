@@ -13,20 +13,6 @@ var a11yMenubar = function () {
 
     _classCallCheck(this, a11yMenubar);
 
-    this._keyCode = {
-      'TAB': 9,
-      'RETURN': 13,
-      'ESC': 27,
-      'SPACE': 32,
-      'PAGEUP': 33,
-      'PAGEDOWN': 34,
-      'END': 35,
-      'HOME': 36,
-      'LEFT': 37,
-      'UP': 38,
-      'RIGHT': 39,
-      'DOWN': 40
-    };
     var navElem = domObj.getElementById(id);
     var menubar = navElem.querySelectorAll('nav > ul');
     navElem.setAttribute('aria-label', ariaLabel);
@@ -40,7 +26,7 @@ var a11yMenubar = function () {
         var tabIndex = j == 0 ? 0 : -1;
         menuitem[j].setAttribute('role', 'menuitem');
         menuitem[j].setAttribute('tabindex', tabIndex);
-        menuitem[j].addEventListener('keydown', this.handleKeydownMenuitem.bind(this));
+        menuitem[j].addEventListener('keyup', this.handleKeyupMenubar.bind(this));
         var _liElem = menuitem[j].parentNode;
 
         var menu = _liElem.querySelectorAll('a + ul');
@@ -68,9 +54,18 @@ var a11yMenubar = function () {
     key: "destroy",
     value: function destroy() {}
   }, {
-    key: "handleKeydownMenuitem",
-    value: function handleKeydownMenuitem(event) {
-      console.log(this);
+    key: "handleKeyupMenubar",
+    value: function handleKeyupMenubar(event) {
+      console.log(event.key);
+      console.log(event.which);
+      console.log(event.keyCode);
+
+      switch (event.code) {}
+    }
+  }, {
+    key: "handleKeyupSubmenu",
+    value: function handleKeyupSubmenu(event) {
+      switch (event.code) {}
     }
   }, {
     key: "openSubmenu",
