@@ -8,27 +8,31 @@ class a11yMenubar {
     // Define members.
     this._keyCode = {
       'TAB':      9,
-      'RETURN':   13,
+      'ENTER':    13,
       'ESC':      27,
       'SPACE':    32,
       'END':      35,
       'HOME':     36,
-      'LEFT':     37,
-      'UP':       38,
-      'RIGHT':    39,
-      'DOWN':     40,
+      'ARROW_LEFT':     37,
+      'ARROW_UP':       38,
+      'ARROW_RIGHT':    39,
+      'ARROW_DOWN':     40,
     };
     
+    this._id = id;
+    this._domObj = domObj;
+    this._ariaLabel = ariaLabel;
+    
     // Set up aria roles and attributes.
-    let navElem = domObj.getElementById(id);
+    let navElem = this._domObj.getElementById(this._id);
     let menubar = navElem.querySelectorAll('nav > ul');
     
-    navElem.setAttribute('aria-label', ariaLabel);
+    navElem.setAttribute('aria-label', this._ariaLabel);
     
     // Ideally there should only be one immediate descendant ul in navElem, but may as well loop.
     for (let i = 0; i < menubar.length; i++) {
       menubar[i].setAttribute('role', 'menubar');
-      menubar[i].setAttribute('aria-label', ariaLabel);
+      menubar[i].setAttribute('aria-label', this._ariaLabel);
       
       let menuitem = menubar[i].querySelectorAll('li > a');
       
@@ -83,11 +87,47 @@ class a11yMenubar {
     console.log(event.which);
     console.log(event.keyCode);
     
-    let key = event.key || event.keyCode;
+    let key = this.normalizeKey(event.key || event.keyCode);
     
     switch (key) {
+      case this._keyCode.SPACE:
+      case this._keyCode.ENTER:
+        // Opens submenu and moves focus to first item in the submenu.
+        break;
       
+      case this._keyCode.ARROW_RIGHT:
+        /*
+          Moves focus to the next item in the menubar.
+          If focus is on the last item, moves focus to the first item.
+         */
+        break;
+      
+      case this._keyCode.ARROW_LEFT:
+        /*
+          Moves focus to the previous item in the menubar.
+          If focus is on the first item, moves focus to the last item.
+         */
+        break;
+      
+      case this._keyCode.ARROW_DOWN:
+        // Opens submenu and moves focus to first item in the submenu.
+        break;
+      
+      case this._keyCode.ARROW_UP:
+        // Opens submenu and moves focus to last item in the submenu.
+        break;
+        
+      case this._keyCode.HOME:
+        // Moves focus to first item in the menubar.
+        break;
+      
+      case this._keyCode.END:
+        // Moves focus to last item in the menubar.
+        break;
+      
+      // Consider adding WCAG 2.0 AAA Character handling.
     }
+    
   };
   
   handleKeydownSubmenu (event) {
@@ -108,22 +148,35 @@ class a11yMenubar {
   normalizeKey (key) {
     let normalizedKey = null;
     
-    switch (key) {
-      case 'Tab':
-      case 9:
-        normalizedKey = this._keyCode.TAB;
-        break;
-      
-      case 'Return':
-      case 13:
-        normalizedKey = this._keyCode.RETURN;
-        break;
-      
-      case 'Escape':
-      case 'Esc':
-      case 13:
-        normalizedKey = this._keyCode.ESC;
-        break;
+    if (key == 'Tab' || key == 9) {
+      normalizedKey = this._keyCode.TAB;
+    }
+    else if (key == 'Enter' || key == 13) {
+      normalizedKey = this._keyCode.ENTER;
+    }
+    else if (key == 'Escape' || key == 'Esc' || key == 13) {
+      normalizedKey = this._keyCode.ESC;
+    }
+    else if (key == ' ' || key == 32) {
+      normalizedKey = this._keyCode.SPACE;
+    }
+    else if (key == 'End' || key == 35) {
+      normalizedKey = this._keyCode.END;
+    }
+    else if (key == 'Home' || key == 36) {
+      normalizedKey = this._keyCode.HOME;
+    }
+    else if (key == 'ArrowLeft' || key == 37) {
+      normalizedKey == this._keyCode.ARROW_LEFT;
+    }
+    else if (key == 'ArrowUp' || key == 38) {
+      normalizedKey == this._keyCode.ARROW_UP;
+    }
+    else if (key == 'ArrowRight' || key == 39) {
+      normalizedKey == this._keyCode.ARROW_RIGHT;
+    }
+    else if (key == 'ArrowDown' || key == 40) {
+      normalizedKey = this._keyCode.ARROW_DOWN;
     }
     
     return normalizedKey;

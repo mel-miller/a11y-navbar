@@ -13,20 +13,37 @@ var a11yMenubar = function () {
 
     _classCallCheck(this, a11yMenubar);
 
-    var navElem = domObj.getElementById(id);
+    this._keyCode = {
+      'TAB': 9,
+      'ENTER': 13,
+      'ESC': 27,
+      'SPACE': 32,
+      'END': 35,
+      'HOME': 36,
+      'ARROW_LEFT': 37,
+      'ARROW_UP': 38,
+      'ARROW_RIGHT': 39,
+      'ARROW_DOWN': 40
+    };
+    this._id = id;
+    this._domObj = domObj;
+    this._ariaLabel = ariaLabel;
+
+    var navElem = this._domObj.getElementById(this._id);
+
     var menubar = navElem.querySelectorAll('nav > ul');
-    navElem.setAttribute('aria-label', ariaLabel);
+    navElem.setAttribute('aria-label', this._ariaLabel);
 
     for (var i = 0; i < menubar.length; i++) {
       menubar[i].setAttribute('role', 'menubar');
-      menubar[i].setAttribute('aria-label', ariaLabel);
+      menubar[i].setAttribute('aria-label', this._ariaLabel);
       var menuitem = menubar[i].querySelectorAll('li > a');
 
       for (var j = 0; j < menuitem.length; j++) {
         var tabIndex = j == 0 ? 0 : -1;
         menuitem[j].setAttribute('role', 'menuitem');
         menuitem[j].setAttribute('tabindex', tabIndex);
-        menuitem[j].addEventListener('keyup', this.handleKeyupMenubar.bind(this));
+        menuitem[j].addEventListener('keydown', this.handleKeydownMenubar.bind(this));
         var _liElem = menuitem[j].parentNode;
 
         var menu = _liElem.querySelectorAll('a + ul');
@@ -54,18 +71,47 @@ var a11yMenubar = function () {
     key: "destroy",
     value: function destroy() {}
   }, {
-    key: "handleKeyupMenubar",
-    value: function handleKeyupMenubar(event) {
+    key: "handleKeydownMenubar",
+    value: function handleKeydownMenubar(event) {
+      if (event.defaultPrevented) {
+        return;
+      }
+
       console.log(event.key);
       console.log(event.which);
       console.log(event.keyCode);
+      var key = this.normalizeKey(event.key || event.keyCode);
 
-      switch (event.code) {}
+      switch (key) {
+        case this._keyCode.SPACE:
+        case this._keyCode.ENTER:
+          break;
+
+        case this._keyCode.ARROW_RIGHT:
+          break;
+
+        case this._keyCode.ARROW_LEFT:
+          break;
+
+        case this._keyCode.ARROW_DOWN:
+          break;
+
+        case this._keyCode.ARROW_UP:
+          break;
+
+        case this._keyCode.HOME:
+          break;
+
+        case this._keyCode.END:
+          break;
+      }
     }
   }, {
-    key: "handleKeyupSubmenu",
-    value: function handleKeyupSubmenu(event) {
-      switch (event.code) {}
+    key: "handleKeydownSubmenu",
+    value: function handleKeydownSubmenu(event) {
+      if (event.defaultPrevented) {
+        return;
+      }
     }
   }, {
     key: "openSubmenu",
@@ -73,6 +119,35 @@ var a11yMenubar = function () {
   }, {
     key: "closeSubmenu",
     value: function closeSubmenu() {}
+  }, {
+    key: "normalizeKey",
+    value: function normalizeKey(key) {
+      var normalizedKey = null;
+
+      if (key == 'Tab' || key == 9) {
+        normalizedKey = this._keyCode.TAB;
+      } else if (key == 'Enter' || key == 13) {
+        normalizedKey = this._keyCode.ENTER;
+      } else if (key == 'Escape' || key == 'Esc' || key == 13) {
+        normalizedKey = this._keyCode.ESC;
+      } else if (key == ' ' || key == 32) {
+        normalizedKey = this._keyCode.SPACE;
+      } else if (key == 'End' || key == 35) {
+        normalizedKey = this._keyCode.END;
+      } else if (key == 'Home' || key == 36) {
+        normalizedKey = this._keyCode.HOME;
+      } else if (key == 'ArrowLeft' || key == 37) {
+        normalizedKey == this._keyCode.ARROW_LEFT;
+      } else if (key == 'ArrowUp' || key == 38) {
+        normalizedKey == this._keyCode.ARROW_UP;
+      } else if (key == 'ArrowRight' || key == 39) {
+        normalizedKey == this._keyCode.ARROW_RIGHT;
+      } else if (key == 'ArrowDown' || key == 40) {
+        normalizedKey = this._keyCode.ARROW_DOWN;
+      }
+
+      return normalizedKey;
+    }
   }]);
 
   return a11yMenubar;
