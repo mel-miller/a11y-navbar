@@ -22,12 +22,12 @@ class a11yMenubar {
     this._id = id;
     this._domObj = domObj;
     this._ariaLabel = ariaLabel;
+    this._navElem = this._domObj.getElementById(this._id);
     
-    // Set up aria roles and attributes.
-    let navElem = this._domObj.getElementById(this._id);
-    let menubar = navElem.querySelectorAll('nav > ul');
+    // Set up aria roles and attributes. 
+    let menubar = this._navElem.querySelectorAll('nav > ul');
     
-    navElem.setAttribute('aria-label', this._ariaLabel);
+    this._navElem.setAttribute('aria-label', this._ariaLabel);
     
     // Ideally there should only be one immediate descendant ul in navElem, but may as well loop.
     for (let i = 0; i < menubar.length; i++) {
@@ -87,12 +87,15 @@ class a11yMenubar {
     console.log(event.which);
     console.log(event.keyCode);
     
+    let menuitem = event.target;
     let key = this.normalizeKey(event.key || event.keyCode);
     
     switch (key) {
       case this._keyCode.SPACE:
       case this._keyCode.ENTER:
         // Opens submenu and moves focus to first item in the submenu.
+        console.info(menuitem);
+        this.openSubmenu(menuitem);
         break;
       
       case this._keyCode.ARROW_RIGHT:
@@ -137,12 +140,24 @@ class a11yMenubar {
     
   }
   
-  openSubmenu () {
+  openSubmenu (menuitem) {
+    let liElem = menuitem.parentNode;
+    let menu = liElem.querySelector('a + ul');
     
+    menu.classList.add('a11yMenubar-menu-open');
+    menuitem.setAttribute('aria-expanded', 'true');
+    
+    console.log(menu);
   }
   
-  closeSubmenu () {
+  closeSubmenu (menuitem) {
+    let liElem = menuitem.parentNode;
+    let menu = liElem.querySelector('a + ul');
     
+    menu.classList.remove('a11yMenubar-menu-open');
+    menuitem.setAttribute('aria-expanded', 'false');
+    
+    // TODO: Close everything nested in submenu...
   }
   
   normalizeKey (key) {

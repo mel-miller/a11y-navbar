@@ -28,11 +28,11 @@ var a11yMenubar = function () {
     this._id = id;
     this._domObj = domObj;
     this._ariaLabel = ariaLabel;
+    this._navElem = this._domObj.getElementById(this._id);
 
-    var navElem = this._domObj.getElementById(this._id);
+    var menubar = this._navElem.querySelectorAll('nav > ul');
 
-    var menubar = navElem.querySelectorAll('nav > ul');
-    navElem.setAttribute('aria-label', this._ariaLabel);
+    this._navElem.setAttribute('aria-label', this._ariaLabel);
 
     for (var i = 0; i < menubar.length; i++) {
       menubar[i].setAttribute('role', 'menubar');
@@ -80,11 +80,14 @@ var a11yMenubar = function () {
       console.log(event.key);
       console.log(event.which);
       console.log(event.keyCode);
+      var menuitem = event.target;
       var key = this.normalizeKey(event.key || event.keyCode);
 
       switch (key) {
         case this._keyCode.SPACE:
         case this._keyCode.ENTER:
+          console.info(menuitem);
+          this.openSubmenu(menuitem);
           break;
 
         case this._keyCode.ARROW_RIGHT:
@@ -115,10 +118,21 @@ var a11yMenubar = function () {
     }
   }, {
     key: "openSubmenu",
-    value: function openSubmenu() {}
+    value: function openSubmenu(menuitem) {
+      var liElem = menuitem.parentNode;
+      var menu = liElem.querySelector('a + ul');
+      menu.classList.add('a11yMenubar-menu-open');
+      menuitem.setAttribute('aria-expanded', 'true');
+      console.log(menu);
+    }
   }, {
     key: "closeSubmenu",
-    value: function closeSubmenu() {}
+    value: function closeSubmenu(menuitem) {
+      var liElem = menuitem.parentNode;
+      var menu = liElem.querySelector('a + ul');
+      menu.classList.remove('a11yMenubar-menu-open');
+      menuitem.setAttribute('aria-expanded', 'false');
+    }
   }, {
     key: "normalizeKey",
     value: function normalizeKey(key) {
