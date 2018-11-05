@@ -34,6 +34,8 @@ var a11yMenubar = function () {
 
     this._navElem.setAttribute('aria-label', this._ariaLabel);
 
+    this._navElem.classList.add('a11y-menubar');
+
     for (var i = 0; i < menubar.length; i++) {
       menubar[i].setAttribute('role', 'menubar');
       menubar[i].setAttribute('aria-label', this._ariaLabel);

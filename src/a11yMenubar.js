@@ -28,6 +28,7 @@ class a11yMenubar {
     let menubar = this._navElem.querySelectorAll('nav > ul');
     
     this._navElem.setAttribute('aria-label', this._ariaLabel);
+    this._navElem.classList.add('a11y-menubar');
     
     // Ideally there should only be one immediate descendant ul in navElem, but may as well loop.
     for (let i = 0; i < menubar.length; i++) {
