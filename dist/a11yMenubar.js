@@ -29,6 +29,7 @@ var a11yMenubar = function () {
     this._domObj = domObj;
     this._ariaLabel = ariaLabel;
     this._navElem = this._domObj.getElementById(this._id);
+    this._menubarMenuitems = [];
     this._currentMenuitem = null;
 
     this._navElem.setAttribute('aria-label', this._ariaLabel);
@@ -40,14 +41,12 @@ var a11yMenubar = function () {
     menubar.setAttribute('role', 'menubar');
     menubar.setAttribute('aria-label', this._ariaLabel);
     var menubarMenuitems = menubar.children;
-    console.log(menubarMenuitems);
 
     for (var i = 0; i < menubarMenuitems.length; i++) {
-      console.log(menubarMenuitems[i]);
-
-      if (menubarMenuitems[i].nodeType == 1) {
-        menubarMenuitems[i].firstChild.classList.add('a11y-menubar-menuitem');
-      }
+      var menubarMenuitem = menubarMenuitems[i].firstChild;
+      menubarMenuitem.classList.add('a11y-menubar-menuitem');
+      this._menubarMenuitems[i] = menubarMenuitem;
+      menubarMenuitem.addEventListener('keydown', this.handleKeydownMenubar.bind(this));
     }
 
     var menuitems = menubar.querySelectorAll('li > a');
@@ -55,7 +54,6 @@ var a11yMenubar = function () {
     for (var j = 0; j < menuitems.length; j++) {
       menuitems[j].setAttribute('role', 'menuitem');
       menuitems[j].setAttribute('tabindex', '-1');
-      menuitems[j].addEventListener('keydown', this.handleKeydownMenubar.bind(this));
       var _liElem = menuitems[j].parentNode;
 
       var submenus = _liElem.querySelectorAll('a + ul');
@@ -76,6 +74,8 @@ var a11yMenubar = function () {
     for (var l = 0; l < liElem.length; l++) {
       liElem[l].setAttribute('role', 'none');
     }
+
+    this._menubarMenuitems[0].setAttribute('tabindex', '0');
   }
 
   _createClass(a11yMenubar, [{

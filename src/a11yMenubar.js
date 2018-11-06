@@ -39,11 +39,12 @@ class a11yMenubar {
     let menubarMenuitems = menubar.children;
     
     for (let i = 0; i < menubarMenuitems.length; i++) {
-      menubarMenuitems[i].firstChild.classList.add('a11y-menubar-menuitem');
+      let menubarMenuitem = menubarMenuitems[i].firstChild;
+      menubarMenuitem.classList.add('a11y-menubar-menuitem');
       // collect these as an Array or something and store in the class.
-      this._menubarMenuitems[i] = menubarMenuitems[i];
+      this._menubarMenuitems[i] = menubarMenuitem;
       // Add keydown handler (bound to a11yMenubar instance).
-      menubarMenuitems[i].addEventListener('keydown', this.handleKeydownMenubar.bind(this));
+      menubarMenuitem.addEventListener('keydown', this.handleKeydownMenubar.bind(this));
     }
     
     // Attributes for all menuitems.
@@ -80,6 +81,9 @@ class a11yMenubar {
     for (let l = 0; l < liElem.length; l++) {
       liElem[l].setAttribute('role', 'none');
     }
+    
+    // First menubar menuitem should have tabindex 0.
+    this._menubarMenuitems[0].setAttribute('tabindex', '0');
     
   }
   
