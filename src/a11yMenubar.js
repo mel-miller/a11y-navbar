@@ -85,6 +85,9 @@ class a11yMenubar {
     // First menubar menuitem should have tabindex 0.
     this._menubarMenuitems[0].setAttribute('tabindex', '0');
     
+    // First menubar menuitem should be the current menuitem.
+    this._currentMenuitem = this._menubarMenuitems[0];
+    
   }
   
   destroy () {

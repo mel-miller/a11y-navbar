@@ -76,6 +76,8 @@ var a11yMenubar = function () {
     }
 
     this._menubarMenuitems[0].setAttribute('tabindex', '0');
+
+    this._currentMenuitem = this._menubarMenuitems[0];
   }
 
   _createClass(a11yMenubar, [{
