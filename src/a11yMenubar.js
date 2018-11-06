@@ -23,56 +23,64 @@ class a11yMenubar {
     this._domObj = domObj;
     this._ariaLabel = ariaLabel;
     this._navElem = this._domObj.getElementById(this._id);
+    this._menubarMenuitems = [];
+    this._currentMenuitem = null;
     
     // Set up aria roles and attributes. 
-    let menubar = this._navElem.querySelectorAll('nav > ul');
-    
     this._navElem.setAttribute('aria-label', this._ariaLabel);
     this._navElem.classList.add('a11y-menubar');
     
-    // Ideally there should only be one immediate descendant ul in navElem, but may as well loop.
-    for (let i = 0; i < menubar.length; i++) {
-      menubar[i].setAttribute('role', 'menubar');
-      menubar[i].setAttribute('aria-label', this._ariaLabel);
-      
-      let menuitem = menubar[i].querySelectorAll('li > a');
-      
-      for (let j = 0; j < menuitem.length; j++) {
-        // Tab index of first menuitem should be 0.
-        let tabIndex = (j == 0) ? 0 : -1;
-        
-        menuitem[j].setAttribute('role', 'menuitem');
-        menuitem[j].setAttribute('tabindex', tabIndex);
-        
-        // Testing 'this' binding on handler.
-        menuitem[j].addEventListener('keydown', this.handleKeydownMenubar.bind(this));
-        
-        // Check for submenus.
-        let liElem = menuitem[j].parentNode;
-        let menu = liElem.querySelectorAll('a + ul');
-        
-        for (let k = 0; k < menu.length; k++) {
-          // Get aria-label from anchor sibing.
-          let menuLiElem = menu[k].parentNode;
-          let aElem = menuLiElem.querySelector('a');
-          let aElemText = aElem.textContent;
-          
-          aElem.setAttribute('aria-haspopup', 'true');
-          aElem.setAttribute('aria-expanded', 'false');
-          
-          menu[k].setAttribute('role', 'menu');
-          menu[k].setAttribute('aria-label', aElemText);
-        }
-        
-      }
-      
-      // All list item elements should have an aria role of "none".
-      let liElem = menubar[i].querySelectorAll('li');
-      
-      for (let l = 0; l < liElem.length; l++) {
-        liElem[l].setAttribute('role', 'none');
-      }
+    let menubar = this._navElem.querySelector('ul');
+    
+    menubar.setAttribute('role', 'menubar');
+    menubar.setAttribute('aria-label', this._ariaLabel);
+    
+    // For menubar menuitems specifically.
+    let menubarMenuitems = menubar.children;
+    
+    for (let i = 0; i < menubarMenuitems.length; i++) {
+      menubarMenuitems[i].firstChild.classList.add('a11y-menubar-menuitem');
+      // collect these as an Array or something and store in the class.
+      this._menubarMenuitems[i] = menubarMenuitems[i];
+      // Add keydown handler (bound to a11yMenubar instance).
+      menubarMenuitems[i].addEventListener('keydown', this.handleKeydownMenubar.bind(this));
     }
+    
+    // Attributes for all menuitems.
+    let menuitems = menubar.querySelectorAll('li > a');
+    
+    for (let j = 0; j < menuitems.length; j++) {
+      menuitems[j].setAttribute('role', 'menuitem');
+      menuitems[j].setAttribute('tabindex', '-1');
+      
+      // Check for submenus.
+      let liElem = menuitems[j].parentNode;
+      let submenus = liElem.querySelectorAll('a + ul');
+      
+      for (let k = 0; k < submenus.length; k++) {
+        // Get aria-label from anchor sibing.
+        let submenuLiElem = submenus[k].parentNode;
+        let aElem = submenuLiElem.querySelector('a');
+        let aElemText = aElem.textContent;
+        
+        aElem.setAttribute('aria-haspopup', 'true');
+        aElem.setAttribute('aria-expanded', 'false');
+        
+        submenus[k].setAttribute('role', 'menu');
+        submenus[k].setAttribute('aria-label', aElemText);
+        
+        // TODO: Add keydown handler to submenu menuitems (bound to a11yMenubar instance).
+      }
+      
+    }
+    
+    // All li elements should have an aria role of "none".
+    let liElem = menubar.querySelectorAll('li');
+    
+    for (let l = 0; l < liElem.length; l++) {
+      liElem[l].setAttribute('role', 'none');
+    }
+    
   }
   
   destroy () {
@@ -95,8 +103,12 @@ class a11yMenubar {
       case this._keyCode.SPACE:
       case this._keyCode.ENTER:
         // Opens submenu and moves focus to first item in the submenu.
-        console.info(menuitem);
         this.openSubmenu(menuitem);
+        let firstMenuitem = menuitem.parentNode.querySelector('ul[role=menu] > li > a[role=menuitem]');
+        firstMenuitem.focus();
+        this._currentMenuitem.setAttribute('tabindex', '-1');
+        this._currentMenuitem = firstMenuitem;
+        this._currentMenuitem.setAttribute('tabindex', '0');
         break;
       
       case this._keyCode.ARROW_RIGHT:
@@ -104,6 +116,7 @@ class a11yMenubar {
           Moves focus to the next item in the menubar.
           If focus is on the last item, moves focus to the first item.
          */
+        let menubarItems = this._navElem
         break;
       
       case this._keyCode.ARROW_LEFT:
@@ -145,20 +158,23 @@ class a11yMenubar {
     let liElem = menuitem.parentNode;
     let menu = liElem.querySelector('a + ul');
     
-    menu.classList.add('a11yMenubar-menu-open');
-    menuitem.setAttribute('aria-expanded', 'true');
-    
-    console.log(menu);
+    // Only open submenu if it exists.
+    if (menu != null) {
+      menu.classList.add('a11y-menubar-menu-open');
+      menuitem.setAttribute('aria-expanded', 'true');
+    }
   }
   
   closeSubmenu (menuitem) {
     let liElem = menuitem.parentNode;
     let menu = liElem.querySelector('a + ul');
     
-    menu.classList.remove('a11yMenubar-menu-open');
-    menuitem.setAttribute('aria-expanded', 'false');
-    
-    // TODO: Close everything nested in submenu...
+    if (menu != null) {
+      menu.classList.remove('a11y-menubar-menu-open');
+      menuitem.setAttribute('aria-expanded', 'false');
+      
+      // TODO: Close everything nested in submenu...
+    }
   }
   
   normalizeKey (key) {

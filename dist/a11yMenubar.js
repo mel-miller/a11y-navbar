@@ -29,43 +29,52 @@ var a11yMenubar = function () {
     this._domObj = domObj;
     this._ariaLabel = ariaLabel;
     this._navElem = this._domObj.getElementById(this._id);
-
-    var menubar = this._navElem.querySelectorAll('nav > ul');
+    this._currentMenuitem = null;
 
     this._navElem.setAttribute('aria-label', this._ariaLabel);
 
     this._navElem.classList.add('a11y-menubar');
 
-    for (var i = 0; i < menubar.length; i++) {
-      menubar[i].setAttribute('role', 'menubar');
-      menubar[i].setAttribute('aria-label', this._ariaLabel);
-      var menuitem = menubar[i].querySelectorAll('li > a');
+    var menubar = this._navElem.querySelector('ul');
 
-      for (var j = 0; j < menuitem.length; j++) {
-        var tabIndex = j == 0 ? 0 : -1;
-        menuitem[j].setAttribute('role', 'menuitem');
-        menuitem[j].setAttribute('tabindex', tabIndex);
-        menuitem[j].addEventListener('keydown', this.handleKeydownMenubar.bind(this));
-        var _liElem = menuitem[j].parentNode;
+    menubar.setAttribute('role', 'menubar');
+    menubar.setAttribute('aria-label', this._ariaLabel);
+    var menubarMenuitems = menubar.children;
+    console.log(menubarMenuitems);
 
-        var menu = _liElem.querySelectorAll('a + ul');
+    for (var i = 0; i < menubarMenuitems.length; i++) {
+      console.log(menubarMenuitems[i]);
 
-        for (var k = 0; k < menu.length; k++) {
-          var menuLiElem = menu[k].parentNode;
-          var aElem = menuLiElem.querySelector('a');
-          var aElemText = aElem.textContent;
-          aElem.setAttribute('aria-haspopup', 'true');
-          aElem.setAttribute('aria-expanded', 'false');
-          menu[k].setAttribute('role', 'menu');
-          menu[k].setAttribute('aria-label', aElemText);
-        }
+      if (menubarMenuitems[i].nodeType == 1) {
+        menubarMenuitems[i].firstChild.classList.add('a11y-menubar-menuitem');
       }
+    }
 
-      var liElem = menubar[i].querySelectorAll('li');
+    var menuitems = menubar.querySelectorAll('li > a');
 
-      for (var l = 0; l < liElem.length; l++) {
-        liElem[l].setAttribute('role', 'none');
+    for (var j = 0; j < menuitems.length; j++) {
+      menuitems[j].setAttribute('role', 'menuitem');
+      menuitems[j].setAttribute('tabindex', '-1');
+      menuitems[j].addEventListener('keydown', this.handleKeydownMenubar.bind(this));
+      var _liElem = menuitems[j].parentNode;
+
+      var submenus = _liElem.querySelectorAll('a + ul');
+
+      for (var k = 0; k < submenus.length; k++) {
+        var submenuLiElem = submenus[k].parentNode;
+        var aElem = submenuLiElem.querySelector('a');
+        var aElemText = aElem.textContent;
+        aElem.setAttribute('aria-haspopup', 'true');
+        aElem.setAttribute('aria-expanded', 'false');
+        submenus[k].setAttribute('role', 'menu');
+        submenus[k].setAttribute('aria-label', aElemText);
       }
+    }
+
+    var liElem = menubar.querySelectorAll('li');
+
+    for (var l = 0; l < liElem.length; l++) {
+      liElem[l].setAttribute('role', 'none');
     }
   }
 
@@ -88,11 +97,20 @@ var a11yMenubar = function () {
       switch (key) {
         case this._keyCode.SPACE:
         case this._keyCode.ENTER:
-          console.info(menuitem);
           this.openSubmenu(menuitem);
+          var firstMenuitem = menuitem.parentNode.querySelector('ul[role=menu] > li > a[role=menuitem]');
+          firstMenuitem.focus();
+
+          this._currentMenuitem.setAttribute('tabindex', '-1');
+
+          this._currentMenuitem = firstMenuitem;
+
+          this._currentMenuitem.setAttribute('tabindex', '0');
+
           break;
 
         case this._keyCode.ARROW_RIGHT:
+          var menubarItems = this._navElem;
           break;
 
         case this._keyCode.ARROW_LEFT:
@@ -123,17 +141,22 @@ var a11yMenubar = function () {
     value: function openSubmenu(menuitem) {
       var liElem = menuitem.parentNode;
       var menu = liElem.querySelector('a + ul');
-      menu.classList.add('a11yMenubar-menu-open');
-      menuitem.setAttribute('aria-expanded', 'true');
-      console.log(menu);
+
+      if (menu != null) {
+        menu.classList.add('a11y-menubar-menu-open');
+        menuitem.setAttribute('aria-expanded', 'true');
+      }
     }
   }, {
     key: "closeSubmenu",
     value: function closeSubmenu(menuitem) {
       var liElem = menuitem.parentNode;
       var menu = liElem.querySelector('a + ul');
-      menu.classList.remove('a11yMenubar-menu-open');
-      menuitem.setAttribute('aria-expanded', 'false');
+
+      if (menu != null) {
+        menu.classList.remove('a11y-menubar-menu-open');
+        menuitem.setAttribute('aria-expanded', 'false');
+      }
     }
   }, {
     key: "normalizeKey",
