@@ -67,6 +67,7 @@ var a11yMenubar = function () {
         aElem.setAttribute('aria-expanded', 'false');
         submenus[k].setAttribute('role', 'menu');
         submenus[k].setAttribute('aria-label', aElemText);
+        submenus[k].classList.add('a11y-menubar-menu-closed');
       }
     }
 
@@ -98,8 +99,11 @@ var a11yMenubar = function () {
       switch (key) {
         case this._keyCode.SPACE:
         case this._keyCode.ENTER:
+        case this._keyCode.ARROW_DOWN:
+          this.closeAllSubmenus();
           this.openSubmenu(menuitem);
           var firstMenuitem = menuitem.parentNode.querySelector('ul[role=menu] > li > a[role=menuitem]');
+          console.log(firstMenuitem);
           firstMenuitem.focus();
 
           this._currentMenuitem.setAttribute('tabindex', '-1');
@@ -134,6 +138,63 @@ var a11yMenubar = function () {
           this._currentMenuitem = prevMenubarItem;
           break;
 
+        case this._keyCode.ARROW_UP:
+          this.openSubmenu(menuitem);
+          var lastMenuitem = menuitem.parentNode.querySelector('ul[role=menu]').lastElementChild.firstElementChild;
+          lastMenuitem.focus();
+
+          this._currentMenuitem.setAttribute('tabindex', '-1');
+
+          this._currentMenuitem = lastMenuitem;
+
+          this._currentMenuitem.setAttribute('tabindex', '0');
+
+          break;
+
+        case this._keyCode.HOME:
+          this._menubarMenuitems[this._currentMenubarIndex].setAttribute('tabindex', '-1');
+
+          this._menubarMenuitems[0].setAttribute('tabindex', '0');
+
+          this._menubarMenuitems[0].focus();
+
+          break;
+
+        case this._keyCode.END:
+          this._menubarMenuitems[this._currentMenubarIndex].setAttribute('tabindex', '-1');
+
+          this._menubarMenuitems[this._menubarMenuitems.length - 1].setAttribute('tabindex', '0');
+
+          this._menubarMenuitems[this._menubarMenuitems.length - 1].focus();
+
+          break;
+      }
+    }
+  }, {
+    key: "handleKeydownSubmenu",
+    value: function handleKeydownSubmenu(event) {
+      if (event.defaultPrevented) {
+        return;
+      }
+
+      var menuitem = event.target;
+      var key = this.normalizeKey(event.key || event.keyCode);
+      console.log(key);
+
+      switch (key) {
+        case this._keyCode.SPACE:
+        case this._keyCode.ENTER:
+          break;
+
+        case this._keyCode.ESC:
+          break;
+
+        case this._keyCode.ARROW_RIGHT:
+          break;
+
+        case this._keyCode.ARROW_LEFT:
+          break;
+
         case this._keyCode.ARROW_DOWN:
           break;
 
@@ -148,19 +209,13 @@ var a11yMenubar = function () {
       }
     }
   }, {
-    key: "handleKeydownSubmenu",
-    value: function handleKeydownSubmenu(event) {
-      if (event.defaultPrevented) {
-        return;
-      }
-    }
-  }, {
     key: "openSubmenu",
     value: function openSubmenu(menuitem) {
       var liElem = menuitem.parentNode;
       var menu = liElem.querySelector('a + ul');
 
       if (menu != null) {
+        menu.classList.remove('a11y-menubar-menu-closed');
         menu.classList.add('a11y-menubar-menu-open');
         menuitem.setAttribute('aria-expanded', 'true');
       }
@@ -173,7 +228,20 @@ var a11yMenubar = function () {
 
       if (menu != null) {
         menu.classList.remove('a11y-menubar-menu-open');
+        menu.classList.add('a11y-menubar-menu-closed');
         menuitem.setAttribute('aria-expanded', 'false');
+      }
+    }
+  }, {
+    key: "closeAllSubmenus",
+    value: function closeAllSubmenus() {
+      var openSubmenus = this._navElem.querySelectorAll('ul.a11y-menubar-menu-open');
+
+      for (var i = 0; i < openSubmenus.length; i++) {
+        var aElem = openSubmenu[i].parentNode.querySelector('ul + a');
+        aElem.setAttribute('aria-expanded', 'false');
+        openSubmenu[i].classList.remove('a11y-menubar-menu-open');
+        openSubmenu[i].classList.add('a11y-menubar-menu-closed');
       }
     }
   }, {
@@ -181,26 +249,56 @@ var a11yMenubar = function () {
     value: function normalizeKey(key) {
       var normalizedKey = null;
 
-      if (key == 'Tab' || key == 9) {
-        normalizedKey = this._keyCode.TAB;
-      } else if (key == 'Enter' || key == 13) {
-        normalizedKey = this._keyCode.ENTER;
-      } else if (key == 'Escape' || key == 'Esc' || key == 13) {
-        normalizedKey = this._keyCode.ESC;
-      } else if (key == ' ' || key == 32) {
-        normalizedKey = this._keyCode.SPACE;
-      } else if (key == 'End' || key == 35) {
-        normalizedKey = this._keyCode.END;
-      } else if (key == 'Home' || key == 36) {
-        normalizedKey = this._keyCode.HOME;
-      } else if (key == 'ArrowLeft' || key == 37) {
-        normalizedKey = this._keyCode.ARROW_LEFT;
-      } else if (key == 'ArrowUp' || key == 38) {
-        normalizedKey = this._keyCode.ARROW_UP;
-      } else if (key == 'ArrowRight' || key == 39) {
-        normalizedKey = this._keyCode.ARROW_RIGHT;
-      } else if (key == 'ArrowDown' || key == 40) {
-        normalizedKey = this._keyCode.ARROW_DOWN;
+      switch (key) {
+        case 'Tab':
+        case 9:
+          normalizedKey = this._keyCode.TAB;
+          break;
+
+        case 'Enter':
+        case 13:
+          normalizedKey = this._keyCode.ENTER;
+          break;
+
+        case 'Escape':
+        case 'Esc':
+        case 13:
+          normalizedKey = this._keyCode.ESC;
+          break;
+
+        case ' ':
+        case 32:
+          normalizedKey = this._keyCode.SPACE;
+          break;
+
+        case 'End':
+        case 35:
+          normalizedKey = this._keyCode.END;
+
+        case 'Home':
+        case 36:
+          normalizedKey = this._keyCode.HOME;
+          break;
+
+        case 'ArrowLeft':
+        case 37:
+          normalizedKey = this._keyCode.ARROW_LEFT;
+          break;
+
+        case 'ArrowUp':
+        case 38:
+          normalizedKey = this._keyCode.ARROW_UP;
+          break;
+
+        case 'ArrowRight':
+        case 39:
+          normalizedKey = this._keyCode.ARROW_RIGHT;
+          break;
+
+        case 'ArrowDown':
+        case 40:
+          normalizedKey = this._keyCode.ARROW_DOWN;
+          break;
       }
 
       return normalizedKey;

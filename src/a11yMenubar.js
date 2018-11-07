@@ -27,6 +27,10 @@ class a11yMenubar {
     this._currentMenubarIndex = 0;
     this._currentMenuitem = null;
     
+    // TODO: Add configurable defaults for class names.
+    
+    // TODO: Add aria-orientation attribute.
+    
     // Set up aria roles and attributes. 
     this._navElem.setAttribute('aria-label', this._ariaLabel);
     this._navElem.classList.add('a11y-menubar');
@@ -70,6 +74,7 @@ class a11yMenubar {
         
         submenus[k].setAttribute('role', 'menu');
         submenus[k].setAttribute('aria-label', aElemText);
+        submenus[k].classList.add('a11y-menubar-menu-closed');
         
         // TODO: Add keydown handler to submenu menuitems (bound to a11yMenubar instance).
       }
@@ -89,6 +94,9 @@ class a11yMenubar {
     // First menubar menuitem should be the current menuitem.
     this._currentMenuitem = this._menubarMenuitems[0];
     
+    // TODO: Add hover listeners.
+    
+    // TODO: Add hoverintent functionality.
   }
   
   destroy () {
@@ -108,9 +116,12 @@ class a11yMenubar {
     switch (key) {
       case this._keyCode.SPACE:
       case this._keyCode.ENTER:
+      case this._keyCode.ARROW_DOWN:
         // Opens submenu and moves focus to first item in the submenu.
+        this.closeAllSubmenus();
         this.openSubmenu(menuitem);
         let firstMenuitem = menuitem.parentNode.querySelector('ul[role=menu] > li > a[role=menuitem]');
+        console.log(firstMenuitem);
         firstMenuitem.focus();
         this._currentMenuitem.setAttribute('tabindex', '-1');
         this._currentMenuitem = firstMenuitem;
@@ -147,23 +158,31 @@ class a11yMenubar {
         this._currentMenuitem = prevMenubarItem;
         break;
       
-      case this._keyCode.ARROW_DOWN:
-        // Opens submenu and moves focus to first item in the submenu.
-        break;
-      
       case this._keyCode.ARROW_UP:
         // Opens submenu and moves focus to last item in the submenu.
+        this.openSubmenu(menuitem);
+        let lastMenuitem = menuitem.parentNode.querySelector('ul[role=menu]').lastElementChild.firstElementChild;
+        lastMenuitem.focus();
+        this._currentMenuitem.setAttribute('tabindex', '-1');
+        this._currentMenuitem = lastMenuitem;
+        this._currentMenuitem.setAttribute('tabindex', '0');
         break;
         
       case this._keyCode.HOME:
         // Moves focus to first item in the menubar.
+        this._menubarMenuitems[this._currentMenubarIndex].setAttribute('tabindex', '-1');
+        this._menubarMenuitems[0].setAttribute('tabindex', '0');
+        this._menubarMenuitems[0].focus();
         break;
       
       case this._keyCode.END:
         // Moves focus to last item in the menubar.
+        this._menubarMenuitems[this._currentMenubarIndex].setAttribute('tabindex', '-1');
+        this._menubarMenuitems[this._menubarMenuitems.length - 1].setAttribute('tabindex', '0');
+        this._menubarMenuitems[this._menubarMenuitems.length - 1].focus();
         break;
       
-      // Consider adding WCAG 2.0 AAA Character handling.
+      // TODO: Consider adding optional character handling.
     }
     
   };
@@ -173,6 +192,67 @@ class a11yMenubar {
       return;
     }
     
+    let menuitem = event.target;
+    let key = this.normalizeKey(event.key || event.keyCode);
+    
+    console.log(key);
+    
+    switch(key) {
+      case this._keyCode.SPACE:
+      case this._keyCode.ENTER:
+        // Activates menu item, causing the link to be activated.
+        break;
+      
+      case this._keyCode.ESC:
+        /* 
+          Closes submenu.
+          Moves focus to parent menubar item.
+        */
+        break;
+      
+      case this._keyCode.ARROW_RIGHT:
+        /*
+          -If focus is on an item with a submenu, opens the submenu and places focus on the first item.
+          -If focus is on an item that does not have a submenu:
+              -Closes submenu.
+              -Moves focus to next item in the menubar.
+              -Opens submenu of newly focused menubar item, keeping focus on that parent menubar item.
+        */
+        break;
+      
+      case this._keyCode.ARROW_LEFT:
+        /*
+          -Closes submenu and moves focus to parent menu item.
+          -If parent menu item is in the menubar, also:
+              -moves focus to previous item in the menubar.
+              -Opens submenu of newly focused menubar item, keeping focus on that parent menubar item.
+        */
+        break;
+      
+      case this._keyCode.ARROW_DOWN:
+        /*
+          -Moves focus to the next item in the submenu.
+          -If focus is on the last item, moves focus to the first item.
+        */
+        break;
+      
+      case this._keyCode.ARROW_UP:
+        /*
+          -Moves focus to previous item in the submenu.
+          -If focus is on the first item, moves focus to the last item.
+        */
+        break;
+      
+      case this._keyCode.HOME:
+        // Moves focus to the first item in the submenu.
+        break;
+      
+      case this._keyCode.END:
+        // Moves focus to the last item in the submenu.
+        break;
+      
+      // TODO: Consider adding optional printable character handling.
+    }
   }
   
   openSubmenu (menuitem) {
@@ -181,6 +261,7 @@ class a11yMenubar {
     
     // Only open submenu if it exists.
     if (menu != null) {
+      menu.classList.remove('a11y-menubar-menu-closed');
       menu.classList.add('a11y-menubar-menu-open');
       menuitem.setAttribute('aria-expanded', 'true');
     }
@@ -192,44 +273,78 @@ class a11yMenubar {
     
     if (menu != null) {
       menu.classList.remove('a11y-menubar-menu-open');
+      menu.classList.add('a11y-menubar-menu-closed');
       menuitem.setAttribute('aria-expanded', 'false');
       
       // TODO: Close everything nested in submenu...
     }
   }
   
+  closeAllSubmenus() {
+    // Closes all currently open submenus.
+    let openSubmenus = this._navElem.querySelectorAll('ul.a11y-menubar-menu-open');
+    
+    for (let i = 0; i < openSubmenus.length; i++) {
+      let aElem = openSubmenu[i].parentNode.querySelector('ul + a');
+      aElem.setAttribute('aria-expanded', 'false');
+      openSubmenu[i].classList.remove('a11y-menubar-menu-open');
+      openSubmenu[i].classList.add('a11y-menubar-menu-closed');
+    }
+  }
+  
   normalizeKey (key) {
     let normalizedKey = null;
     
-    if (key == 'Tab' || key == 9) {
-      normalizedKey = this._keyCode.TAB;
-    }
-    else if (key == 'Enter' || key == 13) {
-      normalizedKey = this._keyCode.ENTER;
-    }
-    else if (key == 'Escape' || key == 'Esc' || key == 13) {
-      normalizedKey = this._keyCode.ESC;
-    }
-    else if (key == ' ' || key == 32) {
-      normalizedKey = this._keyCode.SPACE;
-    }
-    else if (key == 'End' || key == 35) {
-      normalizedKey = this._keyCode.END;
-    }
-    else if (key == 'Home' || key == 36) {
-      normalizedKey = this._keyCode.HOME;
-    }
-    else if (key == 'ArrowLeft' || key == 37) {
-      normalizedKey = this._keyCode.ARROW_LEFT;
-    }
-    else if (key == 'ArrowUp' || key == 38) {
-      normalizedKey = this._keyCode.ARROW_UP;
-    }
-    else if (key == 'ArrowRight' || key == 39) {
-      normalizedKey = this._keyCode.ARROW_RIGHT;
-    }
-    else if (key == 'ArrowDown' || key == 40) {
-      normalizedKey = this._keyCode.ARROW_DOWN;
+    switch (key) {
+      case 'Tab':
+      case 9:
+        normalizedKey = this._keyCode.TAB;
+        break;
+      
+      case 'Enter':
+      case 13:
+        normalizedKey = this._keyCode.ENTER;
+        break;
+      
+      case 'Escape':
+      case 'Esc':
+      case 13:
+        normalizedKey = this._keyCode.ESC;
+        break;
+      
+      case ' ':
+      case 32:
+        normalizedKey = this._keyCode.SPACE;
+        break;
+      
+      case 'End':
+      case 35:
+        normalizedKey = this._keyCode.END;
+      
+      case 'Home':
+      case 36:
+        normalizedKey = this._keyCode.HOME;
+        break;
+      
+      case 'ArrowLeft':
+      case 37:
+        normalizedKey = this._keyCode.ARROW_LEFT;
+        break;
+      
+      case 'ArrowUp':
+      case 38:
+        normalizedKey = this._keyCode.ARROW_UP;
+        break;
+      
+      case 'ArrowRight':
+      case 39:
+        normalizedKey = this._keyCode.ARROW_RIGHT;
+        break;
+      
+      case 'ArrowDown':
+      case 40:
+        normalizedKey = this._keyCode.ARROW_DOWN;
+        break;
     }
     
     return normalizedKey;
