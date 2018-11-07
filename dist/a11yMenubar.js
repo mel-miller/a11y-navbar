@@ -30,6 +30,7 @@ var a11yMenubar = function () {
     this._ariaLabel = ariaLabel;
     this._navElem = this._domObj.getElementById(this._id);
     this._menubarMenuitems = [];
+    this._currentMenubarIndex = 0;
     this._currentMenuitem = null;
 
     this._navElem.setAttribute('aria-label', this._ariaLabel);
@@ -90,11 +91,9 @@ var a11yMenubar = function () {
         return;
       }
 
-      console.log(event.key);
-      console.log(event.which);
-      console.log(event.keyCode);
       var menuitem = event.target;
       var key = this.normalizeKey(event.key || event.keyCode);
+      console.log(key);
 
       switch (key) {
         case this._keyCode.SPACE:
@@ -112,10 +111,27 @@ var a11yMenubar = function () {
           break;
 
         case this._keyCode.ARROW_RIGHT:
-          var menubarItems = this._navElem;
+          var nextMenubarIndex = this._currentMenubarIndex + 1 >= this._menubarMenuitems.length ? 0 : this._currentMenubarIndex + 1;
+          var nextMenubarItem = this._menubarMenuitems[nextMenubarIndex];
+          nextMenubarItem.focus();
+
+          this._menubarMenuitems[this._currentMenubarIndex].setAttribute('tabindex', '-1');
+
+          nextMenubarItem.setAttribute('tabindex', '0');
+          this._currentMenubarIndex = nextMenubarIndex;
+          this._currentMenuitem = nextMenubarItem;
           break;
 
         case this._keyCode.ARROW_LEFT:
+          var prevMenubarIndex = this._currentMenubarIndex - 1 < 0 ? this._menubarMenuitems.length - 1 : this._currentMenubarIndex - 1;
+          var prevMenubarItem = this._menubarMenuitems[prevMenubarIndex];
+          prevMenubarItem.focus();
+
+          this._menubarMenuitems[this._currentMenubarIndex].setAttribute('tabindex', '-1');
+
+          prevMenubarItem.setAttribute('tabindex', '0');
+          this._currentMenubarIndex = prevMenubarIndex;
+          this._currentMenuitem = prevMenubarItem;
           break;
 
         case this._keyCode.ARROW_DOWN:
@@ -178,11 +194,11 @@ var a11yMenubar = function () {
       } else if (key == 'Home' || key == 36) {
         normalizedKey = this._keyCode.HOME;
       } else if (key == 'ArrowLeft' || key == 37) {
-        normalizedKey == this._keyCode.ARROW_LEFT;
+        normalizedKey = this._keyCode.ARROW_LEFT;
       } else if (key == 'ArrowUp' || key == 38) {
-        normalizedKey == this._keyCode.ARROW_UP;
+        normalizedKey = this._keyCode.ARROW_UP;
       } else if (key == 'ArrowRight' || key == 39) {
-        normalizedKey == this._keyCode.ARROW_RIGHT;
+        normalizedKey = this._keyCode.ARROW_RIGHT;
       } else if (key == 'ArrowDown' || key == 40) {
         normalizedKey = this._keyCode.ARROW_DOWN;
       }

@@ -24,6 +24,7 @@ class a11yMenubar {
     this._ariaLabel = ariaLabel;
     this._navElem = this._domObj.getElementById(this._id);
     this._menubarMenuitems = [];
+    this._currentMenubarIndex = 0;
     this._currentMenuitem = null;
     
     // Set up aria roles and attributes. 
@@ -99,12 +100,10 @@ class a11yMenubar {
       return;
     }
     
-    console.log(event.key);
-    console.log(event.which);
-    console.log(event.keyCode);
-    
     let menuitem = event.target;
     let key = this.normalizeKey(event.key || event.keyCode);
+    
+    console.log(key);
     
     switch (key) {
       case this._keyCode.SPACE:
@@ -123,7 +122,14 @@ class a11yMenubar {
           Moves focus to the next item in the menubar.
           If focus is on the last item, moves focus to the first item.
          */
-        let menubarItems = this._navElem
+        let nextMenubarIndex = (this._currentMenubarIndex + 1 >= this._menubarMenuitems.length) ? 0 : this._currentMenubarIndex + 1;
+        let nextMenubarItem = this._menubarMenuitems[nextMenubarIndex];
+        
+        nextMenubarItem.focus();
+        this._menubarMenuitems[this._currentMenubarIndex].setAttribute('tabindex', '-1');
+        nextMenubarItem.setAttribute('tabindex', '0');
+        this._currentMenubarIndex = nextMenubarIndex;
+        this._currentMenuitem = nextMenubarItem;
         break;
       
       case this._keyCode.ARROW_LEFT:
@@ -131,6 +137,14 @@ class a11yMenubar {
           Moves focus to the previous item in the menubar.
           If focus is on the first item, moves focus to the last item.
          */
+        let prevMenubarIndex = (this._currentMenubarIndex - 1 < 0) ? this._menubarMenuitems.length - 1 : this._currentMenubarIndex - 1;
+        let prevMenubarItem = this._menubarMenuitems[prevMenubarIndex];
+        
+        prevMenubarItem.focus();
+        this._menubarMenuitems[this._currentMenubarIndex].setAttribute('tabindex', '-1');
+        prevMenubarItem.setAttribute('tabindex', '0');
+        this._currentMenubarIndex = prevMenubarIndex;
+        this._currentMenuitem = prevMenubarItem;
         break;
       
       case this._keyCode.ARROW_DOWN:
@@ -206,13 +220,13 @@ class a11yMenubar {
       normalizedKey = this._keyCode.HOME;
     }
     else if (key == 'ArrowLeft' || key == 37) {
-      normalizedKey == this._keyCode.ARROW_LEFT;
+      normalizedKey = this._keyCode.ARROW_LEFT;
     }
     else if (key == 'ArrowUp' || key == 38) {
-      normalizedKey == this._keyCode.ARROW_UP;
+      normalizedKey = this._keyCode.ARROW_UP;
     }
     else if (key == 'ArrowRight' || key == 39) {
-      normalizedKey == this._keyCode.ARROW_RIGHT;
+      normalizedKey = this._keyCode.ARROW_RIGHT;
     }
     else if (key == 'ArrowDown' || key == 40) {
       normalizedKey = this._keyCode.ARROW_DOWN;
