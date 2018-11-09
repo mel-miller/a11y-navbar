@@ -109,14 +109,16 @@ var a11yMenubar = function () {
           this.closeAllSubmenus();
           this.openSubmenu(menuitem);
           var firstMenuitem = menuitem.parentNode.querySelector('ul[role=menu] > li > a[role=menuitem]');
-          console.log(firstMenuitem);
-          firstMenuitem.focus();
 
-          this._currentMenuitem.setAttribute('tabindex', '-1');
+          if (firstMenuitem != null) {
+            firstMenuitem.focus();
 
-          this._currentMenuitem = firstMenuitem;
+            this._currentMenuitem.setAttribute('tabindex', '-1');
 
-          this._currentMenuitem.setAttribute('tabindex', '0');
+            this._currentMenuitem = firstMenuitem;
+
+            this._currentMenuitem.setAttribute('tabindex', '0');
+          }
 
           preventDefault = true;
           break;
@@ -144,6 +146,11 @@ var a11yMenubar = function () {
           prevMenubarItem.setAttribute('tabindex', '0');
           this._currentMenubarIndex = prevMenubarIndex;
           this._currentMenuitem = prevMenubarItem;
+
+          if (this.hasSubmenu(this._currentMenuitem)) {
+            this.openSubmenu(this._currentMenuitem);
+          }
+
           preventDefault = true;
           break;
 
@@ -206,11 +213,10 @@ var a11yMenubar = function () {
           break;
 
         case this._keyCode.ESC:
-          this.closeSubmenu(menuitem);
-
           this._currentMenuitem.setAttribute('tabindex', '-1');
 
-          this._currentMenuitem = menuitem.parentNode.parentNode.querySelector('ul + a');
+          this._currentMenuitem = menuitem.parentNode.parentNode.parentNode.querySelector('a[role=menuitem]');
+          this.closeSubmenu(this._currentMenuitem);
 
           this._currentMenuitem.focus();
 
@@ -368,7 +374,7 @@ var a11yMenubar = function () {
     key: "openSubmenu",
     value: function openSubmenu(menuitem) {
       var liElem = menuitem.parentNode;
-      var menu = liElem.querySelector('a + ul');
+      var menu = liElem.querySelector('ul');
 
       if (menu != null) {
         menu.classList.remove('a11y-menubar-menu-closed');
@@ -380,7 +386,7 @@ var a11yMenubar = function () {
     key: "closeSubmenu",
     value: function closeSubmenu(menuitem) {
       var liElem = menuitem.parentNode;
-      var menu = liElem.querySelector('a + ul');
+      var menu = liElem.querySelector('ul');
 
       if (menu != null) {
         menu.classList.remove('a11y-menubar-menu-open');

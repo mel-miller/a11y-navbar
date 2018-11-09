@@ -125,18 +125,20 @@ class a11yMenubar {
         this.closeAllSubmenus();
         this.openSubmenu(menuitem);
         let firstMenuitem = menuitem.parentNode.querySelector('ul[role=menu] > li > a[role=menuitem]');
-        console.log(firstMenuitem);
-        firstMenuitem.focus();
-        this._currentMenuitem.setAttribute('tabindex', '-1');
-        this._currentMenuitem = firstMenuitem;
-        this._currentMenuitem.setAttribute('tabindex', '0');
+        
+        if (firstMenuitem != null) {
+          firstMenuitem.focus();
+          this._currentMenuitem.setAttribute('tabindex', '-1');
+          this._currentMenuitem = firstMenuitem;
+          this._currentMenuitem.setAttribute('tabindex', '0');
+        }
         preventDefault = true;
         break;
       
       case this._keyCode.ARROW_RIGHT:
         /*
-          Moves focus to the next item in the menubar.
-          If focus is on the last item, moves focus to the first item.
+          -Moves focus to the next item in the menubar.
+          -If focus is on the last item, moves focus to the first item. 
          */
         let nextMenubarIndex = (this._currentMenubarIndex + 1 >= this._menubarMenuitems.length) ? 0 : this._currentMenubarIndex + 1;
         let nextMenubarItem = this._menubarMenuitems[nextMenubarIndex];
@@ -151,8 +153,8 @@ class a11yMenubar {
       
       case this._keyCode.ARROW_LEFT:
         /*
-          Moves focus to the previous item in the menubar.
-          If focus is on the first item, moves focus to the last item.
+          -Moves focus to the previous item in the menubar.
+          -If focus is on the first item, moves focus to the last item.
          */
         let prevMenubarIndex = (this._currentMenubarIndex - 1 < 0) ? this._menubarMenuitems.length - 1 : this._currentMenubarIndex - 1;
         let prevMenubarItem = this._menubarMenuitems[prevMenubarIndex];
@@ -162,6 +164,9 @@ class a11yMenubar {
         prevMenubarItem.setAttribute('tabindex', '0');
         this._currentMenubarIndex = prevMenubarIndex;
         this._currentMenuitem = prevMenubarItem;
+        if (this.hasSubmenu(this._currentMenuitem)) {
+          this.openSubmenu(this._currentMenuitem);
+        }
         preventDefault = true;
         break;
       
@@ -200,6 +205,7 @@ class a11yMenubar {
       event.stopPropagation();
       event.preventDefault();
     }
+    
   }
   
   handleKeydownSubmenu (event) {
@@ -224,9 +230,9 @@ class a11yMenubar {
           Closes submenu.
           Moves focus to parent menubar item.
         */
-        this.closeSubmenu(menuitem);
         this._currentMenuitem.setAttribute('tabindex', '-1');
-        this._currentMenuitem = menuitem.parentNode.parentNode.querySelector('ul + a');
+        this._currentMenuitem = menuitem.parentNode.parentNode.parentNode.querySelector('a[role=menuitem]');
+        this.closeSubmenu(this._currentMenuitem);
         this._currentMenuitem.focus();
         this._currentMenuitem.setAttribute('tabindex', '0');
         preventDefault = true;
@@ -371,7 +377,7 @@ class a11yMenubar {
   
   openSubmenu (menuitem) {
     let liElem = menuitem.parentNode;
-    let menu = liElem.querySelector('a + ul');
+    let menu = liElem.querySelector('ul');
     
     // Only open submenu if it exists.
     if (menu != null) {
@@ -383,14 +389,13 @@ class a11yMenubar {
   
   closeSubmenu (menuitem) {
     let liElem = menuitem.parentNode;
-    let menu = liElem.querySelector('a + ul');
+    let menu = liElem.querySelector('ul');
     
+    // Only close submenu if it exists.
     if (menu != null) {
       menu.classList.remove('a11y-menubar-menu-open');
       menu.classList.add('a11y-menubar-menu-closed');
       menuitem.setAttribute('aria-expanded', 'false');
-      
-      // TODO: Close everything nested in submenu.
     }
   }
   
