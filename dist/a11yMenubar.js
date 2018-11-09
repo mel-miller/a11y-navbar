@@ -259,6 +259,32 @@ var a11yMenubar = function () {
           break;
 
         case this._keyCode.ARROW_LEFT:
+          var submenuParentMenuitem = menuitem.parentNode.parentNode.parentNode.querySelector('a[role=menuitem]');
+          this.closeSubmenu(submenuParentMenuitem);
+          submenuParentMenuitem.focus();
+
+          this._currentMenuitem.setAttribute('tabindex', '-1');
+
+          this._currentMenuitem = submenuParentMenuitem;
+
+          this._currentMenuitem.setAttribute('tabindex', '0');
+
+          if (this._currentMenuitem.classList.contains('a11y-menubar-menuitem')) {
+            var prevMenubarIndex = this._currentMenubarIndex - 1 < 0 ? this._menubarItems.length - 1 : this._currentMenubarIndex - 1;
+            var prevMenubarItem = this._menubarMenuitems[prevMenubarIndex];
+
+            this._currentMenuitem.setAttribute('tabindex', '-1');
+
+            this._currentMenuitem = prevMenubaritem;
+            this._currentMenubarIndex = prevMenubarIndex;
+
+            this._currentMenuitem.focus();
+
+            this._currentMenuitem.setAttribute('tabindex', '0');
+
+            this.openSubmenu(this._currentMenuitem);
+          }
+
           preventDefault = true;
           break;
 
