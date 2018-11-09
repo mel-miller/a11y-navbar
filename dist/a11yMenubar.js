@@ -311,10 +311,10 @@ var a11yMenubar = function () {
 
         case this._keyCode.ARROW_UP:
           var prevSubmenuItem = undefined;
-          var prevSubmenuLiElem = menuitem.parentNode.prevElementSibling;
+          var prevSubmenuLiElem = menuitem.parentNode.previousElementSibling;
 
           if (prevSubmenuLiElem == null) {
-            prevSubmenuItem = menuitem.parentNode.parentNode.firstElementChild.querySelector('a');
+            prevSubmenuItem = menuitem.parentNode.parentNode.lastElementChild.querySelector('a');
           } else {
             prevSubmenuItem = prevSubmenuLiElem.querySelector('a');
           }

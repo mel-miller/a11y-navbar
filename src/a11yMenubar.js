@@ -325,9 +325,9 @@ class a11yMenubar {
           -If focus is on the first item, moves focus to the last item.
         */
         let prevSubmenuItem = undefined;
-        let prevSubmenuLiElem = menuitem.parentNode.prevElementSibling;
+        let prevSubmenuLiElem = menuitem.parentNode.previousElementSibling;
         if (prevSubmenuLiElem == null) {
-          prevSubmenuItem = menuitem.parentNode.parentNode.firstElementChild.querySelector('a');
+          prevSubmenuItem = menuitem.parentNode.parentNode.lastElementChild.querySelector('a');
         }
         else {
           prevSubmenuItem = prevSubmenuLiElem.querySelector('a');
