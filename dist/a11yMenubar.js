@@ -101,8 +101,6 @@ var a11yMenubar = function () {
       var preventDefault = false;
       var menuitem = event.target;
       var key = this.normalizeKey(event.key || event.keyCode);
-      console.log(this._currentMenuitem);
-      console.log(key);
 
       switch (key) {
         case this._keyCode.SPACE:
@@ -188,8 +186,6 @@ var a11yMenubar = function () {
         event.stopPropagation();
         event.preventDefault();
       }
-
-      console.log(this._currentMenuitem);
     }
   }, {
     key: "handleKeydownSubmenu",
@@ -201,8 +197,6 @@ var a11yMenubar = function () {
       var preventDefault = false;
       var menuitem = event.target;
       var key = this.normalizeKey(event.key || event.keyCode);
-      console.log(key);
-      console.log(this._currentMenuitem);
 
       switch (key) {
         case this._keyCode.SPACE:
@@ -363,8 +357,6 @@ var a11yMenubar = function () {
         event.stopPropagation();
         event.preventDefault();
       }
-
-      console.log(this._currentMenuitem);
     }
   }, {
     key: "hasSubmenu",

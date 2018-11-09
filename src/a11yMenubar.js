@@ -117,9 +117,6 @@ class a11yMenubar {
     let menuitem = event.target;
     let key = this.normalizeKey(event.key || event.keyCode);
     
-    console.log(this._currentMenuitem);
-    console.log(key);
-    
     switch (key) {
       case this._keyCode.SPACE:
       case this._keyCode.ENTER:
@@ -203,7 +200,6 @@ class a11yMenubar {
       event.stopPropagation();
       event.preventDefault();
     }
-    console.log(this._currentMenuitem);
   }
   
   handleKeydownSubmenu (event) {
@@ -214,9 +210,6 @@ class a11yMenubar {
     let preventDefault = false; // Flag to prevent the keypress from doing what it usually would do.
     let menuitem = event.target;
     let key = this.normalizeKey(event.key || event.keyCode);
-    
-    console.log(key);
-    console.log(this._currentMenuitem);
     
     switch(key) {
       case this._keyCode.SPACE:
@@ -367,8 +360,6 @@ class a11yMenubar {
       event.stopPropagation();
       event.preventDefault();
     }
-    
-    console.log(this._currentMenuitem);
   }
   
   hasSubmenu (menuitem) {

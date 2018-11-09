@@ -1,3 +1,11 @@
 .a11y-menubar {
 	display: block;
+	
+	.a11y-menubar-menu-open {
+	
+	}
+	
+	.a11y-menubar-menu-closed {
+		@include visually-hidden();
+	}
 }
