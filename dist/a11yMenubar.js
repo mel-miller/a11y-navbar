@@ -50,6 +50,12 @@ var a11yMenubar = function () {
       menubarMenuitem.addEventListener('keydown', this.handleKeydownMenubar.bind(this));
     }
 
+    var submenuMenuitems = this._navElem.querySelectorAll('a + ul > li > a');
+
+    for (var _i = 0; _i < submenuMenuitems.length; _i++) {
+      submenuMenuitems[_i].addEventListener('keydown', this.handleKeydownSubmenu.bind(this));
+    }
+
     var menuitems = menubar.querySelectorAll('li > a');
 
     for (var j = 0; j < menuitems.length; j++) {
@@ -92,8 +98,10 @@ var a11yMenubar = function () {
         return;
       }
 
+      var preventDefault = false;
       var menuitem = event.target;
       var key = this.normalizeKey(event.key || event.keyCode);
+      console.log(this._currentMenuitem);
       console.log(key);
 
       switch (key) {
@@ -112,6 +120,7 @@ var a11yMenubar = function () {
 
           this._currentMenuitem.setAttribute('tabindex', '0');
 
+          preventDefault = true;
           break;
 
         case this._keyCode.ARROW_RIGHT:
@@ -124,6 +133,7 @@ var a11yMenubar = function () {
           nextMenubarItem.setAttribute('tabindex', '0');
           this._currentMenubarIndex = nextMenubarIndex;
           this._currentMenuitem = nextMenubarItem;
+          preventDefault = true;
           break;
 
         case this._keyCode.ARROW_LEFT:
@@ -136,6 +146,7 @@ var a11yMenubar = function () {
           prevMenubarItem.setAttribute('tabindex', '0');
           this._currentMenubarIndex = prevMenubarIndex;
           this._currentMenuitem = prevMenubarItem;
+          preventDefault = true;
           break;
 
         case this._keyCode.ARROW_UP:
@@ -149,6 +160,7 @@ var a11yMenubar = function () {
 
           this._currentMenuitem.setAttribute('tabindex', '0');
 
+          preventDefault = true;
           break;
 
         case this._keyCode.HOME:
@@ -158,6 +170,7 @@ var a11yMenubar = function () {
 
           this._menubarMenuitems[0].focus();
 
+          preventDefault = true;
           break;
 
         case this._keyCode.END:
@@ -167,8 +180,16 @@ var a11yMenubar = function () {
 
           this._menubarMenuitems[this._menubarMenuitems.length - 1].focus();
 
+          preventDefault = true;
           break;
       }
+
+      if (preventDefault) {
+        event.stopPropagation();
+        event.preventDefault();
+      }
+
+      console.log(this._currentMenuitem);
     }
   }, {
     key: "handleKeydownSubmenu",
@@ -177,36 +198,101 @@ var a11yMenubar = function () {
         return;
       }
 
+      var preventDefault = false;
       var menuitem = event.target;
       var key = this.normalizeKey(event.key || event.keyCode);
       console.log(key);
+      console.log(this._currentMenuitem);
 
       switch (key) {
         case this._keyCode.SPACE:
         case this._keyCode.ENTER:
+          menuitem.click();
+          preventDefault = true;
           break;
 
         case this._keyCode.ESC:
+          this.closeSubmenu(menuitem);
+
+          this._currentMenuitem.setAttribute('tabindex', '-1');
+
+          this._currentMenuitem = menuitem.parentNode.parentNode.querySelector('ul + a');
+
+          this._currentMenuitem.focus();
+
+          this._currentMenuitem.setAttribute('tabindex', '0');
+
+          preventDefault = true;
           break;
 
         case this._keyCode.ARROW_RIGHT:
+          if (this.hasSubmenu(menuitem)) {
+            this.openSubmenu(menuitem);
+
+            this._currentMenuitem.setAttribute('tabindex', '-1');
+
+            this._currentMenuitem = menuitem.parentNode.querySelector('a + ul').querySelector('li > a');
+
+            this._currentMenuitem.focus();
+
+            this._currentMenuitem.setAttribute('tabindex', '0');
+
+            preventDefault = true;
+          } else {
+            this.closeSubmenu(menuitem);
+            var nextMenubarIndex = this._currentMenubarIndex + 1 >= this._menubarMenuitems.length ? 0 : this._currentMenubarIndex + 1;
+            var nextMenubaritem = this._menubarMenuitems[nextMenubarIndex];
+
+            this._currentMenuitem.setAttribute('tabindex', '-1');
+
+            this._currentMenuitem = nextMenubaritem;
+            this._currentMenubarIndex = nextMenubarIndex;
+
+            this._currentMenuitem.focus();
+
+            this._currentMenuitem.setAttribute('tabindex', '0');
+
+            this.openSubmenu(this._currentMenuitem);
+            preventDefault = true;
+          }
+
           break;
 
         case this._keyCode.ARROW_LEFT:
+          preventDefault = true;
           break;
 
         case this._keyCode.ARROW_DOWN:
+          preventDefault = true;
           break;
 
         case this._keyCode.ARROW_UP:
+          preventDefault = true;
           break;
 
         case this._keyCode.HOME:
+          preventDefault = true;
           break;
 
         case this._keyCode.END:
+          preventDefault = true;
           break;
       }
+
+      if (preventDefault) {
+        event.stopPropagation();
+        event.preventDefault();
+      }
+
+      console.log(this._currentMenuitem);
+    }
+  }, {
+    key: "hasSubmenu",
+    value: function hasSubmenu(menuitem) {
+      var liElem = menuitem.parentNode;
+      var menu = liElem.querySelector('a + ul');
+      var response = menu == null ? false : true;
+      return response;
     }
   }, {
     key: "openSubmenu",
@@ -238,10 +324,10 @@ var a11yMenubar = function () {
       var openSubmenus = this._navElem.querySelectorAll('ul.a11y-menubar-menu-open');
 
       for (var i = 0; i < openSubmenus.length; i++) {
-        var aElem = openSubmenu[i].parentNode.querySelector('ul + a');
+        var aElem = openSubmenus[i].parentNode.querySelector('a');
         aElem.setAttribute('aria-expanded', 'false');
-        openSubmenu[i].classList.remove('a11y-menubar-menu-open');
-        openSubmenu[i].classList.add('a11y-menubar-menu-closed');
+        openSubmenus[i].classList.remove('a11y-menubar-menu-open');
+        openSubmenus[i].classList.add('a11y-menubar-menu-closed');
       }
     }
   }, {
