@@ -230,10 +230,8 @@ var a11yMenubar = function () {
             this._currentMenuitem.focus();
 
             this._currentMenuitem.setAttribute('tabindex', '0');
-
-            preventDefault = true;
           } else {
-            this.closeSubmenu(menuitem);
+            this.closeAllSubmenus();
             var nextMenubarIndex = this._currentMenubarIndex + 1 >= this._menubarMenuitems.length ? 0 : this._currentMenubarIndex + 1;
             var nextMenubaritem = this._menubarMenuitems[nextMenubarIndex];
 
@@ -247,9 +245,9 @@ var a11yMenubar = function () {
             this._currentMenuitem.setAttribute('tabindex', '0');
 
             this.openSubmenu(this._currentMenuitem);
-            preventDefault = true;
           }
 
+          preventDefault = true;
           break;
 
         case this._keyCode.ARROW_LEFT:
@@ -264,8 +262,8 @@ var a11yMenubar = function () {
           this._currentMenuitem.setAttribute('tabindex', '0');
 
           if (this._currentMenuitem.classList.contains('a11y-menubar-menuitem')) {
-            var prevMenubarIndex = this._currentMenubarIndex - 1 < 0 ? this._menubarItems.length - 1 : this._currentMenubarIndex - 1;
-            var prevMenubarItem = this._menubarMenuitems[prevMenubarIndex];
+            var prevMenubarIndex = this._currentMenubarIndex - 1 < 0 ? this._menubarMenuitems.length - 1 : this._currentMenubarIndex - 1;
+            var prevMenubaritem = this._menubarMenuitems[prevMenubarIndex];
 
             this._currentMenuitem.setAttribute('tabindex', '-1');
 

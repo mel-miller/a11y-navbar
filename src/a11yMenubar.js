@@ -246,10 +246,9 @@ class a11yMenubar {
           this._currentMenuitem = menuitem.parentNode.querySelector('a + ul').querySelector('li > a');
           this._currentMenuitem.focus();
           this._currentMenuitem.setAttribute('tabindex', '0');
-          preventDefault = true;
         }
         else {
-          this.closeSubmenu(menuitem);
+          this.closeAllSubmenus();
           
           let nextMenubarIndex = (this._currentMenubarIndex + 1 >= this._menubarMenuitems.length) ? 0 : this._currentMenubarIndex + 1;
           let nextMenubaritem = this._menubarMenuitems[nextMenubarIndex];
@@ -260,8 +259,8 @@ class a11yMenubar {
           this._currentMenuitem.focus();
           this._currentMenuitem.setAttribute('tabindex', '0');
           this.openSubmenu(this._currentMenuitem);
-          preventDefault = true;
         }
+        preventDefault = true;
         break;
       
       case this._keyCode.ARROW_LEFT:
@@ -279,8 +278,8 @@ class a11yMenubar {
         this._currentMenuitem.setAttribute('tabindex', '0');
         
         if (this._currentMenuitem.classList.contains('a11y-menubar-menuitem')) {
-          let prevMenubarIndex = (this._currentMenubarIndex - 1 < 0) ? this._menubarItems.length - 1 : this._currentMenubarIndex - 1;
-          let prevMenubarItem = this._menubarMenuitems[prevMenubarIndex];
+          let prevMenubarIndex = (this._currentMenubarIndex - 1 < 0) ? this._menubarMenuitems.length - 1 : this._currentMenubarIndex - 1;
+          let prevMenubaritem = this._menubarMenuitems[prevMenubarIndex];
           
           this._currentMenuitem.setAttribute('tabindex', '-1');
           this._currentMenuitem = prevMenubaritem;
