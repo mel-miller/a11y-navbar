@@ -146,11 +146,6 @@ var a11yMenubar = function () {
           prevMenubarItem.setAttribute('tabindex', '0');
           this._currentMenubarIndex = prevMenubarIndex;
           this._currentMenuitem = prevMenubarItem;
-
-          if (this.hasSubmenu(this._currentMenuitem)) {
-            this.openSubmenu(this._currentMenuitem);
-          }
-
           preventDefault = true;
           break;
 
