@@ -304,6 +304,18 @@ class a11yMenubar {
           -Moves focus to the next item in the submenu.
           -If focus is on the last item, moves focus to the first item.
         */
+        let nextSubmenuItem = undefined;
+        let nextSubmenuLiElem = menuitem.parentNode.nextElementSibling;
+        if (nextSubmenuLiElem == null) {
+          nextSubmenuItem = menuitem.parentNode.parentNode.firstElementChild.querySelector('a');
+        }
+        else {
+          nextSubmenuItem = nextSubmenuLiElem.querySelector('a');
+        }
+        this._currentMenuitem.setAttribute('tabindex', '-1');
+        this._currentMenuitem = nextSubmenuItem;
+        this._currentMenuitem.focus();
+        this._currentMenuitem.setAttribute('tabindex', '0');
         preventDefault = true;
         break;
       
@@ -312,16 +324,38 @@ class a11yMenubar {
           -Moves focus to previous item in the submenu.
           -If focus is on the first item, moves focus to the last item.
         */
+        let prevSubmenuItem = undefined;
+        let prevSubmenuLiElem = menuitem.parentNode.prevElementSibling;
+        if (prevSubmenuLiElem == null) {
+          prevSubmenuItem = menuitem.parentNode.parentNode.firstElementChild.querySelector('a');
+        }
+        else {
+          prevSubmenuItem = prevSubmenuLiElem.querySelector('a');
+        }
+        this._currentMenuitem.setAttribute('tabindex', '-1');
+        this._currentMenuitem = prevSubmenuItem;
+        this._currentMenuitem.focus();
+        this._currentMenuitem.setAttribute('tabindex', '0');
         preventDefault = true;
         break;
       
       case this._keyCode.HOME:
         // Moves focus to the first item in the submenu.
+        let firstSubmenuItem = menuitem.parentNode.parentNode.firstElementChild.querySelector('a');
+        this._currentMenuitem.setAttribute('tabindex', '-1');
+        this._currentMenuitem = firstSubmenuItem;
+        this._currentMenuitem.focus();
+        this._currentMenuitem.setAttribute('tabindex', '0');
         preventDefault = true;
         break;
       
       case this._keyCode.END:
         // Moves focus to the last item in the submenu.
+        let lastSubmenuItem = menuitem.parentNode.parentNode.lastElementChild.querySelector('a');
+        this._currentMenuitem.setAttribute('tabindex', '-1');
+        this._currentMenuitem = lastSubmenuItem;
+        this._currentMenuitem.focus();
+        this._currentMenuitem.setAttribute('tabindex', '0');
         preventDefault = true;
         break;
       
