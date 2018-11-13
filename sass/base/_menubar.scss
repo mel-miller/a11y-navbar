@@ -1,0 +1,59 @@
+nav.a11y-menubar {
+	font-family:$proxima;
+	
+	background-color:$lt-gray;
+	
+	display:block;
+	width:100%;
+	
+	ul[role=menubar] {
+		list-style-type: none;
+		
+		li {
+			list-style-type: none;
+			display:inline-block;
+			position: relative;
+			
+			a[role=menuitem] {
+				color:$dk-gray;
+				text-decoration:none;
+				background-color:$lt-gray;
+				line-height:1.5rem;
+				
+				display: block;
+				height:1.5rem;
+				
+				&:focus, &:hover {
+					color:$lt-gray;
+					background-color:$dk-gray;
+				}
+			}
+			
+			ul[role=menu] {
+				&.a11y-menubar-menu-open {
+					display:block;
+					width:10rem;
+					position:absolute;
+					top:1.5rem;
+					left:0;
+					
+					li {
+						display:block;
+						width:100%;
+						
+						ul[role=menu] {
+							left:100%;
+						}
+					}
+				}
+				
+				&.a11y-menubar-menu-closed {
+					@include visually-hidden();
+				}
+			}
+			
+		}
+		
+	}
+	
+}
