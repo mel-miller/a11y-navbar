@@ -1,7 +1,7 @@
 {
   "name": "a11y-menubar",
-  "version": "1.0.0",
-  "description": "A library which creates a menubar complying with the WAI-ARIA Menubar pattern.",
+  "version": "0.0.1",
+  "description": "A script which creates a menubar complying with the WAI-ARIA Menubar pattern.",
   "main": "src/a11yMenubar.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
