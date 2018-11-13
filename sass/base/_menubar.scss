@@ -15,10 +15,17 @@ nav.a11y-menubar {
 			position: relative;
 			
 			a[role=menuitem] {
+				&.a11y-menubar-menuitem {
+					border-right:1px solid $md-gray;
+					border-bottom:none;
+				}
+				
 				color:$dk-gray;
 				text-decoration:none;
 				background-color:$lt-gray;
 				line-height:1.5rem;
+				padding:0 1rem 0 1rem;
+				border-bottom:1px solid $md-gray;
 				
 				display: block;
 				height:1.5rem;
