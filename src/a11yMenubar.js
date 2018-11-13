@@ -4,7 +4,7 @@
 
 class a11yMenubar {
   
-  constructor(id, domObj=document, ariaLabel='') {
+  constructor(id, domObj=document, ariaLabel='', hoverintent=hoverintent) {
     // Define members.
     this._keyCode = {
       'TAB':      9,
@@ -60,6 +60,7 @@ class a11yMenubar {
     }
     
     // Attributes for all menuitems.
+    // TODO: Add hoverintent functionality (or mouse events if hoverintent not available).
     let menuitems = menubar.querySelectorAll('li > a');
     
     for (let j = 0; j < menuitems.length; j++) {
@@ -99,9 +100,6 @@ class a11yMenubar {
     // First menubar menuitem should be the current menuitem.
     this._currentMenuitem = this._menubarMenuitems[0];
     
-    // TODO: Add hover listeners.
-    
-    // TODO: Add hoverintent functionality.
   }
   
   destroy () {
@@ -117,88 +115,80 @@ class a11yMenubar {
     let menuitem = event.target;
     let key = this.normalizeKey(event.key || event.keyCode);
     
-    switch (key) {
-      case this._keyCode.SPACE:
-      case this._keyCode.ENTER:
-      case this._keyCode.ARROW_DOWN:
-        // Opens submenu and moves focus to first item in the submenu.
-        this.closeAllSubmenus();
-        this.openSubmenu(menuitem);
-        let firstMenuitem = menuitem.parentNode.querySelector('ul[role=menu] > li > a[role=menuitem]');
-        
-        if (firstMenuitem != null) {
-          firstMenuitem.focus();
-          this._currentMenuitem.setAttribute('tabindex', '-1');
-          this._currentMenuitem = firstMenuitem;
-          this._currentMenuitem.setAttribute('tabindex', '0');
-        }
-        preventDefault = true;
-        break;
+    if (key == this._keyCode.SPACE || key == this._keyCode.ENTER || key == this._keyCode.ARROW_DOWN) {
+      // Opens submenu and moves focus to first item in the submenu.
+      this.closeAllSubmenus();
+      this.openSubmenu(menuitem);
+      let firstMenuitem = menuitem.parentNode.querySelector('ul[role=menu] > li > a[role=menuitem]');
       
-      case this._keyCode.ARROW_RIGHT:
-        /*
-          -Moves focus to the next item in the menubar.
-          -If focus is on the last item, moves focus to the first item. 
-         */
-        let nextMenubarIndex = (this._currentMenubarIndex + 1 >= this._menubarMenuitems.length) ? 0 : this._currentMenubarIndex + 1;
-        let nextMenubarItem = this._menubarMenuitems[nextMenubarIndex];
-        
-        nextMenubarItem.focus();
-        this._menubarMenuitems[this._currentMenubarIndex].setAttribute('tabindex', '-1');
-        nextMenubarItem.setAttribute('tabindex', '0');
-        this._currentMenubarIndex = nextMenubarIndex;
-        this._currentMenuitem = nextMenubarItem;
-        preventDefault = true;
-        break;
-      
-      case this._keyCode.ARROW_LEFT:
-        /*
-          -Moves focus to the previous item in the menubar.
-          -If focus is on the first item, moves focus to the last item.
-         */
-        let prevMenubarIndex = (this._currentMenubarIndex - 1 < 0) ? this._menubarMenuitems.length - 1 : this._currentMenubarIndex - 1;
-        let prevMenubarItem = this._menubarMenuitems[prevMenubarIndex];
-        
-        prevMenubarItem.focus();
-        this._menubarMenuitems[this._currentMenubarIndex].setAttribute('tabindex', '-1');
-        prevMenubarItem.setAttribute('tabindex', '0');
-        this._currentMenubarIndex = prevMenubarIndex;
-        this._currentMenuitem = prevMenubarItem;
-        preventDefault = true;
-        break;
-      
-      case this._keyCode.ARROW_UP:
-        // Opens submenu and moves focus to last item in the submenu.
-        this.openSubmenu(menuitem);
-        let lastMenuitem = menuitem.parentNode.querySelector('ul[role=menu]').lastElementChild.firstElementChild;
-        lastMenuitem.focus();
+      if (firstMenuitem != null) {
+        firstMenuitem.focus();
         this._currentMenuitem.setAttribute('tabindex', '-1');
-        this._currentMenuitem = lastMenuitem;
+        this._currentMenuitem = firstMenuitem;
         this._currentMenuitem.setAttribute('tabindex', '0');
-        preventDefault = true;
-        break;
-        
-      case this._keyCode.HOME:
-        // Moves focus to first item in the menubar.
-        this._menubarMenuitems[this._currentMenubarIndex].setAttribute('tabindex', '-1');
-        this._menubarMenuitems[0].setAttribute('tabindex', '0');
-        this._menubarMenuitems[0].focus();
-        preventDefault = true;
-        break;
+      }
+      preventDefault = true;
+    }
+    else if (key == this._keyCode.ARROW_RIGHT) {
+      /*
+        -Moves focus to the next item in the menubar.
+        -If focus is on the last item, moves focus to the first item. 
+       */
+      let nextMenubarIndex = (this._currentMenubarIndex + 1 >= this._menubarMenuitems.length) ? 0 : this._currentMenubarIndex + 1;
+      let nextMenubarItem = this._menubarMenuitems[nextMenubarIndex];
       
-      case this._keyCode.END:
-        // Moves focus to last item in the menubar.
-        this._menubarMenuitems[this._currentMenubarIndex].setAttribute('tabindex', '-1');
-        this._menubarMenuitems[this._menubarMenuitems.length - 1].setAttribute('tabindex', '0');
-        this._menubarMenuitems[this._menubarMenuitems.length - 1].focus();
-        preventDefault = true;
-        break;
+      nextMenubarItem.focus();
+      this._menubarMenuitems[this._currentMenubarIndex].setAttribute('tabindex', '-1');
+      nextMenubarItem.setAttribute('tabindex', '0');
+      this._currentMenubarIndex = nextMenubarIndex;
+      this._currentMenuitem = nextMenubarItem;
+      preventDefault = true;
+    }
+    else if (key == this._keyCode.ARROW_LEFT) {
+      /*
+        -Moves focus to the previous item in the menubar.
+        -If focus is on the first item, moves focus to the last item.
+       */
+      let prevMenubarIndex = (this._currentMenubarIndex - 1 < 0) ? this._menubarMenuitems.length - 1 : this._currentMenubarIndex - 1;
+      let prevMenubarItem = this._menubarMenuitems[prevMenubarIndex];
       
+      prevMenubarItem.focus();
+      this._menubarMenuitems[this._currentMenubarIndex].setAttribute('tabindex', '-1');
+      prevMenubarItem.setAttribute('tabindex', '0');
+      this._currentMenubarIndex = prevMenubarIndex;
+      this._currentMenuitem = prevMenubarItem;
+      preventDefault = true;
+    }
+    else if (key == this._keyCode.ARROW_UP) {
+      // Opens submenu and moves focus to last item in the submenu.
+      this.openSubmenu(menuitem);
+      let lastMenuitem = menuitem.parentNode.querySelector('ul[role=menu]').lastElementChild.firstElementChild;
+      lastMenuitem.focus();
+      this._currentMenuitem.setAttribute('tabindex', '-1');
+      this._currentMenuitem = lastMenuitem;
+      this._currentMenuitem.setAttribute('tabindex', '0');
+      preventDefault = true;
+    }
+    else if (key == this._keyCode.HOME) {
+      // Moves focus to first item in the menubar.
+      this._menubarMenuitems[this._currentMenubarIndex].setAttribute('tabindex', '-1');
+      this._menubarMenuitems[0].setAttribute('tabindex', '0');
+      this._menubarMenuitems[0].focus();
+      preventDefault = true;
+    }
+    else if (key == this._keyCode.END) {
+      // Moves focus to last item in the menubar.
+      this._menubarMenuitems[this._currentMenubarIndex].setAttribute('tabindex', '-1');
+      this._menubarMenuitems[this._menubarMenuitems.length - 1].setAttribute('tabindex', '0');
+      this._menubarMenuitems[this._menubarMenuitems.length - 1].focus();
+      preventDefault = true;
+    }
+    else {
       // TODO: Consider adding optional character handling.
     }
     
     if (preventDefault) {
-      // The following two statements will stop the keys from doing stuff.
+      // The following statements will stop the keys from doing stuff.
       event.stopPropagation();
       event.preventDefault();
     }
@@ -214,151 +204,142 @@ class a11yMenubar {
     let menuitem = event.target;
     let key = this.normalizeKey(event.key || event.keyCode);
     
-    switch(key) {
-      case this._keyCode.SPACE:
-      case this._keyCode.ENTER:
-        // Activates menu item, causing the link to be activated.
-        menuitem.click();
-        preventDefault = true;
-        break;
-      
-      case this._keyCode.ESC:
-        /* 
-          Closes submenu.
-          Moves focus to parent menubar item.
-        */
+    if (key == this._keyCode.SPACE || key == this._keyCode.ENTER) {
+      // Activates menu item, causing the link to be activated.
+      menuitem.click();
+      preventDefault = true;
+    }
+    else if (key == this._keyCode.ESC) {
+      /* 
+        -Closes submenu.
+        -Moves focus to parent menubar item.
+       */
+      this._currentMenuitem.setAttribute('tabindex', '-1');
+      this._currentMenuitem = menuitem.parentNode.parentNode.parentNode.querySelector('a[role=menuitem]');
+      this.closeSubmenu(this._currentMenuitem);
+      this._currentMenuitem.focus();
+      this._currentMenuitem.setAttribute('tabindex', '0');
+      preventDefault = true;
+    }
+    else if (key == this._keyCode.ARROW_RIGHT) {
+      /*
+        -If focus is on an item with a submenu, opens the submenu and places focus on the first item.
+        -If focus is on an item that does not have a submenu:
+            -Closes submenu.
+            -Moves focus to next item in the menubar.
+            -Opens submenu of newly focused menubar item, keeping focus on that parent menubar item.
+       */
+      if (this.hasSubmenu(menuitem)) {
+        this.openSubmenu(menuitem);
         this._currentMenuitem.setAttribute('tabindex', '-1');
-        this._currentMenuitem = menuitem.parentNode.parentNode.parentNode.querySelector('a[role=menuitem]');
-        this.closeSubmenu(this._currentMenuitem);
+        this._currentMenuitem = menuitem.parentNode.querySelector('a + ul').querySelector('li > a');
         this._currentMenuitem.focus();
         this._currentMenuitem.setAttribute('tabindex', '0');
-        preventDefault = true;
-        break;
-      
-      case this._keyCode.ARROW_RIGHT:
-        /*
-          -If focus is on an item with a submenu, opens the submenu and places focus on the first item.
-          -If focus is on an item that does not have a submenu:
-              -Closes submenu.
-              -Moves focus to next item in the menubar.
-              -Opens submenu of newly focused menubar item, keeping focus on that parent menubar item.
-        */
-        if (this.hasSubmenu(menuitem)) {
-          this.openSubmenu(menuitem);
-          this._currentMenuitem.setAttribute('tabindex', '-1');
-          this._currentMenuitem = menuitem.parentNode.querySelector('a + ul').querySelector('li > a');
-          this._currentMenuitem.focus();
-          this._currentMenuitem.setAttribute('tabindex', '0');
-        }
-        else {
-          this.closeAllSubmenus();
-          
-          let nextMenubarIndex = (this._currentMenubarIndex + 1 >= this._menubarMenuitems.length) ? 0 : this._currentMenubarIndex + 1;
-          let nextMenubaritem = this._menubarMenuitems[nextMenubarIndex];
-          
-          this._currentMenuitem.setAttribute('tabindex', '-1');
-          this._currentMenuitem = nextMenubaritem;
-          this._currentMenubarIndex = nextMenubarIndex;
-          this._currentMenuitem.focus();
-          this._currentMenuitem.setAttribute('tabindex', '0');
-          this.openSubmenu(this._currentMenuitem);
-        }
-        preventDefault = true;
-        break;
-      
-      case this._keyCode.ARROW_LEFT:
-        /*
-          -Closes submenu and moves focus to parent menu item.
-          -If parent menu item is in the menubar, also:
-              -moves focus to previous item in the menubar.
-              -Opens submenu of newly focused menubar item, keeping focus on that parent menubar item.
-        */
-        let submenuParentMenuitem = menuitem.parentNode.parentNode.parentNode.querySelector('a[role=menuitem]');
-        this.closeSubmenu(submenuParentMenuitem);
-        submenuParentMenuitem.focus();
-        this._currentMenuitem.setAttribute('tabindex', '-1');
-        this._currentMenuitem = submenuParentMenuitem;
-        this._currentMenuitem.setAttribute('tabindex', '0');
+      }
+      else {
+        this.closeAllSubmenus();
         
-        if (this._currentMenuitem.classList.contains('a11y-menubar-menuitem')) {
-          let prevMenubarIndex = (this._currentMenubarIndex - 1 < 0) ? this._menubarMenuitems.length - 1 : this._currentMenubarIndex - 1;
-          let prevMenubaritem = this._menubarMenuitems[prevMenubarIndex];
-          
-          this._currentMenuitem.setAttribute('tabindex', '-1');
-          this._currentMenuitem = prevMenubaritem;
-          this._currentMenubarIndex = prevMenubarIndex;
-          this._currentMenuitem.focus();
-          this._currentMenuitem.setAttribute('tabindex', '0');
-          this.openSubmenu(this._currentMenuitem);
-        }
-        preventDefault = true;
-        break;
-      
-      case this._keyCode.ARROW_DOWN:
-        /*
-          -Moves focus to the next item in the submenu.
-          -If focus is on the last item, moves focus to the first item.
-        */
-        let nextSubmenuItem = undefined;
-        let nextSubmenuLiElem = menuitem.parentNode.nextElementSibling;
-        if (nextSubmenuLiElem == null) {
-          nextSubmenuItem = menuitem.parentNode.parentNode.firstElementChild.querySelector('a');
-        }
-        else {
-          nextSubmenuItem = nextSubmenuLiElem.querySelector('a');
-        }
+        let nextMenubarIndex = (this._currentMenubarIndex + 1 >= this._menubarMenuitems.length) ? 0 : this._currentMenubarIndex + 1;
+        let nextMenubaritem = this._menubarMenuitems[nextMenubarIndex];
+        
         this._currentMenuitem.setAttribute('tabindex', '-1');
-        this._currentMenuitem = nextSubmenuItem;
+        this._currentMenuitem = nextMenubaritem;
+        this._currentMenubarIndex = nextMenubarIndex;
         this._currentMenuitem.focus();
         this._currentMenuitem.setAttribute('tabindex', '0');
-        preventDefault = true;
-        break;
+        this.openSubmenu(this._currentMenuitem);
+      }
+      preventDefault = true;
+    }
+    else if (key == this._keyCode.ARROW_LEFT) {
+      /*
+        -Closes submenu and moves focus to parent menu item.
+        -If parent menu item is in the menubar, also:
+            -moves focus to previous item in the menubar.
+            -Opens submenu of newly focused menubar item, keeping focus on that parent menubar item.
+       */
+      let submenuParentMenuitem = menuitem.parentNode.parentNode.parentNode.querySelector('a[role=menuitem]');
+      this.closeSubmenu(submenuParentMenuitem);
+      submenuParentMenuitem.focus();
+      this._currentMenuitem.setAttribute('tabindex', '-1');
+      this._currentMenuitem = submenuParentMenuitem;
+      this._currentMenuitem.setAttribute('tabindex', '0');
       
-      case this._keyCode.ARROW_UP:
-        /*
-          -Moves focus to previous item in the submenu.
-          -If focus is on the first item, moves focus to the last item.
-        */
-        let prevSubmenuItem = undefined;
-        let prevSubmenuLiElem = menuitem.parentNode.previousElementSibling;
-        if (prevSubmenuLiElem == null) {
-          prevSubmenuItem = menuitem.parentNode.parentNode.lastElementChild.querySelector('a');
-        }
-        else {
-          prevSubmenuItem = prevSubmenuLiElem.querySelector('a');
-        }
+      if (this._currentMenuitem.classList.contains('a11y-menubar-menuitem')) {
+        let prevMenubarIndex = (this._currentMenubarIndex - 1 < 0) ? this._menubarMenuitems.length - 1 : this._currentMenubarIndex - 1;
+        let prevMenubaritem = this._menubarMenuitems[prevMenubarIndex];
+        
         this._currentMenuitem.setAttribute('tabindex', '-1');
-        this._currentMenuitem = prevSubmenuItem;
+        this._currentMenuitem = prevMenubaritem;
+        this._currentMenubarIndex = prevMenubarIndex;
         this._currentMenuitem.focus();
         this._currentMenuitem.setAttribute('tabindex', '0');
-        preventDefault = true;
-        break;
-      
-      case this._keyCode.HOME:
-        // Moves focus to the first item in the submenu.
-        let firstSubmenuItem = menuitem.parentNode.parentNode.firstElementChild.querySelector('a');
-        this._currentMenuitem.setAttribute('tabindex', '-1');
-        this._currentMenuitem = firstSubmenuItem;
-        this._currentMenuitem.focus();
-        this._currentMenuitem.setAttribute('tabindex', '0');
-        preventDefault = true;
-        break;
-      
-      case this._keyCode.END:
-        // Moves focus to the last item in the submenu.
-        let lastSubmenuItem = menuitem.parentNode.parentNode.lastElementChild.querySelector('a');
-        this._currentMenuitem.setAttribute('tabindex', '-1');
-        this._currentMenuitem = lastSubmenuItem;
-        this._currentMenuitem.focus();
-        this._currentMenuitem.setAttribute('tabindex', '0');
-        preventDefault = true;
-        break;
-      
+        this.openSubmenu(this._currentMenuitem);
+      }
+      preventDefault = true;
+    }
+    else if (key == this._keyCode.ARROW_DOWN) {
+      /*
+        -Moves focus to the next item in the submenu.
+        -If focus is on the last item, moves focus to the first item.
+       */
+      let nextSubmenuItem = undefined;
+      let nextSubmenuLiElem = menuitem.parentNode.nextElementSibling;
+      if (nextSubmenuLiElem == null) {
+        nextSubmenuItem = menuitem.parentNode.parentNode.firstElementChild.querySelector('a');
+      }
+      else {
+        nextSubmenuItem = nextSubmenuLiElem.querySelector('a');
+      }
+      this._currentMenuitem.setAttribute('tabindex', '-1');
+      this._currentMenuitem = nextSubmenuItem;
+      this._currentMenuitem.focus();
+      this._currentMenuitem.setAttribute('tabindex', '0');
+      preventDefault = true;
+    }
+    else if (key == this._keyCode.ARROW_UP) {
+      /*
+        -Moves focus to previous item in the submenu.
+        -If focus is on the first item, moves focus to the last item.
+      */
+      let prevSubmenuItem = undefined;
+      let prevSubmenuLiElem = menuitem.parentNode.previousElementSibling;
+      if (prevSubmenuLiElem == null) {
+        prevSubmenuItem = menuitem.parentNode.parentNode.lastElementChild.querySelector('a');
+      }
+      else {
+        prevSubmenuItem = prevSubmenuLiElem.querySelector('a');
+      }
+      this._currentMenuitem.setAttribute('tabindex', '-1');
+      this._currentMenuitem = prevSubmenuItem;
+      this._currentMenuitem.focus();
+      this._currentMenuitem.setAttribute('tabindex', '0');
+      preventDefault = true;
+    }
+    else if (key == this._keyCode.HOME) {
+      // Moves focus to the first item in the submenu.
+      let firstSubmenuItem = menuitem.parentNode.parentNode.firstElementChild.querySelector('a');
+      this._currentMenuitem.setAttribute('tabindex', '-1');
+      this._currentMenuitem = firstSubmenuItem;
+      this._currentMenuitem.focus();
+      this._currentMenuitem.setAttribute('tabindex', '0');
+      preventDefault = true;
+    }
+    else if (key == this._keyCode.END) {
+      // Moves focus to the last item in the submenu.
+      let lastSubmenuItem = menuitem.parentNode.parentNode.lastElementChild.querySelector('a');
+      this._currentMenuitem.setAttribute('tabindex', '-1');
+      this._currentMenuitem = lastSubmenuItem;
+      this._currentMenuitem.focus();
+      this._currentMenuitem.setAttribute('tabindex', '0');
+      preventDefault = true;
+    }
+    else {
       // TODO: Consider adding optional printable character handling.
     }
     
     if (preventDefault) {
-      // The following two statements will stop the keys from doing stuff.
+      // The following statements will stop the keys from doing stuff.
       event.stopPropagation();
       event.preventDefault();
     }
