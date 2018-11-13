@@ -4,6 +4,9 @@ const presets = [
       "browsers": ["last 2 versions", "ie >= 9"]
     },
     useBuiltIns: "usage"
+  }],
+  ["minify", {
+    mangle: {}
   }]
 ];
 
