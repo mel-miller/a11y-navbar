@@ -2,7 +2,7 @@
   "name": "a11y-menubar",
   "version": "1.0.0",
   "description": "A library which creates a menubar complying with the WAI-ARIA Menubar pattern.",
-  "main": "index.js",
+  "main": "src/a11yMenubar.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "babel src --out-dir dist --presets=@babel/env"
