@@ -386,8 +386,6 @@ class a11yMenubar {
       return;
     }
     
-    console.log(event);
-    
     let menuitem = event.target;
     
     if (this.hasSubmenu(menuitem)) {
@@ -399,8 +397,6 @@ class a11yMenubar {
     if (event.defaultPrevented) {
       return;
     }
-    
-    console.log(event);
     
     let menubar = event.target;
     
