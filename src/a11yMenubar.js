@@ -21,6 +21,7 @@ class a11yMenubar {
     
     this._id = id;
     this._domObj = domObj;
+    this._hoverintent = hoverintent;
     this._ariaLabel = ariaLabel;
     this._navElem = this._domObj.getElementById(this._id);
     this._menubarMenuitems = [];
@@ -60,7 +61,6 @@ class a11yMenubar {
     }
     
     // Attributes for all menuitems.
-    // TODO: Add hoverintent functionality (or mouse events if hoverintent not available).
     let menuitems = menubar.querySelectorAll('li > a');
     
     for (let j = 0; j < menuitems.length; j++) {
@@ -85,6 +85,10 @@ class a11yMenubar {
         submenus[k].classList.add('a11y-menubar-menu-closed');
       }
       
+      // TODO: Add hoverintent functionality (or mouse events if hoverintent not available).
+      if (this._hoverintent) {
+        
+      }
     }
     
     // All li elements should have an aria role of "none".
@@ -123,9 +127,7 @@ class a11yMenubar {
       
       if (firstMenuitem != null) {
         firstMenuitem.focus();
-        this._currentMenuitem.setAttribute('tabindex', '-1');
-        this._currentMenuitem = firstMenuitem;
-        this._currentMenuitem.setAttribute('tabindex', '0');
+        this.updateCurrentMenuitem(firstMenuitem);
       }
       preventDefault = true;
     }
@@ -138,10 +140,8 @@ class a11yMenubar {
       let nextMenubarItem = this._menubarMenuitems[nextMenubarIndex];
       
       nextMenubarItem.focus();
-      this._menubarMenuitems[this._currentMenubarIndex].setAttribute('tabindex', '-1');
-      nextMenubarItem.setAttribute('tabindex', '0');
       this._currentMenubarIndex = nextMenubarIndex;
-      this._currentMenuitem = nextMenubarItem;
+      this.updateCurrentMenuitem(nextMenubarItem);
       preventDefault = true;
     }
     else if (key == this._keyCode.ARROW_LEFT) {
@@ -153,10 +153,8 @@ class a11yMenubar {
       let prevMenubarItem = this._menubarMenuitems[prevMenubarIndex];
       
       prevMenubarItem.focus();
-      this._menubarMenuitems[this._currentMenubarIndex].setAttribute('tabindex', '-1');
-      prevMenubarItem.setAttribute('tabindex', '0');
       this._currentMenubarIndex = prevMenubarIndex;
-      this._currentMenuitem = prevMenubarItem;
+      this.updateCurrentMenuitem(prevMenubarItem);
       preventDefault = true;
     }
     else if (key == this._keyCode.ARROW_UP) {
@@ -164,23 +162,21 @@ class a11yMenubar {
       this.openSubmenu(menuitem);
       let lastMenuitem = menuitem.parentNode.querySelector('ul[role=menu]').lastElementChild.firstElementChild;
       lastMenuitem.focus();
-      this._currentMenuitem.setAttribute('tabindex', '-1');
-      this._currentMenuitem = lastMenuitem;
-      this._currentMenuitem.setAttribute('tabindex', '0');
+      this.updateCurrentMenuitem(lastMenuitem);
       preventDefault = true;
     }
     else if (key == this._keyCode.HOME) {
       // Moves focus to first item in the menubar.
-      this._menubarMenuitems[this._currentMenubarIndex].setAttribute('tabindex', '-1');
-      this._menubarMenuitems[0].setAttribute('tabindex', '0');
-      this._menubarMenuitems[0].focus();
+      let firstMenubarItem = this._menubarMenuitems[0];
+      firstMenubarItem.focus();
+      this.updateCurrentMenuitem(firstMenubarItem);
       preventDefault = true;
     }
     else if (key == this._keyCode.END) {
       // Moves focus to last item in the menubar.
-      this._menubarMenuitems[this._currentMenubarIndex].setAttribute('tabindex', '-1');
-      this._menubarMenuitems[this._menubarMenuitems.length - 1].setAttribute('tabindex', '0');
-      this._menubarMenuitems[this._menubarMenuitems.length - 1].focus();
+      let lastMenubarItem = this._menubarMenuitems[this._menubarMenuitems.length - 1];
+      lastMenubarItem.focus();
+      this.updateCurrentMenuitem(lastMenubarItem);
       preventDefault = true;
     }
     else {
@@ -214,11 +210,10 @@ class a11yMenubar {
         -Closes submenu.
         -Moves focus to parent menubar item.
        */
-      this._currentMenuitem.setAttribute('tabindex', '-1');
-      this._currentMenuitem = menuitem.parentNode.parentNode.parentNode.querySelector('a[role=menuitem]');
-      this.closeSubmenu(this._currentMenuitem);
-      this._currentMenuitem.focus();
-      this._currentMenuitem.setAttribute('tabindex', '0');
+      let parentMenuitem = menuitem.parentNode.parentNode.parentNode.querySelector('a[role=menuitem]');
+      this.closeSubmenu(parentMenuitem);
+      parentMenuitem.focus();
+      this.updateCurrentMenuitem(parentMenuitem);
       preventDefault = true;
     }
     else if (key == this._keyCode.ARROW_RIGHT) {
@@ -230,24 +225,21 @@ class a11yMenubar {
             -Opens submenu of newly focused menubar item, keeping focus on that parent menubar item.
        */
       if (this.hasSubmenu(menuitem)) {
+        let firstSubmenuItem = menuitem.parentNode.querySelector('a + ul').querySelector('li > a');
         this.openSubmenu(menuitem);
-        this._currentMenuitem.setAttribute('tabindex', '-1');
-        this._currentMenuitem = menuitem.parentNode.querySelector('a + ul').querySelector('li > a');
-        this._currentMenuitem.focus();
-        this._currentMenuitem.setAttribute('tabindex', '0');
+        firstSubmenuItem.focus();
+        this.updateCurrentMenuitem(firstSubmenuItem);
       }
       else {
         this.closeAllSubmenus();
         
         let nextMenubarIndex = (this._currentMenubarIndex + 1 >= this._menubarMenuitems.length) ? 0 : this._currentMenubarIndex + 1;
-        let nextMenubaritem = this._menubarMenuitems[nextMenubarIndex];
+        let nextMenubarItem = this._menubarMenuitems[nextMenubarIndex];
         
-        this._currentMenuitem.setAttribute('tabindex', '-1');
-        this._currentMenuitem = nextMenubaritem;
+        nextMenubarItem.focus();
+        this.openSubmenu(nextMenubarItem);
         this._currentMenubarIndex = nextMenubarIndex;
-        this._currentMenuitem.focus();
-        this._currentMenuitem.setAttribute('tabindex', '0');
-        this.openSubmenu(this._currentMenuitem);
+        this.updateCurrentMenuitem(nextMenubarItem);
       }
       preventDefault = true;
     }
@@ -261,20 +253,16 @@ class a11yMenubar {
       let submenuParentMenuitem = menuitem.parentNode.parentNode.parentNode.querySelector('a[role=menuitem]');
       this.closeSubmenu(submenuParentMenuitem);
       submenuParentMenuitem.focus();
-      this._currentMenuitem.setAttribute('tabindex', '-1');
-      this._currentMenuitem = submenuParentMenuitem;
-      this._currentMenuitem.setAttribute('tabindex', '0');
+      this.updateCurrentMenuitem(submenuParentMenuitem);
       
       if (this._currentMenuitem.classList.contains('a11y-menubar-menuitem')) {
         let prevMenubarIndex = (this._currentMenubarIndex - 1 < 0) ? this._menubarMenuitems.length - 1 : this._currentMenubarIndex - 1;
-        let prevMenubaritem = this._menubarMenuitems[prevMenubarIndex];
+        let prevMenubarItem = this._menubarMenuitems[prevMenubarIndex];
         
-        this._currentMenuitem.setAttribute('tabindex', '-1');
-        this._currentMenuitem = prevMenubaritem;
+        prevMenubarItem.focus();
+        this.openSubmenu(prevMenubarItem);
         this._currentMenubarIndex = prevMenubarIndex;
-        this._currentMenuitem.focus();
-        this._currentMenuitem.setAttribute('tabindex', '0');
-        this.openSubmenu(this._currentMenuitem);
+        this.updateCurrentMenuitem(prevMenubarItem);
       }
       preventDefault = true;
     }
@@ -291,10 +279,8 @@ class a11yMenubar {
       else {
         nextSubmenuItem = nextSubmenuLiElem.querySelector('a');
       }
-      this._currentMenuitem.setAttribute('tabindex', '-1');
-      this._currentMenuitem = nextSubmenuItem;
-      this._currentMenuitem.focus();
-      this._currentMenuitem.setAttribute('tabindex', '0');
+      nextSubmenuItem.focus();
+      this.updateCurrentMenuitem(nextSubmenuItem);
       preventDefault = true;
     }
     else if (key == this._keyCode.ARROW_UP) {
@@ -310,28 +296,22 @@ class a11yMenubar {
       else {
         prevSubmenuItem = prevSubmenuLiElem.querySelector('a');
       }
-      this._currentMenuitem.setAttribute('tabindex', '-1');
-      this._currentMenuitem = prevSubmenuItem;
-      this._currentMenuitem.focus();
-      this._currentMenuitem.setAttribute('tabindex', '0');
+      prevSubmenuItem.focus();
+      this.updateCurrentMenuitem(prevSubmenuItem);
       preventDefault = true;
     }
     else if (key == this._keyCode.HOME) {
       // Moves focus to the first item in the submenu.
       let firstSubmenuItem = menuitem.parentNode.parentNode.firstElementChild.querySelector('a');
-      this._currentMenuitem.setAttribute('tabindex', '-1');
-      this._currentMenuitem = firstSubmenuItem;
-      this._currentMenuitem.focus();
-      this._currentMenuitem.setAttribute('tabindex', '0');
+      firstSubmenuItem.focus();
+      this.updateCurrentMenuitem(firstSubmenuItem);
       preventDefault = true;
     }
     else if (key == this._keyCode.END) {
       // Moves focus to the last item in the submenu.
       let lastSubmenuItem = menuitem.parentNode.parentNode.lastElementChild.querySelector('a');
-      this._currentMenuitem.setAttribute('tabindex', '-1');
-      this._currentMenuitem = lastSubmenuItem;
-      this._currentMenuitem.focus();
-      this._currentMenuitem.setAttribute('tabindex', '0');
+      lastSubmenuItem.focus();
+      this.updateCurrentMenuitem(lastSubmenuItem);
       preventDefault = true;
     }
     else {
@@ -343,6 +323,12 @@ class a11yMenubar {
       event.stopPropagation();
       event.preventDefault();
     }
+  }
+  
+  updateCurrentMenuitem (newMenuitem) {
+    this._currentMenuitem.setAttribute('tabindex', '-1');
+    this._currentMenuitem = newMenuitem;
+    this._currentMenuitem.setAttribute('tabindex', '0');
   }
   
   hasSubmenu (menuitem) {
