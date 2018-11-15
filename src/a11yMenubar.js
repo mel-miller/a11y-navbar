@@ -87,7 +87,22 @@ class a11yMenubar {
       
       // TODO: Add hoverintent functionality (or mouse events if hoverintent not available).
       if (this._hoverintent) {
+        // Hoverintent in environment.
+        let options = {
+          timeout: 500,
+          interval: 50
+        };
         
+        hoverintent(
+            menuitems[j],
+            handleMouseoverMenuitem.bind(this), 
+            handleMouseoutMenuitem.bind(this)
+        ).options(options);
+      }
+      else {
+        // Default mouse events.
+        menuitems[j].addEventListener('mouseover', handleMouseoverMenuitem.bind(this));
+        menuitems[j].addEventListener('mouseout', handleMouseoutMenuitem.bind(this));
       }
     }
     
@@ -323,6 +338,22 @@ class a11yMenubar {
       event.stopPropagation();
       event.preventDefault();
     }
+  }
+  
+  handleMouseoverMenuitem (event) {
+    if (event.defaultPrevented) {
+      return;
+    }
+    
+    console.log(event);
+  }
+  
+  handleMouseoutMenuitem (event) {
+    if (event.defaultPrevented) {
+      return;
+    }
+    
+    console.log(event);
   }
   
   updateCurrentMenuitem (newMenuitem) {

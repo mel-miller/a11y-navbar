@@ -24,6 +24,7 @@
     "node-sass": "^4.10.0"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.0.0"
+    "@babel/polyfill": "^7.0.0",
+    "hoverintent": "^2.2.0"
   }
 }
