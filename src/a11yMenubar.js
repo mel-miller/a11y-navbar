@@ -41,16 +41,56 @@ class a11yMenubar {
     menubar.setAttribute('role', 'menubar');
     menubar.setAttribute('aria-label', this._ariaLabel);
     
+    // Add hoverintent functionality (or mouse events if hoverintent not available).
+    if (this._hoverintent) {
+      // Hoverintent in environment.
+      let options = {
+        timeout: 900,
+        interval: 50
+      };
+      
+      this._hoverintent(
+          menubar,
+          function (event) {},
+          this.handleMouseoutMenubar.bind(this)
+      ).options(options);
+    }
+    else {
+      // Default mouse events.
+      menubar.addEventListener('mouseout', this.handleMouseoutMenubar.bind(this));
+    }
+    
     // For menubar menuitems specifically.
     let menubarMenuitems = menubar.children;
     
     for (let i = 0; i < menubarMenuitems.length; i++) {
       let menubarMenuitem = menubarMenuitems[i].firstChild;
       menubarMenuitem.classList.add('a11y-menubar-menuitem');
+      
       // collect these as an Array or something and store in the class.
       this._menubarMenuitems[i] = menubarMenuitem;
+      
       // Add keydown handler (bound to a11yMenubar instance).
       menubarMenuitem.addEventListener('keydown', this.handleKeydownMenubar.bind(this));
+      
+      // Add hoverintent functionality (or mouse events if hoverintent not available).
+      if (this._hoverintent) {
+        // Hoverintent in environment.
+        let options = {
+          timeout: 900,
+          interval: 50
+        };
+        
+        this._hoverintent(
+            menubarMenuitem,
+            this.handleMouseoverMenubarMenuitem.bind(this),
+            function (event) {}
+        ).options(options);
+      }
+      else {
+        // Default mouse events.
+        menubar.addEventListener('mouseover', this.handleMouseoverMenubarMenuitem.bind(this));
+      }
     }
     
     // Add keydown handler to submenu menuitems (bound to a11yMenubar instance).
@@ -85,24 +125,23 @@ class a11yMenubar {
         submenus[k].classList.add('a11y-menubar-menu-closed');
       }
       
-      // TODO: Add hoverintent functionality (or mouse events if hoverintent not available).
+      // Add hoverintent functionality (or mouse events if hoverintent not available).
       if (this._hoverintent) {
         // Hoverintent in environment.
         let options = {
-          timeout: 500,
+          timeout: 900,
           interval: 50
         };
         
-        hoverintent(
+        this._hoverintent(
             menuitems[j],
-            handleMouseoverMenuitem.bind(this), 
-            handleMouseoutMenuitem.bind(this)
+            this.handleMouseoverMenuitem.bind(this), 
+            function (event) {}
         ).options(options);
       }
       else {
         // Default mouse events.
-        menuitems[j].addEventListener('mouseover', handleMouseoverMenuitem.bind(this));
-        menuitems[j].addEventListener('mouseout', handleMouseoutMenuitem.bind(this));
+        menuitems[j].addEventListener('mouseover', this.handleMouseoverMenuitem.bind(this));
       }
     }
     
@@ -124,6 +163,8 @@ class a11yMenubar {
   destroy () {
     // Remove all attributes/behaviors, etc. from constructor.
   }
+  
+  // Event Handlers -----------------------------------------------------
   
   handleKeydownMenubar (event) {
     if (event.defaultPrevented) {
@@ -346,15 +387,38 @@ class a11yMenubar {
     }
     
     console.log(event);
+    
+    let menuitem = event.target;
+    
+    if (this.hasSubmenu(menuitem)) {
+      this.openSubmenu(menuitem);
+    }
   }
   
-  handleMouseoutMenuitem (event) {
+  handleMouseoutMenubar (event) {
     if (event.defaultPrevented) {
       return;
     }
     
     console.log(event);
+    
+    let menubar = event.target;
+    
+    this.closeAllSubmenus();
   }
+  
+  handleMouseoverMenubarMenuitem (event) {
+    if (event.defaultPrevented) {
+      return;
+    }
+    
+    let menubarMenuitem = event.target;
+    
+    this.closeAllSubmenus();
+    this.openSubmenu(menubarMenuitem);
+  }
+  
+  // Utility functions -----------------------------------------------
   
   updateCurrentMenuitem (newMenuitem) {
     this._currentMenuitem.setAttribute('tabindex', '-1');
