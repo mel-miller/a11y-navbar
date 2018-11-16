@@ -391,6 +391,8 @@ class a11yMenubar {
     if (this.hasSubmenu(menuitem)) {
       this.openSubmenu(menuitem);
     }
+    
+    this.closeSiblingSubmenus(menuitem);
   }
   
   handleMouseoutMenubar (event) {
@@ -451,6 +453,23 @@ class a11yMenubar {
       menu.classList.remove('a11y-menubar-menu-open');
       menu.classList.add('a11y-menubar-menu-closed');
       menuitem.setAttribute('aria-expanded', 'false');
+    }
+  }
+  
+  closeSiblingSubmenus (menuitem) {
+    let ulElem = menuitem.parentNode.parentNode;
+    let siblings = ulElem.querySelectorAll('li > a[role=menuitem]');
+    let siblingsArray = [];
+    
+    // Remove menuitem from siblings.
+    for (let i = 0; i < siblings.length; i++) {
+      if (siblings[i] !== menuitem) {
+        siblingsArray.push(siblings[i]);
+      }
+    }
+    console.log(siblingsArray);
+    for (let j = 0; j < siblingsArray.length; j++) {
+      this.closeSubmenu(siblingsArray[j]);
     }
   }
   
