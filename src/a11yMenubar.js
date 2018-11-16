@@ -72,25 +72,6 @@ class a11yMenubar {
       
       // Add keydown handler (bound to a11yMenubar instance).
       menubarMenuitem.addEventListener('keydown', this.handleKeydownMenubar.bind(this));
-      
-      // Add hoverintent functionality (or mouse events if hoverintent not available).
-      if (this._hoverintent) {
-        // Hoverintent in environment.
-        let options = {
-          timeout: 900,
-          interval: 50
-        };
-        
-        this._hoverintent(
-            menubarMenuitem,
-            this.handleMouseoverMenubarMenuitem.bind(this),
-            function (event) {}
-        ).options(options);
-      }
-      else {
-        // Default mouse events.
-        menubar.addEventListener('mouseover', this.handleMouseoverMenubarMenuitem.bind(this));
-      }
     }
     
     // Add keydown handler to submenu menuitems (bound to a11yMenubar instance).
@@ -129,8 +110,8 @@ class a11yMenubar {
       if (this._hoverintent) {
         // Hoverintent in environment.
         let options = {
-          timeout: 900,
-          interval: 50
+          timeout: 100,
+          interval: 0
         };
         
         this._hoverintent(
@@ -405,17 +386,6 @@ class a11yMenubar {
     this.closeAllSubmenus();
   }
   
-  handleMouseoverMenubarMenuitem (event) {
-    if (event.defaultPrevented) {
-      return;
-    }
-    
-    let menubarMenuitem = event.target;
-    
-    this.closeAllSubmenus();
-    this.openSubmenu(menubarMenuitem);
-  }
-  
   // Utility functions -----------------------------------------------
   
   updateCurrentMenuitem (newMenuitem) {
@@ -467,7 +437,7 @@ class a11yMenubar {
         siblingsArray.push(siblings[i]);
       }
     }
-    console.log(siblingsArray);
+    
     for (let j = 0; j < siblingsArray.length; j++) {
       this.closeSubmenu(siblingsArray[j]);
     }
