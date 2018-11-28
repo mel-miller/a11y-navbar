@@ -4,3 +4,6 @@ node_modules/*
 
 # Eclipse
 .project
+
+#OSX
+**/.DS_Store
