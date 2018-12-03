@@ -64,7 +64,7 @@ class a11yMenubar {
     let menubarMenuitems = menubar.children;
     
     for (let i = 0; i < menubarMenuitems.length; i++) {
-      let menubarMenuitem = menubarMenuitems[i].firstChild;
+      let menubarMenuitem = menubarMenuitems[i].firstElementChild;
       menubarMenuitem.classList.add('a11y-menubar-menuitem');
       
       // collect these as an Array or something and store in the class.
