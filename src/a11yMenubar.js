@@ -72,6 +72,8 @@ class a11yMenubar {
       
       // Add keydown handler (bound to a11yMenubar instance).
       menubarMenuitem.addEventListener('keydown', this.handleKeydownMenubar.bind(this));
+      
+      // TODO: Add click/touch handler(s) for dealing with touch even ambiguity.
     }
     
     // Add keydown handler to submenu menuitems (bound to a11yMenubar instance).
@@ -79,6 +81,8 @@ class a11yMenubar {
     
     for (let i = 0; i < submenuMenuitems.length; i++) {
       submenuMenuitems[i].addEventListener('keydown', this.handleKeydownSubmenu.bind(this));
+      
+      // TODO: Add click/touch handler(s) for dealing with touch event ambiguity.
     }
     
     // Attributes for all menuitems.
@@ -384,6 +388,32 @@ class a11yMenubar {
     let menubar = event.target;
     
     this.closeAllSubmenus();
+  }
+  
+  handleClickMenuitem (event) {
+    if (event.defaultPrevented) {
+      return;
+    }
+    
+    // Prevent click initially (to make sure click doesn't occur during touch event)
+    event.preventDefault();
+    
+    let menuitem = event.target;
+    let hasAriaExpanded = menuitem.hasAttribute('aria-expanded');
+    
+    if (hasAriaExpanded) {
+      let ariaExpanded = menuitem.getAttribute('aria-expanded');
+      
+      if (ariaExpanded == 'true') {
+        // Only perform click if submenu is already open.
+        menuitem.click();
+      }
+    }
+    else {
+      // Just perform click (menuitem does not have submenu).
+      menuitem.click();
+    }
+    
   }
   
   // Utility functions -----------------------------------------------
