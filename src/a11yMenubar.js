@@ -28,7 +28,13 @@ class a11yMenubar {
     this._currentMenubarIndex = 0;
     this._currentMenuitem = null;
     
-    // TODO: Add configurable defaults for class names.
+    // TODO: Add configurable defaults for class names. (Use object and merge user-altered values.)
+    this._defaultOptions = {
+      'domObj' : document,
+      'ariaLabel' : '',
+      'hoverintent' : hoverintent,
+      'orientation' : 'horizontal'
+    };
     
     // TODO: Add aria-orientation attribute.
     
@@ -127,6 +133,9 @@ class a11yMenubar {
       
       // Override click event for all menuitems.
       menuitems[j].addEventListener('click', this.handleClickMenuitem.bind(this));
+      
+      // Override touchmove event for all menuitems.
+      menuitems[j].addEventListener('touchmove', this.handleTouchmove.bind(this));
     }
     
     // All li elements should have an aria role of "none".
@@ -417,6 +426,10 @@ class a11yMenubar {
       this.handleClick(menuitem);
     }
     
+  }
+  
+  handleTouchmove (event) {
+    event.preventDefault();
   }
   
   // Utility functions -----------------------------------------------
