@@ -72,8 +72,6 @@ class a11yMenubar {
       
       // Add keydown handler (bound to a11yMenubar instance).
       menubarMenuitem.addEventListener('keydown', this.handleKeydownMenubar.bind(this));
-      
-      // TODO: Add click/touch handler(s) for dealing with touch even ambiguity.
     }
     
     // Add keydown handler to submenu menuitems (bound to a11yMenubar instance).
@@ -81,8 +79,6 @@ class a11yMenubar {
     
     for (let i = 0; i < submenuMenuitems.length; i++) {
       submenuMenuitems[i].addEventListener('keydown', this.handleKeydownSubmenu.bind(this));
-      
-      // TODO: Add click/touch handler(s) for dealing with touch event ambiguity.
     }
     
     // Attributes for all menuitems.
@@ -128,6 +124,9 @@ class a11yMenubar {
         // Default mouse events.
         menuitems[j].addEventListener('mouseover', this.handleMouseoverMenuitem.bind(this));
       }
+      
+      // Override click event for all menuitems.
+      menuitems[j].addEventListener('click', this.handleClickMenuitem.bind(this));
     }
     
     // All li elements should have an aria role of "none".
@@ -243,7 +242,7 @@ class a11yMenubar {
     
     if (key == this._keyCode.SPACE || key == this._keyCode.ENTER) {
       // Activates menu item, causing the link to be activated.
-      menuitem.click();
+      this.handleClick(menuitem);
       preventDefault = true;
     }
     else if (key == this._keyCode.ESC) {
@@ -400,18 +399,22 @@ class a11yMenubar {
     
     let menuitem = event.target;
     let hasAriaExpanded = menuitem.hasAttribute('aria-expanded');
-    
+    console.log(hasAriaExpanded);
     if (hasAriaExpanded) {
       let ariaExpanded = menuitem.getAttribute('aria-expanded');
-      
+      console.log(ariaExpanded);
       if (ariaExpanded == 'true') {
         // Only perform click if submenu is already open.
-        menuitem.click();
+        this.handleClick(menuitem);
+      }
+      else {
+        // Open the submenu.
+        this.openSubmenu(menuitem);
       }
     }
     else {
       // Just perform click (menuitem does not have submenu).
-      menuitem.click();
+      this.handleClick(menuitem);
     }
     
   }
@@ -483,6 +486,12 @@ class a11yMenubar {
       openSubmenus[i].classList.remove('a11y-menubar-menu-open');
       openSubmenus[i].classList.add('a11y-menubar-menu-closed');
     }
+  }
+  
+  handleClick (menuitem) {
+    let href = menuitem.getAttribute('href');
+    
+    window.location = href;
   }
   
   normalizeKey (key) {
