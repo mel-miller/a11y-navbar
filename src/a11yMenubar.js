@@ -135,7 +135,7 @@ class a11yMenubar {
       menuitems[j].addEventListener('click', this.handleClickMenuitem.bind(this));
       
       // Override touchmove event for all menuitems.
-      menuitems[j].addEventListener('touchmove', this.handleTouchmove.bind(this));
+      menuitems[j].addEventListener('touchmove', this.handleTouchmoveMenuitem.bind(this));
     }
     
     // All li elements should have an aria role of "none".
@@ -428,7 +428,7 @@ class a11yMenubar {
     
   }
   
-  handleTouchmove (event) {
+  handleTouchmoveMenuitem (event) {
     event.preventDefault();
   }
   
