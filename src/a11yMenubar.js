@@ -399,10 +399,10 @@ class a11yMenubar {
     
     let menuitem = event.target;
     let hasAriaExpanded = menuitem.hasAttribute('aria-expanded');
-    console.log(hasAriaExpanded);
+    
     if (hasAriaExpanded) {
       let ariaExpanded = menuitem.getAttribute('aria-expanded');
-      console.log(ariaExpanded);
+      
       if (ariaExpanded == 'true') {
         // Only perform click if submenu is already open.
         this.handleClick(menuitem);
