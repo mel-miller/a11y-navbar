@@ -116,8 +116,8 @@ class a11yMenubar {
       if (this._options.hoverintent) {
         // Hoverintent in environment.
         let options = {
-          timeout: 100,
-          interval: 0
+          timeout: 500,
+          interval: 100
         };
         
         this._options.hoverintent(
