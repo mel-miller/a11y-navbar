@@ -4,7 +4,7 @@
 
 class a11yMenubar {
   
-  constructor(id, domObj=document, ariaLabel='', hoverintent=hoverintent) {
+  constructor(id, options={}) {
     // Define members.
     this._keyCode = {
       'TAB':      9,
@@ -19,43 +19,43 @@ class a11yMenubar {
       'ARROW_DOWN':     40,
     };
     
+    // Merge user-defined options with default options.
+    this._defaultOptions = {
+      'domObj' : document,
+      'ariaLabel' : '',
+      'hoverintent' : hoverintent,
+      'ariaOrientation' : 'horizontal'
+    };
+    this._options = Object.assign(this._defaultOptions, options);
+    
     this._id = id;
-    this._domObj = domObj;
-    this._hoverintent = hoverintent;
-    this._ariaLabel = ariaLabel;
-    this._navElem = this._domObj.getElementById(this._id);
+    this._navElem = this._options.domObj.getElementById(this._id);
     this._menubarMenuitems = [];
     this._currentMenubarIndex = 0;
     this._currentMenuitem = null;
     
     // TODO: Add configurable defaults for class names. (Use object and merge user-altered values.)
-    this._defaultOptions = {
-      'domObj' : document,
-      'ariaLabel' : '',
-      'hoverintent' : hoverintent,
-      'orientation' : 'horizontal'
-    };
     
     // TODO: Add aria-orientation attribute.
     
     // Set up aria roles and attributes. 
-    this._navElem.setAttribute('aria-label', this._ariaLabel);
+    this._navElem.setAttribute('aria-label', this._options.ariaLabel);
     this._navElem.classList.add('a11y-menubar');
     
     let menubar = this._navElem.querySelector('ul');
     
     menubar.setAttribute('role', 'menubar');
-    menubar.setAttribute('aria-label', this._ariaLabel);
+    menubar.setAttribute('aria-label', this._options.ariaLabel);
     
     // Add hoverintent functionality (or mouse events if hoverintent not available).
-    if (this._hoverintent) {
+    if (this._options.hoverintent) {
       // Hoverintent in environment.
       let options = {
         timeout: 900,
         interval: 50
       };
       
-      this._hoverintent(
+      this._options.hoverintent(
           menubar,
           function (event) {},
           this.handleMouseoutMenubar.bind(this)
@@ -113,14 +113,14 @@ class a11yMenubar {
       }
       
       // Add hoverintent functionality (or mouse events if hoverintent not available).
-      if (this._hoverintent) {
+      if (this._options.hoverintent) {
         // Hoverintent in environment.
         let options = {
           timeout: 100,
           interval: 0
         };
         
-        this._hoverintent(
+        this._options.hoverintent(
             menuitems[j],
             this.handleMouseoverMenuitem.bind(this), 
             function (event) {}
@@ -428,6 +428,7 @@ class a11yMenubar {
     
   }
   
+  // @see https://developer.mozilla.org/en-US/docs/Web/API/Touch_events/Supporting_both_TouchEvent_and_MouseEvent#Event_firing
   handleTouchmoveMenuitem (event) {
     event.preventDefault();
   }

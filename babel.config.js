@@ -10,7 +10,12 @@ const presets = [
   }]
 ];
 
+const plugins = ["@babel/plugin-transform-object-assign"];
+
+const comments = false;
+
 module.exports = {
     presets,
-    "comments" : false
+    plugins,
+    comments
 };
