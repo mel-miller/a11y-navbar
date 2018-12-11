@@ -232,10 +232,12 @@ class a11yMenubar {
     )
     {
       // Opens submenu and moves focus to last item in the submenu.
-      this.openSubmenu(menuitem);
-      let lastMenuitem = menuitem.parentNode.querySelector('ul[role=menu]').lastElementChild.firstElementChild;
-      lastMenuitem.focus();
-      this.updateCurrentMenuitem(lastMenuitem);
+      if (this.hasSubmenu(menuitem)) {
+        this.openSubmenu(menuitem);
+        let lastMenuitem = menuitem.parentNode.querySelector('ul[role=menu]').lastElementChild.firstElementChild;
+        lastMenuitem.focus();
+        this.updateCurrentMenuitem(lastMenuitem);
+      }
       preventDefault = true;
     }
     else if (key == this._keyCode.HOME) {
