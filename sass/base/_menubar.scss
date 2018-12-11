@@ -1,31 +1,24 @@
 nav.a11y-menubar {
 	font-family:$proxima;
 	
-	background-color:$lt-gray;
-	
 	display:block;
 	width:100%;
 	
 	ul[role=menubar] {
+		background-color:$lt-gray;
+		
 		list-style-type: none;
 		
 		li {
 			list-style-type: none;
-			display:inline-block;
 			position: relative;
 			
 			a[role=menuitem] {
-				&.a11y-menubar-menuitem {
-					border-right:1px solid $md-gray;
-					border-bottom:none;
-				}
-				
 				color:$dk-gray;
 				text-decoration:none;
 				background-color:$lt-gray;
 				line-height:1.5rem;
 				padding:0 1rem 0 1rem;
-				border-bottom:1px solid $md-gray;
 				
 				display: block;
 				height:1.5rem;
@@ -41,17 +34,10 @@ nav.a11y-menubar {
 					display:block;
 					width:10rem;
 					position:absolute;
-					top:1.5rem;
-					left:0;
 					
 					li {
 						display:block;
 						width:100%;
-						
-						ul[role=menu] {
-							top:0rem;
-							left:100%;
-						}
 						
 						a[aria-haspopup=true] {
 							&::after {
@@ -80,6 +66,72 @@ nav.a11y-menubar {
 				}
 			}
 			
+		}
+		
+		&[aria-orientation=horizontal] {
+			li {
+				display:inline-block;
+				
+				a[role=menuitem] {
+					&.a11y-menubar-menuitem {
+						border-right:1px solid $md-gray;
+						border-bottom:none;
+					}
+					
+					border-bottom:1px solid $md-gray;
+				}
+				
+				ul[role=menu] {
+					&.a11y-menubar-menu-open {
+						top:1.5rem;
+						left:0;
+						
+						li {
+							ul[role=menu] {
+								top:0rem;
+								left:100%;
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		&[aria-orientation=vertical] {
+			width:10rem;
+			
+			a[role=menuitem] {
+				&[aria-haspopup=true] {
+					&::after {
+						// Right arrows
+						content: '';
+						width: 0; 
+						height: 0; 
+						border-top:0.25rem solid transparent;
+						border-bottom:0.25rem solid transparent;
+						border-left:0.25rem solid $dk-gray;
+						position:absolute;
+						right:0.25rem;
+						top:0.5rem;
+					}
+				}
+			}
+			
+			li {
+				border:1px solid $md-gray;
+				border-bottom:none;
+				
+				&:last-child {
+					border-bottom:1px solid $md-gray;
+				}
+				
+				ul[role=menu] {
+					&.a11y-menubar-menu-open {
+						top:-1px;
+						left:100%;
+					}
+				}
+			}
 		}
 		
 	}

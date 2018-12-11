@@ -7,12 +7,12 @@ class a11yMenubar {
   constructor(id, options={}) {
     // Define members.
     this._keyCode = {
-      'TAB':      9,
-      'ENTER':    13,
-      'ESC':      27,
-      'SPACE':    32,
-      'END':      35,
-      'HOME':     36,
+      'TAB':             9,
+      'ENTER':          13,
+      'ESC':            27,
+      'SPACE':          32,
+      'END':            35,
+      'HOME':           36,
       'ARROW_LEFT':     37,
       'ARROW_UP':       38,
       'ARROW_RIGHT':    39,
@@ -34,18 +34,18 @@ class a11yMenubar {
     this._currentMenubarIndex = 0;
     this._currentMenuitem = null;
     
-    // TODO: Add configurable defaults for class names. (Use object and merge user-altered values.)
-    
-    // TODO: Add aria-orientation attribute.
+    // TODO: Add configurable defaults for class names.
     
     // Set up aria roles and attributes. 
     this._navElem.setAttribute('aria-label', this._options.ariaLabel);
     this._navElem.classList.add('a11y-menubar');
+    this._navElem.classList.add('a11y-menubar-orientation-' + this._options.ariaOrientation);
     
     let menubar = this._navElem.querySelector('ul');
     
     menubar.setAttribute('role', 'menubar');
     menubar.setAttribute('aria-label', this._options.ariaLabel);
+    menubar.setAttribute('aria-orientation', this._options.ariaOrientation);
     
     // Add hoverintent functionality (or mouse events if hoverintent not available).
     if (this._options.hoverintent) {
@@ -164,11 +164,23 @@ class a11yMenubar {
       return;
     }
     
+    /*
+     When items in a menubar are arranged vertically and items in menu containers are arranged horizontally:
+      -Down Arrow performs as Right Arrow, and vice versa.
+      -Up Arrow performs as Left Arrow, and vice versa.
+     */
+    
     let preventDefault = false; // Flag to prevent the keypress from doing what it usually would do.
     let menuitem = event.target;
     let key = this.normalizeKey(event.key || event.keyCode);
     
-    if (key == this._keyCode.SPACE || key == this._keyCode.ENTER || key == this._keyCode.ARROW_DOWN) {
+    if (
+      key == this._keyCode.SPACE ||
+      key == this._keyCode.ENTER || 
+      (this._options.ariaOrientation == 'horizontal' && key == this._keyCode.ARROW_DOWN) ||
+      (this._options.ariaOrientation == 'vertical' && key == this._keyCode.ARROW_RIGHT)
+    )
+    {
       // Opens submenu and moves focus to first item in the submenu.
       this.closeAllSubmenus();
       this.openSubmenu(menuitem);
@@ -180,7 +192,11 @@ class a11yMenubar {
       }
       preventDefault = true;
     }
-    else if (key == this._keyCode.ARROW_RIGHT) {
+    else if (
+      (this._options.ariaOrientation == 'horizontal' && key == this._keyCode.ARROW_RIGHT) ||
+      (this._options.ariaOrientation == 'vertical' && key == this._keyCode.ARROW_DOWN)
+    )
+    {
       /*
         -Moves focus to the next item in the menubar.
         -If focus is on the last item, moves focus to the first item. 
@@ -193,7 +209,11 @@ class a11yMenubar {
       this.updateCurrentMenuitem(nextMenubarItem);
       preventDefault = true;
     }
-    else if (key == this._keyCode.ARROW_LEFT) {
+    else if (
+      (this._options.ariaOrientation == 'horizontal' && key == this._keyCode.ARROW_LEFT) ||
+      (this._options.ariaOrientation == 'vertical' && key == this._keyCode.ARROW_UP)
+    )
+    {
       /*
         -Moves focus to the previous item in the menubar.
         -If focus is on the first item, moves focus to the last item.
@@ -206,7 +226,11 @@ class a11yMenubar {
       this.updateCurrentMenuitem(prevMenubarItem);
       preventDefault = true;
     }
-    else if (key == this._keyCode.ARROW_UP) {
+    else if (
+      (this._options.ariaOrientation == 'horizontal' && key == this._keyCode.ARROW_UP) ||
+      (this._options.ariaOrientation == 'vertical' && key == this._keyCode.ARROW_LEFT)
+    )
+    {
       // Opens submenu and moves focus to last item in the submenu.
       this.openSubmenu(menuitem);
       let lastMenuitem = menuitem.parentNode.querySelector('ul[role=menu]').lastElementChild.firstElementChild;
