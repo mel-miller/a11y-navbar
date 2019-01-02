@@ -21,10 +21,13 @@ class a11yMenubar {
     
     // Merge user-defined options with default options.
     this._defaultOptions = {
+      'windowObj' : window,
       'domObj' : document,
       'ariaLabel' : '',
       'hoverintent' : hoverintent,
-      'ariaOrientation' : 'horizontal'
+      'ariaOrientation' : 'horizontal',
+      'breakpointMinWidth' : 1000,
+      'menubarToggleText' : 'Menu'
     };
     this._options = Object.assign(this._defaultOptions, options);
     
@@ -33,6 +36,15 @@ class a11yMenubar {
     this._menubarMenuitems = [];
     this._currentMenubarIndex = 0;
     this._currentMenuitem = null;
+    
+    // TODO: Add/Remove toggle button based on breakpointMinWidth.
+    this._menubarToggle = this._options.domObj.createElement('button');
+    this._menubarToggle.textContent = this._options.menubarToggleText;
+    this._menubarToggle.setAttribute('id', this._id + '-toggle');
+    this._menubarToggle.setAttribute('aria-expanded', 'false');
+    this._menubarToggle.setAttribute('aria-controls', this._id);
+    
+    this._options.windowObj.addEventListener('resize', this.handleMenubarResize.bind(this));
     
     // TODO: Add configurable defaults for class names.
     
@@ -158,6 +170,23 @@ class a11yMenubar {
   }
   
   // Event Handlers -----------------------------------------------------
+  
+  handleMenubarResize (event) {
+    if (event.defaultPrevented) {
+      return;
+    }
+    
+    let viewportWidth = this._options.windowObj.innerWidth;
+    
+    if (viewportWidth <= this._options.breakpointMinWidth) {
+      // Show menubar toggle.
+      this.addMenubarToggle();
+    }
+    else {
+      // Hide menubar toggle.
+      this.removeMenubarToggle();
+    }
+  }
   
   handleKeydownMenubar (event) {
     if (event.defaultPrevented) {
@@ -460,6 +489,18 @@ class a11yMenubar {
   }
   
   // Utility functions -----------------------------------------------
+  
+  addMenubarToggle() {
+    if (this._options.domObj.getElementById(this._menubarToggle.getAttribute('id')) == null) {
+      this._navElem.parentNode.insertBefore(this._menubarToggle, this._navElem);
+    }
+  }
+  
+  removeMenubarToggle() {
+    if (this._options.domObj.getElementById(this._menubarToggle.getAttribute('id'))) {
+      this._navElem.parentNode.removeChild(this._menubarToggle);
+    }
+  }
   
   updateCurrentMenuitem (newMenuitem) {
     this._currentMenuitem.setAttribute('tabindex', '-1');
