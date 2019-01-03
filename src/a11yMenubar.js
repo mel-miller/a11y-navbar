@@ -164,6 +164,9 @@ class a11yMenubar {
     // First menubar menuitem should be the current menuitem.
     this._currentMenuitem = this._menubarMenuitems[0];
     
+    // Check if the menu should be resized on page load.
+    this.menubarResize();
+    
   }
   
   destroy () {
@@ -177,16 +180,7 @@ class a11yMenubar {
       return;
     }
     
-    let viewportWidth = this._options.windowObj.innerWidth;
-    
-    if (viewportWidth <= this._options.breakpointMinWidth) {
-      // Show menubar toggle.
-      this.addMenubarToggle();
-    }
-    else {
-      // Hide menubar toggle.
-      this.removeMenubarToggle();
-    }
+    this.menubarResize();
   }
   
   handleClickMenubarToggle (event) {
@@ -505,6 +499,19 @@ class a11yMenubar {
   }
   
   // Utility functions -----------------------------------------------
+  
+  menubarResize() {
+    let viewportWidth = this._options.windowObj.innerWidth;
+    
+    if (viewportWidth <= this._options.breakpointMinWidth) {
+      // Show menubar toggle.
+      this.addMenubarToggle();
+    }
+    else {
+      // Hide menubar toggle.
+      this.removeMenubarToggle();
+    }
+  }
   
   addMenubarToggle() {
     if (this._options.domObj.getElementById(this._menubarToggle.getAttribute('id')) == null) {
