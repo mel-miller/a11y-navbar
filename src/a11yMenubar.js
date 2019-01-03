@@ -26,7 +26,7 @@ class a11yMenubar {
       'ariaLabel' : '',
       'hoverintent' : hoverintent,
       'ariaOrientation' : 'horizontal',
-      'breakpointMinWidth' : 1000,
+      'breakpointMinWidth' : 500,
       'menubarToggleText' : 'Menu'
     };
     this._options = Object.assign(this._defaultOptions, options);
@@ -37,12 +37,13 @@ class a11yMenubar {
     this._currentMenubarIndex = 0;
     this._currentMenuitem = null;
     
-    // TODO: Add/Remove toggle button based on breakpointMinWidth.
+    // Add/Remove toggle button based on breakpointMinWidth.
     this._menubarToggle = this._options.domObj.createElement('button');
     this._menubarToggle.textContent = this._options.menubarToggleText;
     this._menubarToggle.setAttribute('id', this._id + '-toggle');
     this._menubarToggle.setAttribute('aria-expanded', 'false');
     this._menubarToggle.setAttribute('aria-controls', this._id);
+    this._menubarToggle.addEventListener('click', this.handleClickMenubarToggle.bind(this));
     
     this._options.windowObj.addEventListener('resize', this.handleMenubarResize.bind(this));
     
@@ -185,6 +186,21 @@ class a11yMenubar {
     else {
       // Hide menubar toggle.
       this.removeMenubarToggle();
+    }
+  }
+  
+  handleClickMenubarToggle (event) {
+    if (event.defaultPrevented) {
+      return;
+    }
+    
+    if (this._navElem.classList.contains('a11y-menubar-closed')) {
+      this._navElem.classList.remove('a11y-menubar-closed');
+      this._navElem.classList.add('a11y-menubar-open');
+    }
+    else if (this._navElem.classList.contains('a11y-menubar-open')) {
+      this._navElem.classList.remove('a11y-menubar-open');
+      this._navElem.classList.add('a11y-menubar-closed');
     }
   }
   
@@ -493,13 +509,28 @@ class a11yMenubar {
   addMenubarToggle() {
     if (this._options.domObj.getElementById(this._menubarToggle.getAttribute('id')) == null) {
       this._navElem.parentNode.insertBefore(this._menubarToggle, this._navElem);
+      // Add closed class to menubar.
+      this._navElem.classList.add('a11y-menubar-closed');
     }
   }
   
   removeMenubarToggle() {
     if (this._options.domObj.getElementById(this._menubarToggle.getAttribute('id'))) {
       this._navElem.parentNode.removeChild(this._menubarToggle);
+      // Remove open/closed classes from menubar.
+      this._navElem.classList.remove('a11y-menubar-open');
+      this._navElem.classList.remove('a11y-menubar-closed');
     }
+  }
+  
+  showMenubar () {
+    this._navElem.classList.remove('a11y-menubar-closed');
+    this._navElem.classList.add('a11y-menubar-open');
+  }
+  
+  hideMenubar () {
+    this._navElem.classList.remove('a11y-menubar-open');
+    this._navElem.classList.add('a11y-menubar-closed');
   }
   
   updateCurrentMenuitem (newMenuitem) {

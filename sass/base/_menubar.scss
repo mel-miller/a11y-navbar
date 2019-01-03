@@ -136,4 +136,8 @@ nav.a11y-menubar {
 		
 	}
 	
+	&.a11y-menubar-closed {
+		@include visually-hidden();
+	}
+	
 }
