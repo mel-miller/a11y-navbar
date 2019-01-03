@@ -43,6 +43,7 @@ class a11yMenubar {
     this._menubarToggle.setAttribute('id', this._id + '-toggle');
     this._menubarToggle.setAttribute('aria-expanded', 'false');
     this._menubarToggle.setAttribute('aria-controls', this._id);
+    this._menubarToggle.classList.add('a11y-menubar-toggle');
     this._menubarToggle.addEventListener('click', this.handleClickMenubarToggle.bind(this));
     
     this._options.windowObj.addEventListener('resize', this.handleMenubarResize.bind(this));
@@ -517,6 +518,7 @@ class a11yMenubar {
     if (this._options.domObj.getElementById(this._menubarToggle.getAttribute('id')) == null) {
       this._navElem.parentNode.insertBefore(this._menubarToggle, this._navElem);
       // Add closed class to menubar.
+      this._navElem.classList.add('a11y-menubar-responsive');
       this._navElem.classList.add('a11y-menubar-closed');
     }
   }
@@ -525,6 +527,7 @@ class a11yMenubar {
     if (this._options.domObj.getElementById(this._menubarToggle.getAttribute('id'))) {
       this._navElem.parentNode.removeChild(this._menubarToggle);
       // Remove open/closed classes from menubar.
+      this._navElem.classList.remove('a11y-menubar-responsive');
       this._navElem.classList.remove('a11y-menubar-open');
       this._navElem.classList.remove('a11y-menubar-closed');
     }
