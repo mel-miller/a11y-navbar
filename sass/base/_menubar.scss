@@ -1,12 +1,10 @@
 nav.a11y-menubar {
 	font-family:$proxima;
-	
 	display:block;
 	width:100%;
 	
 	ul[role=menubar] {
 		background-color:$lt-gray;
-		
 		list-style-type: none;
 		
 		li {
@@ -76,6 +74,28 @@ nav.a11y-menubar {
 					&.a11y-menubar-menuitem {
 						border-right:1px solid $md-gray;
 						border-bottom:none;
+						
+						&[aria-haspopup=true] {
+							padding-right:1.5rem;
+							
+							&::after {
+								// Down arrows
+								content: '';
+								width: 0; 
+								height: 0; 
+								border-top:0.25rem solid $dk-gray;
+								border-right:0.25rem solid transparent;
+								border-left:0.25rem solid transparent;
+								position:absolute;
+								right:0.25rem;
+								top:0.5rem;
+							}
+							
+							&:hover::after,
+							&:focus::after {
+								border-top:0.25rem solid $lt-gray;
+							}
+						}
 					}
 					
 					border-bottom:1px solid $md-gray;
@@ -138,44 +158,112 @@ nav.a11y-menubar {
 	
 	&.a11y-menubar-responsive {
 		ul[role=menubar] {
-			li {
-				display:block;
-				
-				a[role=menuitem] {
-					&.a11y-menubar-menuitem {
-						border-right:none;
-						border-bottom:1px solid $md-gray;
-					}
+			// Responsive menu should be identical whether vertical or horizontal initially.
+			&[aria-orientation=horizontal],
+			&[aria-orientation=vertical] {
+				li {
+					display:block;
 					
-					border-bottom:1px solid $md-gray;
-				}
-				
-				
-				ul[role=menu] {
-					position:static;
-					width:100%;
-					
-					li {
-						a[role=menuitem] {
-							// Second-level menuitems.
-							background-color:darken($lt-gray,30%);
-							color:lighten($lt-gray,20%);
+					a[role=menuitem] {
+						&.a11y-menubar-menuitem {
+							border-right:none;
+							border-bottom:1px solid $md-gray;
 						}
 						
-						ul[role=menu] {
-							li {
-								a[role=menuitem] {
-									// Third-level menuitems.
-									background-color:darken($lt-gray,60%);
-									color:lighten($lt-gray,30%);
+						border-bottom:1px solid $md-gray;
+						
+						&:focus, &:hover {
+							color:$lt-gray;
+							background-color:$dk-gray;
+						}
+						
+						&[aria-haspopup=true] {
+							padding-right:1.5rem;
+							
+							&::after {
+								// Down arrows
+								content: '';
+								width: 0; 
+								height: 0; 
+								border-top:0.25rem solid $dk-gray;
+								border-right:0.25rem solid transparent;
+								border-left:0.25rem solid transparent;
+								position:absolute;
+								right:0.25rem;
+								top:0.5rem;
+							}
+							
+							&:hover::after,
+							&:focus::after {
+								border-top:0.25rem solid $lt-gray;
+							}
+						}
+					}
+					
+					ul[role=menu] {
+						position:static;
+						width:100%;
+						
+						li {
+							a[role=menuitem] {
+								// Second-level menuitems.
+								background-color:darken($lt-gray,30%);
+								color:lighten($lt-gray,20%);
+								
+								&:focus, &:hover {
+									color:$lt-gray;
+									background-color:$dk-gray;
 								}
 								
-								ul[role=menu] {
-									li {
-										a[role=menuitem] {
-											// Fourth-level menuitems.
-											background-color:darken($lt-gray,90%);
-											color:lighten($lt-gray,40%);
+								// Override default right arrows on submenus.
+								&[aria-haspopup=true] {
+									padding-right:1.5rem;
+									
+									&::after {
+										// Down arrows
+										content: '';
+										width: 0; 
+										height: 0; 
+										border-top:0.25rem solid $dk-gray;
+										border-right:0.25rem solid transparent;
+										border-left:0.25rem solid transparent;
+										position:absolute;
+										right:0.25rem;
+										top:0.5rem;
+									}
+									
+									&:hover::after,
+									&:focus::after {
+										border-top:0.25rem solid $lt-gray;
+									}
+								}
+							}
+							
+							ul[role=menu] {
+								li {
+									a[role=menuitem] {
+										// Third-level menuitems.
+										background-color:darken($lt-gray,60%);
+										color:lighten($lt-gray,30%);
+										
+										&:focus, &:hover {
+											color:$lt-gray;
+											background-color:$dk-gray;
+										}
+									}
+									
+									ul[role=menu] {
+										li {
+											a[role=menuitem] {
+												// Fourth-level menuitems.
+												background-color:darken($lt-gray,90%);
+												color:lighten($lt-gray,40%);
+												
+												&:focus, &:hover {
+													color:$lt-gray;
+													background-color:$dk-gray;
+												}
+											}
 										}
 									}
 								}
@@ -201,4 +289,34 @@ button.a11y-menubar-toggle {
 	width:100%;
 	padding:0.5rem;
 	text-align:left;
+	position:relative;
+	
+	// Hamburger icon.
+	span {
+		position: absolute;
+		right:1rem;
+		top:40%;
+		
+		&,
+		&::before,
+		&::after
+		{
+			cursor: pointer;
+			border-radius: 1px;
+			height: 3px;
+			width: 20px;
+			background: $lt-gray;
+			position: absolute;
+			display: block;
+			content: '';
+		}
+		
+		&::before {
+			top:-5px;
+		}
+		
+		&::after {
+			bottom:-5px;
+		}
+	}
 }

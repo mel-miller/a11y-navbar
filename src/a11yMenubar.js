@@ -44,6 +44,9 @@ class a11yMenubar {
     this._menubarToggle.setAttribute('aria-expanded', 'false');
     this._menubarToggle.setAttribute('aria-controls', this._id);
     this._menubarToggle.classList.add('a11y-menubar-toggle');
+    let menuIcon = this._options.domObj.createElement('span');
+    menuIcon.setAttribute('aria-hidden', 'true');
+    this._menubarToggle.appendChild(menuIcon);
     this._menubarToggle.addEventListener('click', this.handleClickMenubarToggle.bind(this));
     
     this._options.windowObj.addEventListener('resize', this.handleMenubarResize.bind(this));
