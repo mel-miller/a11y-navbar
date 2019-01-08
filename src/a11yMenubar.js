@@ -492,6 +492,7 @@ class a11yMenubar {
       this.handleClick(menuitem);
     }
     
+    // TODO: Change behavior for responsive menu...?
   }
   
   // @see https://developer.mozilla.org/en-US/docs/Web/API/Touch_events/Supporting_both_TouchEvent_and_MouseEvent#Event_firing

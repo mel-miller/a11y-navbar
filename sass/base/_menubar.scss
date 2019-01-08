@@ -150,9 +150,38 @@ nav.a11y-menubar {
 					border-bottom:1px solid $md-gray;
 				}
 				
+				
 				ul[role=menu] {
 					position:static;
 					width:100%;
+					
+					li {
+						a[role=menuitem] {
+							// Second-level menuitems.
+							background-color:darken($lt-gray,30%);
+							color:lighten($lt-gray,20%);
+						}
+						
+						ul[role=menu] {
+							li {
+								a[role=menuitem] {
+									// Third-level menuitems.
+									background-color:darken($lt-gray,60%);
+									color:lighten($lt-gray,30%);
+								}
+								
+								ul[role=menu] {
+									li {
+										a[role=menuitem] {
+											// Fourth-level menuitems.
+											background-color:darken($lt-gray,90%);
+											color:lighten($lt-gray,40%);
+										}
+									}
+								}
+							}
+						}
+					}
 				}
 			}
 		}
@@ -165,5 +194,11 @@ nav.a11y-menubar {
 }
 
 button.a11y-menubar-toggle {
-	
+	@include button-reset();
+	font-family:$proxima;
+	background-color:$dk-gray;
+	color:$lt-gray;
+	width:100%;
+	padding:0.5rem;
+	text-align:left;
 }
