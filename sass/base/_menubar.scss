@@ -28,10 +28,13 @@ nav.a11y-menubar {
 			}
 			
 			ul[role=menu] {
+				opacity:0;
 				&.a11y-menubar-menu-open {
 					display:block;
 					width:10rem;
 					position:absolute;
+					opacity:1;
+					transition:opacity 0.4s linear;
 					
 					li {
 						display:block;
