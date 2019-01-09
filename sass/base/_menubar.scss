@@ -204,6 +204,14 @@ nav.a11y-menubar {
 					}
 					
 					ul[role=menu] {
+						opacity:1;
+						max-height:0;
+						overflow:hidden;
+						&.a11y-menubar-menu-open {
+							max-height:9999px;
+							transition:max-height 1s ease-in;
+						}
+						
 						position:static;
 						width:100%;
 						
