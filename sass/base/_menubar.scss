@@ -63,7 +63,7 @@ nav.a11y-menubar {
 				}
 				
 				&.a11y-menubar-menu-closed {
-					@include visually-hidden();
+					display:none;
 				}
 			}
 			

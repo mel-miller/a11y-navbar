@@ -319,9 +319,22 @@ class a11yMenubar {
     let key = this.normalizeKey(event.key || event.keyCode);
     
     if (key == this._keyCode.SPACE || key == this._keyCode.ENTER) {
-      // Activates menu item, causing the link to be activated.
-      this.handleClick(menuitem);
-      preventDefault = true;
+      if (this.hasSubmenu(menuitem)) {
+        // Open the submenu and place focus on the first item.
+        this.openSubmenu(menuitem);
+        let firstMenuitem = menuitem.parentNode.querySelector('ul[role=menu] > li').firstElementChild;
+        
+        if (firstMenuitem != null) {
+          firstMenuitem.focus();
+          this.updateCurrentMenuitem(firstMenuitem);
+        }
+        preventDefault = true;
+      }
+      else {
+        // Activates menu item, causing the link to be activated.
+        this.handleClick(menuitem);
+        preventDefault = true;
+      }
     }
     else if (key == this._keyCode.ESC) {
       /* 
