@@ -27,7 +27,8 @@ class a11yMenubar {
       'hoverintent' : hoverintent,
       'ariaOrientation' : 'horizontal',
       'breakpointMinWidth' : 500,
-      'menubarToggleText' : 'Menu'
+      'menubarToggleText' : 'Menu',
+      'mode' : 'standard'
     };
     this._options = Object.assign(this._defaultOptions, options);
     
@@ -216,10 +217,11 @@ class a11yMenubar {
     let preventDefault = false; // Flag to prevent the keypress from doing what it usually would do.
     let menuitem = event.target;
     let key = this.normalizeKey(event.key || event.keyCode);
+    let mode = this._options.mode;
     
     if (
-      key == this._keyCode.SPACE ||
-      key == this._keyCode.ENTER || 
+      (key == this._keyCode.SPACE && mode == 'standard') ||
+      (key == this._keyCode.ENTER && mode == 'standard') || 
       (this._options.ariaOrientation == 'horizontal' && key == this._keyCode.ARROW_DOWN) ||
       (this._options.ariaOrientation == 'vertical' && key == this._keyCode.ARROW_RIGHT)
     )
@@ -233,6 +235,15 @@ class a11yMenubar {
         firstMenuitem.focus();
         this.updateCurrentMenuitem(firstMenuitem);
       }
+      preventDefault = true;
+    }
+    else if (
+      (key == this._keyCode.SPACE && mode == 'dualAction') ||
+      (key == this._keyCode.ENTER && mode == 'dualAction')
+    )
+    {
+      // Activates menu item, causing the link to be activated.
+      this.handleClick(menuitem);
       preventDefault = true;
     }
     else if (
@@ -317,8 +328,9 @@ class a11yMenubar {
     let preventDefault = false; // Flag to prevent the keypress from doing what it usually would do.
     let menuitem = event.target;
     let key = this.normalizeKey(event.key || event.keyCode);
+    let mode = this._options.mode;
     
-    if (key == this._keyCode.SPACE || key == this._keyCode.ENTER) {
+    if ((key == this._keyCode.SPACE || key == this._keyCode.ENTER) && mode == 'standard') {
       if (this.hasSubmenu(menuitem)) {
         // Open the submenu and place focus on the first item.
         this.openSubmenu(menuitem);
@@ -335,6 +347,11 @@ class a11yMenubar {
         this.handleClick(menuitem);
         preventDefault = true;
       }
+    }
+    else if ((key == this._keyCode.SPACE || key == this._keyCode.ENTER) && mode == 'dualAction') {
+      // Activates menu item, causing the link to be activated.
+      this.handleClick(menuitem);
+      preventDefault = true;
     }
     else if (key == this._keyCode.ESC) {
       /* 
