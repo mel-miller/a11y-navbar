@@ -76,7 +76,8 @@ var test = new a11yMenubar('main-nav', options);
   'hoverintent' : hoverintent,
   'ariaOrientation' : 'horizontal',
   'breakpointMinWidth' : 500,
-  'menubarToggleText' : 'Menu'
+  'menubarToggleText' : 'Menu',
+  'mode' : 'standard'
 }
 ```
 
@@ -87,5 +88,6 @@ var test = new a11yMenubar('main-nav', options);
 * *ariaOrientation* is the direction the menubar flows. Valid values are either "horizontal" (which is the default) or "vertical".
 * *breakpointMinWidth* is the width in pixels at which the menu transforms into a "mobile friendly" compact menu. The default is 500px.
 * *menubarToggleText* is the text for the menu button when the "mobile friendly" compact menu is active. It defaults to "Menu".
+* *mode* can be set to either "standard" (for behavior strictly following the menubar design pattern) or "dualAction" (in which menuitems with submenus can be activated with Enter/Space, or expanded with the appropriate arrow key).
 
  
