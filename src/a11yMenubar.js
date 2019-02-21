@@ -38,6 +38,21 @@ class a11yMenubar {
     this._currentMenubarIndex = 0;
     this._currentMenuitem = null;
     
+    if (this._options.mode == 'dualAction') {
+      // Add element to explain alternate instructions for mode dualAction.
+      this._menubarInstructions = this._options.domObj.createElement('div');
+      this._menubarInstructions.innerHTML = "<p>Use <strong>Enter</strong> or <strong>Space</strong> to activate links.</p>" +
+      		"<p>Use appropriate arrow key to open submenus.</p>";
+      this._menubarInstructions.setAttribute('id', this._id + '-menubar-instructions');
+      this._menubarInstructions.classList.add('a11y-menubar-instructions');
+      this._menubarInstructions.classList.add('a11y-menubar-instructions-hide');
+      this._navElem.insertBefore(this._menubarInstructions, this._navElem.firstElementChild);
+      
+      // Hide instructions when focus is given to anything but a menuitem.
+      this._options.windowObj.addEventListener('focusin', this.handleFocusinWindowObj.bind(this));
+      this._options.windowObj.addEventListener('blur', this.handleBlurWindowObj.bind(this));
+    }
+    
     // Add/Remove toggle button based on breakpointMinWidth.
     this._menubarToggle = this._options.domObj.createElement('button');
     this._menubarToggle.textContent = this._options.menubarToggleText;
@@ -154,6 +169,19 @@ class a11yMenubar {
       
       // Override touchmove event for all menuitems.
       menuitems[j].addEventListener('touchmove', this.handleTouchmoveMenuitem.bind(this));
+      
+      if (this._options.mode == 'dualAction') {
+        // Add instructions for dualAction mode to menuitems.
+        menuitems[j].setAttribute('aria-describedby', this._id + '-menubar-instructions');
+        
+        // Add focus events to toggle instruction visibility.
+        menuitems[j].addEventListener('focusin', this.handleFocusinMenuitem.bind(this));
+        
+        // Override mousedown to avoid showing instructions on click to prevent focus event.
+        menuitems[j].addEventListener('mousedown', this.handleMousedownMenuitem.bind(this));
+      }
+      
+      // TODO: If submenus are closed due to non-keyboard (e.g. mouse) interaction, add focusin event to open all relevant submenus.
     }
     
     // All li elements should have an aria role of "none".
@@ -533,6 +561,30 @@ class a11yMenubar {
     event.preventDefault();
   }
   
+  handleFocusinMenuitem (event) {
+    let instructionsVisible = (this._menubarInstructions.classList.contains('a11y-menubar-instructions-show')) ? true : false;
+    
+    if (!instructionsVisible) {
+      this.showInstructions();
+    }
+  }
+  
+  handleFocusinWindowObj (event) {
+    let elemRole = event.target.getAttribute('role');
+    
+    if (elemRole == null || elemRole != 'menuitem') {
+      this.hideInstructions();
+    }
+  }
+  
+  handleBlurWindowObj (event) {
+    this.hideInstructions();
+  }
+  
+  handleMousedownMenuitem (event) {
+    event.preventDefault();
+  }
+  
   // Utility functions -----------------------------------------------
   
   menubarResize() {
@@ -577,6 +629,27 @@ class a11yMenubar {
     this._navElem.classList.add('a11y-menubar-closed');
   }
   
+  toggleInstructions () {
+    let instructionsVisible = (this._menubarInstructions.classList.contains('a11y-menubar-instructions-show')) ? true : false;
+    
+    if (instructionsVisible) {
+      this.hideInstructions();
+    }
+    else {
+      this.showInstructions();
+    }
+  }
+  
+  showInstructions () {
+    this._menubarInstructions.classList.add('a11y-menubar-instructions-show');
+    this._menubarInstructions.classList.remove('a11y-menubar-instructions-hide');
+  }
+  
+  hideInstructions () {
+    this._menubarInstructions.classList.add('a11y-menubar-instructions-hide');
+    this._menubarInstructions.classList.remove('a11y-menubar-instructions-show');
+  }
+  
   updateCurrentMenuitem (newMenuitem) {
     this._currentMenuitem.setAttribute('tabindex', '-1');
     this._currentMenuitem = newMenuitem;
@@ -601,6 +674,12 @@ class a11yMenubar {
       menu.classList.add('a11y-menubar-menu-open');
       menuitem.setAttribute('aria-expanded', 'true');
     }
+  }
+  
+  openParentSubmenus (menuitem) {
+    // Open all submenus above and including the menuitem.
+    let currentMenuitem = this._currentMenuitem;
+    let submenu = currentMenuitem.parentNode.parentNode;
   }
   
   closeSubmenu (menuitem) {
