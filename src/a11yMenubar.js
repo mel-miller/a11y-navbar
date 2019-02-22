@@ -80,6 +80,14 @@ class a11yMenubar {
     menubar.setAttribute('aria-label', this._options.ariaLabel);
     menubar.setAttribute('aria-orientation', this._options.ariaOrientation);
     
+    if (this._options.mode == 'dualAction') {
+      // Add instructions for dualAction mode to nav element.
+      menubar.setAttribute('aria-describedby', this._id + '-menubar-instructions');
+      
+      // Add focus events to toggle instruction visibility.
+      menubar.addEventListener('focusin', this.handleFocusinMenubar.bind(this));
+    }
+    
     // Add hoverintent functionality (or mouse events if hoverintent not available).
     if (this._options.hoverintent) {
       // Hoverintent in environment.
@@ -171,12 +179,6 @@ class a11yMenubar {
       menuitems[j].addEventListener('touchmove', this.handleTouchmoveMenuitem.bind(this));
       
       if (this._options.mode == 'dualAction') {
-        // Add instructions for dualAction mode to menuitems.
-        menuitems[j].setAttribute('aria-describedby', this._id + '-menubar-instructions');
-        
-        // Add focus events to toggle instruction visibility.
-        menuitems[j].addEventListener('focusin', this.handleFocusinMenuitem.bind(this));
-        
         // Override mousedown to avoid showing instructions on click to prevent focus event.
         menuitems[j].addEventListener('mousedown', this.handleMousedownMenuitem.bind(this));
       }
@@ -561,7 +563,7 @@ class a11yMenubar {
     event.preventDefault();
   }
   
-  handleFocusinMenuitem (event) {
+  handleFocusinMenubar (event) {
     let instructionsVisible = (this._menubarInstructions.classList.contains('a11y-menubar-instructions-show')) ? true : false;
     
     if (!instructionsVisible) {
