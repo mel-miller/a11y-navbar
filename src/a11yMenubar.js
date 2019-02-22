@@ -47,10 +47,6 @@ class a11yMenubar {
       this._menubarInstructions.classList.add('a11y-menubar-instructions');
       this._menubarInstructions.classList.add('a11y-menubar-instructions-hide');
       this._navElem.insertBefore(this._menubarInstructions, this._navElem.firstElementChild);
-      
-      // Hide instructions when focus is given to anything but a menuitem.
-      this._options.windowObj.addEventListener('focusin', this.handleFocusinWindowObj.bind(this));
-      this._options.windowObj.addEventListener('blur', this.handleBlurWindowObj.bind(this));
     }
     
     // Add/Remove toggle button based on breakpointMinWidth.
@@ -79,11 +75,6 @@ class a11yMenubar {
     menubar.setAttribute('role', 'menubar');
     menubar.setAttribute('aria-label', this._options.ariaLabel);
     menubar.setAttribute('aria-orientation', this._options.ariaOrientation);
-    
-    if (this._options.mode == 'dualAction') {
-      // Add instructions for dualAction mode to menubar itself (it might be announced here...?).
-      menubar.setAttribute('aria-describedby', this._id + '-menubar-instructions');
-    }
     
     // Add hoverintent functionality (or mouse events if hoverintent not available).
     if (this._options.hoverintent) {
@@ -589,18 +580,6 @@ class a11yMenubar {
   
   handleMousedownFirstMenuitem (event) {
     event.preventDefault();
-  }
-  
-  handleFocusinWindowObj (event) {
-    let elemRole = event.target.getAttribute('role');
-    
-    if (elemRole == null || elemRole != 'menuitem') {
-      this.hideInstructions();
-    }
-  }
-  
-  handleBlurWindowObj (event) {
-    this.hideInstructions();
   }
   
   // Utility functions -----------------------------------------------
