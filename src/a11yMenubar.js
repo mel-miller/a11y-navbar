@@ -81,11 +81,8 @@ class a11yMenubar {
     menubar.setAttribute('aria-orientation', this._options.ariaOrientation);
     
     if (this._options.mode == 'dualAction') {
-      // Add instructions for dualAction mode to nav element.
+      // Add instructions for dualAction mode to menubar itself (it might be announced here...?).
       menubar.setAttribute('aria-describedby', this._id + '-menubar-instructions');
-      
-      // Add focus events to toggle instruction visibility.
-      menubar.addEventListener('focusin', this.handleFocusinMenubar.bind(this));
     }
     
     // Add hoverintent functionality (or mouse events if hoverintent not available).
@@ -178,11 +175,6 @@ class a11yMenubar {
       // Override touchmove event for all menuitems.
       menuitems[j].addEventListener('touchmove', this.handleTouchmoveMenuitem.bind(this));
       
-      if (this._options.mode == 'dualAction') {
-        // Override mousedown to avoid showing instructions on click to prevent focus event.
-        menuitems[j].addEventListener('mousedown', this.handleMousedownMenuitem.bind(this));
-      }
-      
       // TODO: If submenus are closed due to non-keyboard (e.g. mouse) interaction, add focusin event to open all relevant submenus.
     }
     
@@ -195,6 +187,18 @@ class a11yMenubar {
     
     // First menubar menuitem should have tabindex 0.
     this._menubarMenuitems[0].setAttribute('tabindex', '0');
+    
+    if (this._options.mode == 'dualAction') {
+      // Add instructions for dualAction mode to first menubar menuitem.
+      this._menubarMenuitems[0].setAttribute('aria-describedby', this._id + '-menubar-instructions');
+      
+      // Add focus events to toggle instruction visibility.
+      this._menubarMenuitems[0].addEventListener('focusin', this.handleFocusinFirstMenuitem.bind(this));
+      this._menubarMenuitems[0].addEventListener('focusout', this.handleFocusoutFirstMenuitem.bind(this));
+      
+      // Override mousedown to avoid showing instructions on click to prevent focus event.
+      this._menubarMenuitems[0].addEventListener('mousedown', this.handleMousedownFirstMenuitem.bind(this));
+    }
     
     // First menubar menuitem should be the current menuitem.
     this._currentMenuitem = this._menubarMenuitems[0];
@@ -563,12 +567,20 @@ class a11yMenubar {
     event.preventDefault();
   }
   
-  handleFocusinMenubar (event) {
+  handleFocusinFirstMenuitem (event) {
     let instructionsVisible = (this._menubarInstructions.classList.contains('a11y-menubar-instructions-show')) ? true : false;
     
     if (!instructionsVisible) {
       this.showInstructions();
     }
+  }
+  
+  handleFocusoutFirstMenuitem (event) {
+    this.hideInstructions();
+  }
+  
+  handleMousedownFirstMenuitem (event) {
+    event.preventDefault();
   }
   
   handleFocusinWindowObj (event) {
@@ -581,10 +593,6 @@ class a11yMenubar {
   
   handleBlurWindowObj (event) {
     this.hideInstructions();
-  }
-  
-  handleMousedownMenuitem (event) {
-    event.preventDefault();
   }
   
   // Utility functions -----------------------------------------------
