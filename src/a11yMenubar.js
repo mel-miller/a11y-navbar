@@ -123,6 +123,9 @@ class a11yMenubar {
     
     for (let i = 0; i < submenuMenuitems.length; i++) {
       submenuMenuitems[i].addEventListener('keydown', this.handleKeydownSubmenu.bind(this));
+      
+      // Add handler to open parent menuitems if menu was closed by non-keyboard interaction.
+      submenuMenuitems[i].addEventListener('focusin', this.handleFocusinMenuitem.bind(this));
     }
     
     // Attributes for all menuitems.
@@ -567,6 +570,11 @@ class a11yMenubar {
     event.preventDefault();
   }
   
+  handleFocusinMenuitem (event) {
+    let menuitem = event.target;
+    this.openParentSubmenus(menuitem);
+  }
+  
   handleFocusinFirstMenuitem (event) {
     let instructionsVisible = (this._menubarInstructions.classList.contains('a11y-menubar-instructions-show')) ? true : false;
     
@@ -688,8 +696,16 @@ class a11yMenubar {
   
   openParentSubmenus (menuitem) {
     // Open all submenus above and including the menuitem.
-    let currentMenuitem = this._currentMenuitem;
-    let submenu = currentMenuitem.parentNode.parentNode;
+    let submenu = menuitem.parentNode.parentNode;
+    
+    if (submenu.classList.contains('a11y-menubar-menu-closed')) {
+      let parentMenuitem = submenu.parentNode.querySelector('a[aria-expanded="false"]');
+      
+      if (parentMenuitem != null) {
+        this.openSubmenu(parentMenuitem);
+        this.openParentSubmenus(parentMenuitem);
+      }
+    }
   }
   
   closeSubmenu (menuitem) {
