@@ -1,5 +1,7 @@
 /**
  * @file a11yMenubar.js
+ * 
+ * A11y Menubar Copyright (c) 2019 Joe Bondra
  */
 
 class a11yMenubar {
