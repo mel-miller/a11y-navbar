@@ -162,6 +162,11 @@ nav.a11y-menubar {
 	}
 	
 	&.a11y-menubar-responsive {
+		& div.a11y-menubar-instructions-show {
+			// Keep instructions visually hidden in responsive menu.
+			@include visually-hidden();
+		}
+		
 		ul[role=menubar] {
 			// Responsive menu should be identical whether vertical or horizontal initially.
 			&[aria-orientation=horizontal],
