@@ -41,7 +41,7 @@ Essentially, include the following in the HEAD element of your HTML:
 <script src="demo.js"></script>
 ```
 
-It can be seen above that the a11yMenubar.js script uses the non-jQuery version of [hoverintent](https://www.npmjs.com/package/hoverintent). If this is not present in the environment before a11yMenubar.js it will default to using basic mouse events.
+It can be seen above that the a11yMenubar.js script uses the non-jQuery version of [hoverintent](https://www.npmjs.com/package/hoverintent). If this is not present in the environment before a11yMenubar.js it will default to using basic mouse events. (For convenience, I've set package.json to move a copy of hoverintent.min.js from node_module/hoverintent/dist during `npm run build`.)
 
 If you look at demo.js you can see the basic usage of the menubar. Though, essentially all you really need is something like the following:
 
@@ -52,6 +52,10 @@ var test = new a11yMenubar('main-nav');
 ...where 'main-nav' is the id attribute of whichever NAV element is to be converted by the script into a navbar. The NAV element should contain a simple unordered list of anchor elements to function properly. See the markup in demo/demo.html as an example.
 
 Since the initial motivation for creating A11y Menubar was for use in a [Drupal 8](https://drupal.org) based website, you'll also find demo/demo-drupal-markup.html which contains some default markup from the Drupal 8 menu system.
+
+### Polyfills
+
+If you're having difficulty supporting an older browser, you can try attaching the [@babel/polyfill](https://babeljs.io/docs/en/babel-polyfill) script polyfill.min.js in the dist folder. (For convenience, a copy of node_modules/@babel/polyfill/dist/polyfill.min.js gets move into dist during `npm run build`.)
 
 ### Options
 

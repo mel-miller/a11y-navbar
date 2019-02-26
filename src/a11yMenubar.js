@@ -47,7 +47,6 @@ class a11yMenubar {
       		"<p>Use appropriate arrow key to open or close submenus.</p>";
       this._menubarInstructions.setAttribute('id', this._id + '-menubar-instructions');
       this._menubarInstructions.classList.add('a11y-menubar-instructions');
-      this._menubarInstructions.classList.add('a11y-menubar-instructions-hide');
       this._navElem.insertBefore(this._menubarInstructions, this._navElem.firstElementChild);
     }
     
