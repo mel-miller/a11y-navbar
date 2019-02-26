@@ -298,33 +298,6 @@ nav.a11y-menubar {
 	}
 	
 	div.a11y-menubar-instructions {
-		display:block;
-		width:20rem;
-		height:5rem;
-		position:absolute;
-		left:0;
-		bottom:1.5rem;
-		border:0.25rem solid $md-gray;
-		padding:1rem;
-		background:$lt-gray;
-		opacity:0;
-		
-		p {
-			margin-bottom: 0.5rem;
-		}
-		
-		strong {
-			font-weight:600;
-		}
-	}
-	
-	div.a11y-menubar-instructions-show {
-		opacity:1;
-		transition:opacity 0.4s linear;
-		z-index: 9999;
-	}
-	
-	div.a11y-menubar-instructions-hide {
 		@include visually-hidden();
 	}
 }

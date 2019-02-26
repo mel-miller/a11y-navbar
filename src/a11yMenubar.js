@@ -187,13 +187,6 @@ class a11yMenubar {
     if (this._options.mode == 'dualAction') {
       // Add instructions for dualAction mode to first menubar menuitem.
       this._menubarMenuitems[0].setAttribute('aria-describedby', this._id + '-menubar-instructions');
-      
-      // Add focus events to toggle instruction visibility.
-      this._menubarMenuitems[0].addEventListener('focusin', this.handleFocusinFirstMenuitem.bind(this));
-      this._menubarMenuitems[0].addEventListener('focusout', this.handleFocusoutFirstMenuitem.bind(this));
-      
-      // Override mousedown to avoid showing instructions on click to prevent focus event.
-      this._menubarMenuitems[0].addEventListener('mousedown', this.handleMousedownFirstMenuitem.bind(this));
     }
     
     // First menubar menuitem should be the current menuitem.
@@ -566,22 +559,6 @@ class a11yMenubar {
   handleFocusinMenuitem (event) {
     let menuitem = event.target;
     this.openParentSubmenus(menuitem);
-  }
-  
-  handleFocusinFirstMenuitem (event) {
-    let instructionsVisible = (this._menubarInstructions.classList.contains('a11y-menubar-instructions-show')) ? true : false;
-    
-    if (!instructionsVisible) {
-      this.showInstructions();
-    }
-  }
-  
-  handleFocusoutFirstMenuitem (event) {
-    this.hideInstructions();
-  }
-  
-  handleMousedownFirstMenuitem (event) {
-    event.preventDefault();
   }
   
   // Utility functions -----------------------------------------------
