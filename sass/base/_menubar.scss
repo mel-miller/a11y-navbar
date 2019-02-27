@@ -171,7 +171,13 @@ nav.a11y-menubar {
 			// Responsive menu should be identical whether vertical or horizontal initially.
 			&[aria-orientation=horizontal],
 			&[aria-orientation=vertical] {
+				// Undo aria-orientation="vertical" ul[role=menubar] width setting.
+				width:auto;
+				
 				li {
+					// Undo aria-orientation="vertical" li border setting.
+					border:none;
+					
 					display:block;
 					
 					a[role=menuitem] {
