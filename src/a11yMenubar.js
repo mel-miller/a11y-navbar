@@ -215,13 +215,17 @@ class a11yMenubar {
       return;
     }
     
+    let toggleButton = event.target;
+    
     if (this._navElem.classList.contains('a11y-menubar-closed')) {
       this._navElem.classList.remove('a11y-menubar-closed');
       this._navElem.classList.add('a11y-menubar-open');
+      toggleButton.setAttribute('aria-expanded', 'true');
     }
     else if (this._navElem.classList.contains('a11y-menubar-open')) {
       this._navElem.classList.remove('a11y-menubar-open');
       this._navElem.classList.add('a11y-menubar-closed');
+      toggleButton.setAttribute('aria-expanded', 'false');
     }
   }
   
