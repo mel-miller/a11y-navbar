@@ -4,7 +4,7 @@
 window.addEventListener("load", function(event) {
   var options = {
     'ariaLabel' : 'Main Navigation',
-    'ariaOrientation' : 'vertical'
+    'orientation' : 'vertical'
   }
   var test = new a11yMenubar('main-nav', options);
 });
