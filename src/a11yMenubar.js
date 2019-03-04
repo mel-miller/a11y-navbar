@@ -69,13 +69,20 @@ class a11yMenubar {
     // Set up aria roles and attributes. 
     this._navElem.setAttribute('aria-label', this._options.ariaLabel);
     this._navElem.classList.add('a11y-menubar');
-    this._navElem.classList.add('a11y-menubar-orientation-' + this._options.orientation);
     
     let menubar = this._navElem.querySelector('ul');
     
-    menubar.setAttribute('role', 'menubar');
     menubar.setAttribute('aria-label', this._options.ariaLabel);
-    menubar.setAttribute('aria-orientation', this._options.orientation);
+    menubar.classList.add('a11y-menubar-menubar');
+    menubar.classList.add('a11y-menubar-orientation-' + this._options.orientation);
+    
+    if (this._options.orientation == 'horizontal') {
+      menubar.setAttribute('role', 'menubar');
+    }
+    else if (this._options.orientation == 'vertical') {
+      // aria-orientation is implicitly 'vertical' for menus, and not supported on role=menubar.
+      menubar.setAttribute('role', 'menu');
+    }
     
     // Add hoverintent functionality (or mouse events if hoverintent not available).
     if (this._options.hoverintent) {
@@ -253,7 +260,7 @@ class a11yMenubar {
       // Opens submenu and moves focus to first item in the submenu.
       this.closeAllSubmenus();
       this.openSubmenu(menuitem);
-      let firstMenuitem = menuitem.parentNode.querySelector('ul[role=menu] > li > a[role=menuitem]');
+      let firstMenuitem = menuitem.parentNode.querySelector('ul[role=menu] > li').firstElementChild;
       
       if (firstMenuitem != null) {
         firstMenuitem.focus();
@@ -311,6 +318,7 @@ class a11yMenubar {
     {
       // Opens submenu and moves focus to last item in the submenu.
       if (this.hasSubmenu(menuitem)) {
+        this.closeAllSubmenus();
         this.openSubmenu(menuitem);
         let lastMenuitem = menuitem.parentNode.querySelector('ul[role=menu]').lastElementChild.firstElementChild;
         lastMenuitem.focus();

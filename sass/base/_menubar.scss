@@ -5,7 +5,7 @@ nav.a11y-menubar {
 	width:100%;
 	overflow:visible;
 	
-	ul[role=menubar] {
+	ul.a11y-menubar-menubar {
 		background-color:$lt-gray;
 		list-style-type: none;
 		
@@ -71,7 +71,7 @@ nav.a11y-menubar {
 			
 		}
 		
-		&[aria-orientation=horizontal] {
+		&.a11y-menubar-orientation-horizontal {
 			li {
 				display:inline-block;
 				
@@ -122,7 +122,7 @@ nav.a11y-menubar {
 			}
 		}
 		
-		&[aria-orientation=vertical] {
+		&.a11y-menubar-orientation-vertical {
 			width:10rem;
 			
 			a[role=menuitem] {
@@ -167,10 +167,10 @@ nav.a11y-menubar {
 			@include visually-hidden();
 		}
 		
-		ul[role=menubar] {
+		ul.a11y-menubar-menubar {
 			// Responsive menu should be identical whether vertical or horizontal initially.
-			&[aria-orientation=horizontal],
-			&[aria-orientation=vertical] {
+			&.a11y-menubar-orientation-horizontal,
+			&.a11y-menubar-orientation-vertical {
 				// Undo aria-orientation="vertical" ul[role=menubar] width setting.
 				width:auto;
 				
