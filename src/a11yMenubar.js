@@ -27,7 +27,7 @@ class a11yMenubar {
       'domObj' : document,
       'ariaLabel' : '',
       'hoverintent' : hoverintent,
-      'ariaOrientation' : 'horizontal',
+      'orientation' : 'horizontal',
       'breakpointMinWidth' : 500,
       'menubarToggleText' : 'Menu',
       'mode' : 'standard'
@@ -69,13 +69,13 @@ class a11yMenubar {
     // Set up aria roles and attributes. 
     this._navElem.setAttribute('aria-label', this._options.ariaLabel);
     this._navElem.classList.add('a11y-menubar');
-    this._navElem.classList.add('a11y-menubar-orientation-' + this._options.ariaOrientation);
+    this._navElem.classList.add('a11y-menubar-orientation-' + this._options.orientation);
     
     let menubar = this._navElem.querySelector('ul');
     
     menubar.setAttribute('role', 'menubar');
     menubar.setAttribute('aria-label', this._options.ariaLabel);
-    menubar.setAttribute('aria-orientation', this._options.ariaOrientation);
+    menubar.setAttribute('aria-orientation', this._options.orientation);
     
     // Add hoverintent functionality (or mouse events if hoverintent not available).
     if (this._options.hoverintent) {
@@ -246,8 +246,8 @@ class a11yMenubar {
     if (
       (key == this._keyCode.SPACE && mode == 'standard') ||
       (key == this._keyCode.ENTER && mode == 'standard') || 
-      (this._options.ariaOrientation == 'horizontal' && key == this._keyCode.ARROW_DOWN) ||
-      (this._options.ariaOrientation == 'vertical' && key == this._keyCode.ARROW_RIGHT)
+      (this._options.orientation == 'horizontal' && key == this._keyCode.ARROW_DOWN) ||
+      (this._options.orientation == 'vertical' && key == this._keyCode.ARROW_RIGHT)
     )
     {
       // Opens submenu and moves focus to first item in the submenu.
@@ -271,8 +271,8 @@ class a11yMenubar {
       preventDefault = true;
     }
     else if (
-      (this._options.ariaOrientation == 'horizontal' && key == this._keyCode.ARROW_RIGHT) ||
-      (this._options.ariaOrientation == 'vertical' && key == this._keyCode.ARROW_DOWN)
+      (this._options.orientation == 'horizontal' && key == this._keyCode.ARROW_RIGHT) ||
+      (this._options.orientation == 'vertical' && key == this._keyCode.ARROW_DOWN)
     )
     {
       /*
@@ -288,8 +288,8 @@ class a11yMenubar {
       preventDefault = true;
     }
     else if (
-      (this._options.ariaOrientation == 'horizontal' && key == this._keyCode.ARROW_LEFT) ||
-      (this._options.ariaOrientation == 'vertical' && key == this._keyCode.ARROW_UP)
+      (this._options.orientation == 'horizontal' && key == this._keyCode.ARROW_LEFT) ||
+      (this._options.orientation == 'vertical' && key == this._keyCode.ARROW_UP)
     )
     {
       /*
@@ -305,8 +305,8 @@ class a11yMenubar {
       preventDefault = true;
     }
     else if (
-      (this._options.ariaOrientation == 'horizontal' && key == this._keyCode.ARROW_UP) ||
-      (this._options.ariaOrientation == 'vertical' && key == this._keyCode.ARROW_LEFT)
+      (this._options.orientation == 'horizontal' && key == this._keyCode.ARROW_UP) ||
+      (this._options.orientation == 'vertical' && key == this._keyCode.ARROW_LEFT)
     )
     {
       // Opens submenu and moves focus to last item in the submenu.
