@@ -3,8 +3,12 @@
 ## Unreleased
 
 * Changing the name of this project from "A11y Menubar" to "A11y Navbar". This has been coming for a while. I don't believe "menubar" adequately describes what this script is intended to be.
-* Modify behavior of navbar to reset focus to the first menuitem when focus on the entire navbar is lost (i.e. reset tabindex to 0 on first menuitem when tab stop moves out of the navbar).
 
+## v0.3.2
+
+**Mar 6, 2019**
+
+* Modifies behavior of navbar to reset focus to the first menuitem when focus on the entire navbar is lost (i.e. reset tabindex to 0 on first menuitem when tab stop moves out of the navbar). Also closes all submenus when focus on navbar is lost.
 
 ## v0.3.1
 
