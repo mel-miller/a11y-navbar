@@ -40,6 +40,9 @@ class a11yMenubar {
     this._currentMenubarIndex = 0;
     this._currentMenuitem = null;
     
+    // Reset navbar when navbar loses focus.
+    this._navElem.addEventListener('focusout', this.handleFocusoutNavElem.bind(this));
+    
     if (this._options.mode == 'dualAction') {
       // Add element to explain alternate instructions for mode dualAction.
       this._menubarInstructions = this._options.domObj.createElement('div');
@@ -568,6 +571,17 @@ class a11yMenubar {
   handleFocusinMenuitem (event) {
     let menuitem = event.target;
     this.openParentSubmenus(menuitem);
+  }
+  
+  handleFocusoutNavElem (event) {
+    let newTarget = event.relatedTarget;
+    
+    if (newTarget == null || !(this._navElem.contains(newTarget))) {
+      // Reset navbar.
+      this.updateCurrentMenuitem(this._menubarMenuitems[0]);
+      this._currentMenubarIndex = 0;
+      this.closeAllSubmenus();
+    }
   }
   
   // Utility functions -----------------------------------------------
