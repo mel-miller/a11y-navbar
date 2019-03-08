@@ -1,10 +1,10 @@
 /**
- * @file a11yMenubar.js
+ * @file a11yNavbar.js
  * 
- * A11y Menubar Copyright (c) 2019 Joe Bondra
+ * A11y Navbar Copyright (c) 2019 Joe Bondra
  */
 
-class a11yMenubar {
+class a11yNavbar {
   
   constructor(id, options={}) {
     // Define members.
@@ -49,7 +49,7 @@ class a11yMenubar {
       this._menubarInstructions.innerHTML = "<p>Use <strong>Enter</strong> or <strong>Space</strong> to activate links.</p>" +
       		"<p>Use appropriate arrow key to open or close submenus.</p>";
       this._menubarInstructions.setAttribute('id', this._id + '-menubar-instructions');
-      this._menubarInstructions.classList.add('a11y-menubar-instructions');
+      this._menubarInstructions.classList.add('a11y-navbar-instructions');
       this._navElem.insertBefore(this._menubarInstructions, this._navElem.firstElementChild);
     }
     
@@ -59,7 +59,7 @@ class a11yMenubar {
     this._menubarToggle.setAttribute('id', this._id + '-toggle');
     this._menubarToggle.setAttribute('aria-expanded', 'false');
     this._menubarToggle.setAttribute('aria-controls', this._id);
-    this._menubarToggle.classList.add('a11y-menubar-toggle');
+    this._menubarToggle.classList.add('a11y-navbar-toggle');
     let menuIcon = this._options.domObj.createElement('span');
     menuIcon.setAttribute('aria-hidden', 'true');
     this._menubarToggle.appendChild(menuIcon);
@@ -71,13 +71,13 @@ class a11yMenubar {
     
     // Set up aria roles and attributes. 
     this._navElem.setAttribute('aria-label', this._options.ariaLabel);
-    this._navElem.classList.add('a11y-menubar');
+    this._navElem.classList.add('a11y-navbar');
     
     let menubar = this._navElem.querySelector('ul');
     
     menubar.setAttribute('aria-label', this._options.ariaLabel);
-    menubar.classList.add('a11y-menubar-menubar');
-    menubar.classList.add('a11y-menubar-orientation-' + this._options.orientation);
+    menubar.classList.add('a11y-navbar-menubar');
+    menubar.classList.add('a11y-navbar-orientation-' + this._options.orientation);
     
     if (this._options.orientation == 'horizontal') {
       menubar.setAttribute('role', 'menubar');
@@ -111,16 +111,16 @@ class a11yMenubar {
     
     for (let i = 0; i < menubarMenuitems.length; i++) {
       let menubarMenuitem = menubarMenuitems[i].firstElementChild;
-      menubarMenuitem.classList.add('a11y-menubar-menuitem');
+      menubarMenuitem.classList.add('a11y-navbar-menuitem');
       
       // collect these as an Array or something and store in the class.
       this._menubarMenuitems[i] = menubarMenuitem;
       
-      // Add keydown handler (bound to a11yMenubar instance).
+      // Add keydown handler (bound to a11yNavbar instance).
       menubarMenuitem.addEventListener('keydown', this.handleKeydownMenubar.bind(this));
     }
     
-    // Add keydown handler to submenu menuitems (bound to a11yMenubar instance).
+    // Add keydown handler to submenu menuitems (bound to a11yNavbar instance).
     let submenuMenuitems = this._navElem.querySelectorAll('a + ul > li > a');
     
     for (let i = 0; i < submenuMenuitems.length; i++) {
@@ -152,7 +152,7 @@ class a11yMenubar {
         
         submenus[k].setAttribute('role', 'menu');
         submenus[k].setAttribute('aria-label', aElemText);
-        submenus[k].classList.add('a11y-menubar-menu-closed');
+        submenus[k].classList.add('a11y-navbar-menu-closed');
       }
       
       // Add hoverintent functionality (or mouse events if hoverintent not available).
@@ -225,14 +225,14 @@ class a11yMenubar {
       return;
     }
     
-    if (this._navElem.classList.contains('a11y-menubar-closed')) {
-      this._navElem.classList.remove('a11y-menubar-closed');
-      this._navElem.classList.add('a11y-menubar-open');
+    if (this._navElem.classList.contains('a11y-navbar-closed')) {
+      this._navElem.classList.remove('a11y-navbar-closed');
+      this._navElem.classList.add('a11y-navbar-open');
       this._menubarToggle.setAttribute('aria-expanded', 'true');
     }
-    else if (this._navElem.classList.contains('a11y-menubar-open')) {
-      this._navElem.classList.remove('a11y-menubar-open');
-      this._navElem.classList.add('a11y-menubar-closed');
+    else if (this._navElem.classList.contains('a11y-navbar-open')) {
+      this._navElem.classList.remove('a11y-navbar-open');
+      this._navElem.classList.add('a11y-navbar-closed');
       this._menubarToggle.setAttribute('aria-expanded', 'false');
     }
   }
@@ -438,7 +438,7 @@ class a11yMenubar {
       submenuParentMenuitem.focus();
       this.updateCurrentMenuitem(submenuParentMenuitem);
       
-      if (this._currentMenuitem.classList.contains('a11y-menubar-menuitem')) {
+      if (this._currentMenuitem.classList.contains('a11y-navbar-menuitem')) {
         let prevMenubarIndex = (this._currentMenubarIndex - 1 < 0) ? this._menubarMenuitems.length - 1 : this._currentMenubarIndex - 1;
         let prevMenubarItem = this._menubarMenuitems[prevMenubarIndex];
         
@@ -603,8 +603,8 @@ class a11yMenubar {
     if (this._options.domObj.getElementById(this._menubarToggle.getAttribute('id')) == null) {
       this._navElem.parentNode.insertBefore(this._menubarToggle, this._navElem);
       // Add closed class to menubar.
-      this._navElem.classList.add('a11y-menubar-responsive');
-      this._navElem.classList.add('a11y-menubar-closed');
+      this._navElem.classList.add('a11y-navbar-responsive');
+      this._navElem.classList.add('a11y-navbar-closed');
       this._menubarToggle.setAttribute('aria-expanded', 'false');
     }
   }
@@ -613,25 +613,25 @@ class a11yMenubar {
     if (this._options.domObj.getElementById(this._menubarToggle.getAttribute('id'))) {
       this._navElem.parentNode.removeChild(this._menubarToggle);
       // Remove open/closed classes from menubar.
-      this._navElem.classList.remove('a11y-menubar-responsive');
-      this._navElem.classList.remove('a11y-menubar-open');
-      this._navElem.classList.remove('a11y-menubar-closed');
+      this._navElem.classList.remove('a11y-navbar-responsive');
+      this._navElem.classList.remove('a11y-navbar-open');
+      this._navElem.classList.remove('a11y-navbar-closed');
       this._menubarToggle.setAttribute('aria-expanded', 'false');
     }
   }
   
   showMenubar () {
-    this._navElem.classList.remove('a11y-menubar-closed');
-    this._navElem.classList.add('a11y-menubar-open');
+    this._navElem.classList.remove('a11y-navbar-closed');
+    this._navElem.classList.add('a11y-navbar-open');
   }
   
   hideMenubar () {
-    this._navElem.classList.remove('a11y-menubar-open');
-    this._navElem.classList.add('a11y-menubar-closed');
+    this._navElem.classList.remove('a11y-navbar-open');
+    this._navElem.classList.add('a11y-navbar-closed');
   }
   
   toggleInstructions () {
-    let instructionsVisible = (this._menubarInstructions.classList.contains('a11y-menubar-instructions-show')) ? true : false;
+    let instructionsVisible = (this._menubarInstructions.classList.contains('a11y-navbar-instructions-show')) ? true : false;
     
     if (instructionsVisible) {
       this.hideInstructions();
@@ -642,13 +642,13 @@ class a11yMenubar {
   }
   
   showInstructions () {
-    this._menubarInstructions.classList.add('a11y-menubar-instructions-show');
-    this._menubarInstructions.classList.remove('a11y-menubar-instructions-hide');
+    this._menubarInstructions.classList.add('a11y-navbar-instructions-show');
+    this._menubarInstructions.classList.remove('a11y-navbar-instructions-hide');
   }
   
   hideInstructions () {
-    this._menubarInstructions.classList.add('a11y-menubar-instructions-hide');
-    this._menubarInstructions.classList.remove('a11y-menubar-instructions-show');
+    this._menubarInstructions.classList.add('a11y-navbar-instructions-hide');
+    this._menubarInstructions.classList.remove('a11y-navbar-instructions-show');
   }
   
   updateCurrentMenuitem (newMenuitem) {
@@ -671,8 +671,8 @@ class a11yMenubar {
     
     // Only open submenu if it exists.
     if (menu != null) {
-      menu.classList.remove('a11y-menubar-menu-closed');
-      menu.classList.add('a11y-menubar-menu-open');
+      menu.classList.remove('a11y-navbar-menu-closed');
+      menu.classList.add('a11y-navbar-menu-open');
       menuitem.setAttribute('aria-expanded', 'true');
     }
   }
@@ -681,7 +681,7 @@ class a11yMenubar {
     // Open all submenus above and including the menuitem.
     let submenu = menuitem.parentNode.parentNode;
     
-    if (submenu.classList.contains('a11y-menubar-menu-closed')) {
+    if (submenu.classList.contains('a11y-navbar-menu-closed')) {
       let parentMenuitem = submenu.parentNode.querySelector('a[aria-expanded="false"]');
       
       if (parentMenuitem != null) {
@@ -697,8 +697,8 @@ class a11yMenubar {
     
     // Only close submenu if it exists.
     if (menu != null) {
-      menu.classList.remove('a11y-menubar-menu-open');
-      menu.classList.add('a11y-menubar-menu-closed');
+      menu.classList.remove('a11y-navbar-menu-open');
+      menu.classList.add('a11y-navbar-menu-closed');
       menuitem.setAttribute('aria-expanded', 'false');
     }
   }
@@ -722,13 +722,13 @@ class a11yMenubar {
   
   closeAllSubmenus() {
     // Closes all currently open submenus.
-    let openSubmenus = this._navElem.querySelectorAll('ul.a11y-menubar-menu-open');
+    let openSubmenus = this._navElem.querySelectorAll('ul.a11y-navbar-menu-open');
     
     for (let i = 0; i < openSubmenus.length; i++) {
       let aElem = openSubmenus[i].parentNode.querySelector('a');
       aElem.setAttribute('aria-expanded', 'false');
-      openSubmenus[i].classList.remove('a11y-menubar-menu-open');
-      openSubmenus[i].classList.add('a11y-menubar-menu-closed');
+      openSubmenus[i].classList.remove('a11y-navbar-menu-open');
+      openSubmenus[i].classList.add('a11y-navbar-menu-closed');
     }
   }
   

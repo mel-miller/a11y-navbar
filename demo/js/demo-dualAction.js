@@ -6,5 +6,5 @@ window.addEventListener("load", function(event) {
     'ariaLabel' : 'Main Navigation',
     'mode' : 'dualAction'
   }
-  var test = new a11yMenubar('main-nav', options);
+  var test = new a11yNavbar('main-nav', options);
 });

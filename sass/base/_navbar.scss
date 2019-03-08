@@ -1,11 +1,11 @@
-nav.a11y-menubar {
+nav.a11y-navbar {
 	font-family:$proxima;
 	display:block;
 	position:relative;
 	width:100%;
 	overflow:visible;
 	
-	ul.a11y-menubar-menubar {
+	ul.a11y-navbar-menubar {
 		background-color:$lt-gray;
 		list-style-type: none;
 		
@@ -31,7 +31,7 @@ nav.a11y-menubar {
 			
 			ul[role=menu] {
 				opacity:0;
-				&.a11y-menubar-menu-open {
+				&.a11y-navbar-menu-open {
 					display:block;
 					width:10rem;
 					position:absolute;
@@ -64,19 +64,19 @@ nav.a11y-menubar {
 					}
 				}
 				
-				&.a11y-menubar-menu-closed {
+				&.a11y-navbar-menu-closed {
 					@include visually-hidden();
 				}
 			}
 			
 		}
 		
-		&.a11y-menubar-orientation-horizontal {
+		&.a11y-navbar-orientation-horizontal {
 			li {
 				display:inline-block;
 				
 				a[role=menuitem] {
-					&.a11y-menubar-menuitem {
+					&.a11y-navbar-menuitem {
 						border-right:1px solid $md-gray;
 						border-bottom:none;
 						
@@ -107,7 +107,7 @@ nav.a11y-menubar {
 				}
 				
 				ul[role=menu] {
-					&.a11y-menubar-menu-open {
+					&.a11y-navbar-menu-open {
 						top:1.5rem;
 						left:0;
 						
@@ -122,7 +122,7 @@ nav.a11y-menubar {
 			}
 		}
 		
-		&.a11y-menubar-orientation-vertical {
+		&.a11y-navbar-orientation-vertical {
 			width:10rem;
 			
 			a[role=menuitem] {
@@ -151,7 +151,7 @@ nav.a11y-menubar {
 				}
 				
 				ul[role=menu] {
-					&.a11y-menubar-menu-open {
+					&.a11y-navbar-menu-open {
 						top:-1px;
 						left:100%;
 					}
@@ -161,16 +161,16 @@ nav.a11y-menubar {
 		
 	}
 	
-	&.a11y-menubar-responsive {
-		& div.a11y-menubar-instructions-show {
+	&.a11y-navbar-responsive {
+		& div.a11y-navbar-instructions-show {
 			// Keep instructions visually hidden in responsive menu.
 			@include visually-hidden();
 		}
 		
-		ul.a11y-menubar-menubar {
+		ul.a11y-navbar-menubar {
 			// Responsive menu should be identical whether vertical or horizontal initially.
-			&.a11y-menubar-orientation-horizontal,
-			&.a11y-menubar-orientation-vertical {
+			&.a11y-navbar-orientation-horizontal,
+			&.a11y-navbar-orientation-vertical {
 				// Undo aria-orientation="vertical" ul[role=menubar] width setting.
 				width:auto;
 				
@@ -181,7 +181,7 @@ nav.a11y-menubar {
 					display:block;
 					
 					a[role=menuitem] {
-						&.a11y-menubar-menuitem {
+						&.a11y-navbar-menuitem {
 							border-right:none;
 							border-bottom:1px solid $md-gray;
 						}
@@ -220,7 +220,7 @@ nav.a11y-menubar {
 						opacity:1;
 						max-height:0;
 						overflow:hidden;
-						&.a11y-menubar-menu-open {
+						&.a11y-navbar-menu-open {
 							max-height:9999px;
 							transition:max-height 1s ease-in;
 						}
@@ -299,16 +299,16 @@ nav.a11y-menubar {
 		}
 	}
 	
-	&.a11y-menubar-closed {
+	&.a11y-navbar-closed {
 		@include visually-hidden();
 	}
 	
-	div.a11y-menubar-instructions {
+	div.a11y-navbar-instructions {
 		@include visually-hidden();
 	}
 }
 
-button.a11y-menubar-toggle {
+button.a11y-navbar-toggle {
 	@include button-reset();
 	font-family:$proxima;
 	background-color:$dk-gray;
