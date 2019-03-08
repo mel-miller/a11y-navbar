@@ -4,6 +4,12 @@
 
 * (no upcoming updates at the moment...)
 
+## v0.5.0
+
+**Mar 8, 2019**
+
+* Changed the compiled script name in dist from `a11yNavbar.js` to `a11yNavbar.min.js`.
+
 ## v0.4.0
 
 **Mar 8, 2019**

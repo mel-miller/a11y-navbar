@@ -37,11 +37,11 @@ Essentially, include the following in the HEAD element of your HTML:
 ```
 <link rel="stylesheet" href="../css/a11y-navbar.styles.css">
 <script src="../node_modules/hoverintent/dist/hoverintent.min.js"></script>
-<script src="../dist/a11yNavbar.js"></script>
+<script src="../dist/a11yNavbar.min.js"></script>
 <script src="demo.js"></script>
 ```
 
-It can be seen above that the a11ynavbar.js script uses the non-jQuery version of [hoverintent](https://www.npmjs.com/package/hoverintent). If this is not present in the environment before a11ynavbar.js it will default to using basic mouse events. (For convenience, I've set package.json to move a copy of hoverintent.min.js from node_module/hoverintent/dist during `npm run build`.)
+It can be seen above that the a11yNavbar.min.js script uses the non-jQuery version of [hoverintent](https://www.npmjs.com/package/hoverintent). If this is not present in the environment before a11yNavbar.min.js it will default to using basic mouse events. (For convenience, I've set package.json to move a copy of hoverintent.min.js from node_module/hoverintent/dist during `npm run build`.)
 
 If you look at demo.js you can see the basic usage of the navbar. Though, essentially all you really need is something like the following:
 
