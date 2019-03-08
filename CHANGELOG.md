@@ -6,6 +6,8 @@
 
 ## v0.4.0
 
+**Mar 8, 2019**
+
 * Changed the name of this project from "A11y Menubar" to "A11y Navbar". This has been coming for a while. I don't believe "menubar" adequately describes what this script is intended to be.
     - Any instances of `a11y-menubar` and `a11yMenubar` have been changed to `a11y-navbar` and `a11yNavbar` respectively. So, you'll have to adjust any sass/css selectors and scripts accordingly.
 * Changed option `menubarToggleText` to `responsiveToggleText`
