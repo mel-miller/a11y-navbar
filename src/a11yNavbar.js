@@ -29,7 +29,7 @@ class a11yNavbar {
       'hoverintent' : hoverintent,
       'orientation' : 'horizontal',
       'breakpointMinWidth' : 500,
-      'menubarToggleText' : 'Menu',
+      'responsiveToggleText' : 'Menu',
       'mode' : 'standard'
     };
     this._options = Object.assign(this._defaultOptions, options);
@@ -55,7 +55,7 @@ class a11yNavbar {
     
     // Add/Remove toggle button based on breakpointMinWidth.
     this._menubarToggle = this._options.domObj.createElement('button');
-    this._menubarToggle.textContent = this._options.menubarToggleText;
+    this._menubarToggle.textContent = this._options.responsiveToggleText;
     this._menubarToggle.setAttribute('id', this._id + '-toggle');
     this._menubarToggle.setAttribute('aria-expanded', 'false');
     this._menubarToggle.setAttribute('aria-controls', this._id);

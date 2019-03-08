@@ -1,6 +1,6 @@
-# A11y Menubar
+# A11y Navbar
 
-A11y Menubar is an attempt at creating a WAI-ARIA 2.0 AA compatible navigation bar menu script for use in websites. It may be better named "A11y Navbar" or something to that effect, so, maybe the name will change eventually since it's really not supposed to be anything fancier than just a basic navbar (as opposed to some sort of elaborate menu system).
+A11y Navbar is an attempt at creating a WAI-ARIA 2.0 AA compatible navigation bar menu script for use in websites. It follows the [ARIA Design Pattern for Menu/Menubar](https://www.w3.org/TR/wai-aria-practices-1.1/#menu) but it's really not supposed to be anything fancier than just a basic website navbar (as opposed to some sort of elaborate menu system).
 
 ## Development
 
@@ -30,28 +30,28 @@ npm run build
 
 ## Usage
 
-Take a look at demo/demo.html to understand what is necessary to use the A11y Menubar component in a browser (which at the moment is primarily if not the only way to use this script).
+Take a look at demo/demo.html to understand what is necessary to use the A11y Navbar component in a browser (which at the moment is primarily if not the only way to use this script).
 
 Essentially, include the following in the HEAD element of your HTML:
 
 ```
-<link rel="stylesheet" href="../css/a11y-menubar.styles.css">
+<link rel="stylesheet" href="../css/a11y-navbar.styles.css">
 <script src="../node_modules/hoverintent/dist/hoverintent.min.js"></script>
-<script src="../dist/a11yMenubar.js"></script>
+<script src="../dist/a11yNavbar.js"></script>
 <script src="demo.js"></script>
 ```
 
-It can be seen above that the a11yMenubar.js script uses the non-jQuery version of [hoverintent](https://www.npmjs.com/package/hoverintent). If this is not present in the environment before a11yMenubar.js it will default to using basic mouse events. (For convenience, I've set package.json to move a copy of hoverintent.min.js from node_module/hoverintent/dist during `npm run build`.)
+It can be seen above that the a11ynavbar.js script uses the non-jQuery version of [hoverintent](https://www.npmjs.com/package/hoverintent). If this is not present in the environment before a11ynavbar.js it will default to using basic mouse events. (For convenience, I've set package.json to move a copy of hoverintent.min.js from node_module/hoverintent/dist during `npm run build`.)
 
-If you look at demo.js you can see the basic usage of the menubar. Though, essentially all you really need is something like the following:
+If you look at demo.js you can see the basic usage of the navbar. Though, essentially all you really need is something like the following:
 
 ```
-var test = new a11yMenubar('main-nav');
+var test = new a11yNavbar('main-nav');
 ```
 
 ...where 'main-nav' is the id attribute of whichever NAV element is to be converted by the script into a navbar. The NAV element should contain a simple unordered list of anchor elements to function properly. See the markup in demo/demo.html as an example.
 
-Since the initial motivation for creating A11y Menubar was for use in a [Drupal 8](https://drupal.org) based website, you'll also find demo/demo-drupal-markup.html which contains some default markup from the Drupal 8 menu system.
+Since the initial motivation for creating A11y Navbar was for use in a [Drupal 8](https://drupal.org) based website, you'll also find demo/demo-drupal-markup.html which contains some default markup from the Drupal 8 menu system.
 
 ### Polyfills
 
@@ -67,7 +67,7 @@ An example can be seen in demo/demo.js:
 var options = {
     'ariaLabel' : 'Main Navigation'
   }
-var test = new a11yMenubar('main-nav', options);
+var test = new a11yNavbar('main-nav', options);
 ```
 
 #### Default Options
@@ -80,7 +80,7 @@ var test = new a11yMenubar('main-nav', options);
   'hoverintent' : hoverintent,
   'orientation' : 'horizontal',
   'breakpointMinWidth' : 500,
-  'menubarToggleText' : 'Menu',
+  'responsiveToggleText' : 'Menu',
   'mode' : 'standard'
 }
 ```
@@ -89,9 +89,9 @@ var test = new a11yMenubar('main-nav', options);
 * *domObj* is the DOM object being used to both find and manipulate the appropriate HTML. If this isn't just *document* than you really don't have to worry about it.
 * *ariaLabel* is the ARIA label for the navbar. This should be whatever brief, meaningful identifier that will describe the navigation bar.
 * *hoverintent* is the implementation of hoverintent you're using. If for some unknown reason (maybe you're crazy) it isn't the included version of hoverintent you can change it here.
-* *orientation* is the direction the menubar flows. Valid values are either "horizontal" (which is the default) or "vertical".
+* *orientation* is the direction the navbar flows. Valid values are either "horizontal" (which is the default) or "vertical".
 * *breakpointMinWidth* is the width in pixels at which the menu transforms into a "mobile friendly" compact menu. The default is 500px.
-* *menubarToggleText* is the text for the menu button when the "mobile friendly" compact menu is active. It defaults to "Menu".
-* *mode* can be set to either "standard" (for behavior strictly following the menubar design pattern) or "dualAction" (in which menuitems with submenus can be activated with Enter/Space, or expanded with the appropriate arrow key).
+* *responsiveToggleText* is the text for the menu button when the "mobile friendly" compact menu is active. It defaults to "Menu".
+* *mode* can be set to either "standard" (for behavior strictly following the navbar design pattern) or "dualAction" (in which menuitems with submenus can be activated with Enter/Space, or expanded with the appropriate arrow key).
 
  
