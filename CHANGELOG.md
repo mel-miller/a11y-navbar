@@ -3,6 +3,7 @@
 ## Unreleased
 
 * Implement optional character key handling "Any key that corresponds to a printable character (Optional): Move focus to the next menu item in the current menu whose label begins with that printable character." from [ARIA Design Pattern for Menu/Menubar](https://www.w3.org/TR/wai-aria-practices-1.1/#menu).
+* Implement destroy() function in a11yNavbar class.
 
 ## v0.5.0
 
