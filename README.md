@@ -53,6 +53,8 @@ var test = new a11yNavbar('main-nav');
 
 Since the initial motivation for creating A11y Navbar was for use in a [Drupal 8](https://drupal.org) based website, you'll also find demo/demo-drupal-markup.html which contains some default markup from the Drupal 8 menu system.
 
+There are also demos for a vertically-oriented navbar and a navbar using the `dualAction` mode.
+
 ### Polyfills
 
 If you're having difficulty supporting an older browser, you can try attaching the [@babel/polyfill](https://babeljs.io/docs/en/babel-polyfill) script polyfill.min.js in the dist folder. (For convenience, a copy of node_modules/@babel/polyfill/dist/polyfill.min.js gets move into dist during `npm run build`.)
