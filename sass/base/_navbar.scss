@@ -1,4 +1,16 @@
 nav.a11y-navbar {
+	@include element-reset();
+	
+	/*
+		Reset potentially nested elements.
+	*/
+	div, span, ul, ol, li, a, p {
+		@include element-reset();
+	}
+	ul, ol, li {
+		@include list-reset();
+	}
+	
 	font-family:$proxima;
 	display:block;
 	position:relative;

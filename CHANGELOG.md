@@ -5,6 +5,12 @@
 * Implement optional character key handling "Any key that corresponds to a printable character (Optional): Move focus to the next menu item in the current menu whose label begins with that printable character." from [ARIA Design Pattern for Menu/Menubar](https://www.w3.org/TR/wai-aria-practices-1.1/#menu).
 * Implement destroy() function in a11yNavbar class.
 
+## v0.5.1
+
+**Mar 12, 2019**
+
+* Fixes minor issue in adding reset css via SASS. Now only resets elements specifically used within the navbar rather than including global resets in the compiled stylesheet. (The default body element in the demos will now have default margins, etc.)
+
 ## v0.5.0
 
 **Mar 8, 2019**
