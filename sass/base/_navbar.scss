@@ -49,6 +49,7 @@ nav.a11y-navbar {
 					position:absolute;
 					opacity:1;
 					transition:opacity 0.4s linear;
+					z-index:9999;
 					
 					li {
 						display:block;
