@@ -5,6 +5,12 @@
 * Implement optional character key handling "Any key that corresponds to a printable character (Optional): Move focus to the next menu item in the current menu whose label begins with that printable character." from [ARIA Design Pattern for Menu/Menubar](https://www.w3.org/TR/wai-aria-practices-1.1/#menu).
 * Implement destroy() function in a11yNavbar class.
 
+## v0.5.2
+
+**Mar 14, 2019**
+
+* Fixes minor issue in default styles in which z-index for submenus was not set (making submenus potentially appear under other elements in page layouts).
+
 ## v0.5.1
 
 **Mar 12, 2019**
