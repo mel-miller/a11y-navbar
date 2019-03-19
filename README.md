@@ -57,7 +57,7 @@ There are also demos for a vertically-oriented navbar and a navbar using the `du
 
 ### Polyfills
 
-If you're having difficulty supporting an older browser, you can try attaching the [@babel/polyfill](https://babeljs.io/docs/en/babel-polyfill) script polyfill.min.js in the dist folder. (For convenience, a copy of node_modules/@babel/polyfill/dist/polyfill.min.js gets move into dist during `npm run build`.)
+If you're having difficulty supporting an older browser, you can try attaching the [@babel/polyfill](https://babeljs.io/docs/en/babel-polyfill) script polyfill.min.js in the dist folder. (For convenience, a copy of node_modules/@babel/polyfill/dist/polyfill.min.js gets moved into dist during `npm run build`.)
 
 ### Options
 
