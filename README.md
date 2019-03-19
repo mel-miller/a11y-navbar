@@ -36,7 +36,7 @@ Essentially, include the following in the HEAD element of your HTML:
 
 ```
 <link rel="stylesheet" href="../css/a11y-navbar.styles.css">
-<script src="../node_modules/hoverintent/dist/hoverintent.min.js"></script>
+<script src="../dist/hoverintent.min.js"></script>
 <script src="../dist/a11yNavbar.min.js"></script>
 <script src="demo.js"></script>
 ```
