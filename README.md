@@ -32,7 +32,7 @@ npm run build
 
 Take a look at demo/demo.html to understand what is necessary to use the A11y Navbar component in a browser (which at the moment is primarily if not the only way to use this script).
 
-Essentially, include the following in the HEAD element of your HTML:
+Essentially, include something similar the following in the HEAD element of your HTML:
 
 ```
 <link rel="stylesheet" href="../css/a11y-navbar.styles.css">
