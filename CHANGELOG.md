@@ -6,6 +6,12 @@
 * Implement destroy() function in a11yNavbar class.
 * Implement mouse events for li[role="none"] elements that are identical to the a[role="menuitem"] mouse events.
 
+## v0.5.4
+
+**Mar 27, 2019**
+
+* Removes navbar from tab order when hidden by disclosure in responsive "mobile friendly" menu.
+
 ## v0.5.3
 
 **Mar 20, 2019**
