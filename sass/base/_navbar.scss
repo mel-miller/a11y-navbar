@@ -312,7 +312,7 @@ nav.a11y-navbar {
 	}
 	
 	&.a11y-navbar-closed {
-		@include visually-hidden();
+		display: none;
 	}
 	
 	div.a11y-navbar-instructions {
