@@ -174,11 +174,14 @@ class a11yNavbar {
         menuitems[j].addEventListener('mouseover', this.handleMouseoverMenuitem.bind(this));
       }
       
+      // @see https://w3c.github.io/touch-events/#mouse-events
       // Override click event for all menuitems.
       menuitems[j].addEventListener('click', this.handleClickMenuitem.bind(this));
       
-      // Override touchmove event for all menuitems.
+      // Override touch events for all menuitems.
+      menuitems[j].addEventListener('touchstart', this.handleTouchstartMenuitem.bind(this));
       menuitems[j].addEventListener('touchmove', this.handleTouchmoveMenuitem.bind(this));
+      menuitems[j].addEventListener('touchend', this.handleTouchendMenuitem.bind(this));
       
       // TODO: If submenus are closed due to non-keyboard (e.g. mouse) interaction, add focusin event to open all relevant submenus.
     }
@@ -277,7 +280,7 @@ class a11yNavbar {
     )
     {
       // Activates menu item, causing the link to be activated.
-      this.handleClick(menuitem);
+      this.performClick(menuitem);
       preventDefault = true;
     }
     else if (
@@ -379,13 +382,13 @@ class a11yNavbar {
       }
       else {
         // Activates menu item, causing the link to be activated.
-        this.handleClick(menuitem);
+        this.performClick(menuitem);
         preventDefault = true;
       }
     }
     else if ((key == this._keyCode.SPACE || key == this._keyCode.ENTER) && mode == 'dualAction') {
       // Activates menu item, causing the link to be activated.
-      this.handleClick(menuitem);
+      this.performClick(menuitem);
       preventDefault = true;
     }
     else if (key == this._keyCode.ESC) {
@@ -541,31 +544,36 @@ class a11yNavbar {
     event.preventDefault();
     
     let menuitem = event.target;
-    let hasAriaExpanded = menuitem.hasAttribute('aria-expanded');
-    
-    if (hasAriaExpanded) {
-      let ariaExpanded = menuitem.getAttribute('aria-expanded');
-      
-      if (ariaExpanded == 'true') {
-        // Only perform click if submenu is already open.
-        this.handleClick(menuitem);
-      }
-      else {
-        // Open the submenu.
-        this.openSubmenu(menuitem);
-      }
-    }
-    else {
-      // Just perform click (menuitem does not have submenu).
-      this.handleClick(menuitem);
-    }
+    this.clickMenuitem(menuitem);
     
     // TODO: Change behavior for responsive menu...?
   }
   
   // @see https://developer.mozilla.org/en-US/docs/Web/API/Touch_events/Supporting_both_TouchEvent_and_MouseEvent#Event_firing
-  handleTouchmoveMenuitem (event) {
+  // @see https://w3c.github.io/touch-events/#mouse-events
+  handleTouchstartMenuitem (event) {
+    if (event.defaultPrevented) {
+      return;
+    }
+    
     event.preventDefault();
+  }
+  handleTouchmoveMenuitem (event) {
+    if (event.defaultPrevented) {
+      return;
+    }
+    
+    event.preventDefault();
+  }
+  handleTouchendMenuitem (event) {
+    if (event.defaultPrevented) {
+      return;
+    }
+    
+    event.preventDefault();
+    
+    let menuitem = event.target;
+    this.clickMenuitem(menuitem);
   }
   
   handleFocusinMenuitem (event) {
@@ -732,10 +740,31 @@ class a11yNavbar {
     }
   }
   
-  handleClick (menuitem) {
+  performClick (menuitem) {
     let href = menuitem.getAttribute('href');
     
     window.location = href;
+  }
+  
+  clickMenuitem (menuitem) {
+    let hasAriaExpanded = menuitem.hasAttribute('aria-expanded');
+    
+    if (hasAriaExpanded) {
+      let ariaExpanded = menuitem.getAttribute('aria-expanded');
+      
+      if (ariaExpanded == 'true') {
+        // Only perform click if submenu is already open.
+        this.performClick(menuitem);
+      }
+      else {
+        // Open the submenu.
+        this.openSubmenu(menuitem);
+      }
+    }
+    else {
+      // Just perform click (menuitem does not have submenu).
+      this.performClick(menuitem);
+    }
   }
   
   normalizeKey (key) {
