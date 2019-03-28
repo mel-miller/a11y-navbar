@@ -6,6 +6,12 @@
 * Implement destroy() function in a11yNavbar class.
 * Implement mouse events for li[role="none"] elements that are identical to the a[role="menuitem"] mouse events.
 
+## v0.5.5
+
+**Mar 28, 2019**
+
+* Fixes touch event handling for mobile devices. (Properly separates Touch and Click event handling.)
+
 ## v0.5.4
 
 **Mar 27, 2019**
