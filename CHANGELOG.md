@@ -11,6 +11,7 @@
 **Mar 28, 2019**
 
 * Fixes touch event handling for mobile devices. (Properly separates Touch and Click event handling.)
+* Adds viewport metatag to demo pages.
 
 ## v0.5.4
 
