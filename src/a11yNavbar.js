@@ -555,15 +555,11 @@ class a11yNavbar {
     if (event.defaultPrevented) {
       return;
     }
-    
-    event.preventDefault();
   }
   handleTouchmoveMenuitem (event) {
     if (event.defaultPrevented) {
       return;
     }
-    
-    event.preventDefault();
   }
   handleTouchendMenuitem (event) {
     if (event.defaultPrevented) {
