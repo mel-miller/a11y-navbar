@@ -7,6 +7,12 @@
 * Implement mouse events for li[role="none"] elements that are identical to the a[role="menuitem"] mouse events.
 * Add expand/collapse toggles to menuitems with submenus in the responsive (mobile) menu.
 
+## v0.5.6
+
+**Mar 29, 2019**
+
+* Bugfix: Fixes issue where click on menuitem would be triggered when touch-dragging the menu.
+
 ## v0.5.5
 
 **Mar 28, 2019**
