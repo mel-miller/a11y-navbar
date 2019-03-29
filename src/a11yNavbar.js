@@ -21,6 +21,8 @@ class a11yNavbar {
       'ARROW_DOWN':     40,
     };
     
+    this._touchmoveActive = false; // Used to determine if user is currently scrolling via touch.
+    
     // Merge user-defined options with default options.
     this._defaultOptions = {
       'windowObj' : window,
@@ -560,6 +562,9 @@ class a11yNavbar {
     if (event.defaultPrevented) {
       return;
     }
+    
+    // User has begun a touch scroll over the menuitem.
+    this._touchmoveActive = true;
   }
   handleTouchendMenuitem (event) {
     if (event.defaultPrevented) {
@@ -568,8 +573,15 @@ class a11yNavbar {
     
     event.preventDefault();
     
-    let menuitem = event.target;
-    this.clickMenuitem(menuitem);
+    // Don't activate click if user is finishing a touch scroll.
+    if (this._touchmoveActive) {
+      this._touchmoveActive = false;
+    }
+    else {
+      let menuitem = event.target;
+      this.clickMenuitem(menuitem);
+    }
+    
   }
   
   handleFocusinMenuitem (event) {
