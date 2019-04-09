@@ -139,24 +139,6 @@ class a11yNavbar {
       menuitems[j].setAttribute('role', 'menuitem');
       menuitems[j].setAttribute('tabindex', '-1');
       
-      // Check for submenus.
-      let liElem = menuitems[j].parentNode;
-      let submenus = liElem.querySelectorAll('a + ul');
-      
-      for (let k = 0; k < submenus.length; k++) {
-        // Get aria-label from anchor sibing.
-        let submenuLiElem = submenus[k].parentNode;
-        let aElem = submenuLiElem.querySelector('a');
-        let aElemText = aElem.textContent;
-        
-        aElem.setAttribute('aria-haspopup', 'true');
-        aElem.setAttribute('aria-expanded', 'false');
-        
-        submenus[k].setAttribute('role', 'menu');
-        submenus[k].setAttribute('aria-label', aElemText);
-        submenus[k].classList.add('a11y-navbar-menu-closed');
-      }
-      
       // Add hoverintent functionality (or mouse events if hoverintent not available).
       if (this._options.hoverintent) {
         // Hoverintent in environment.
@@ -184,8 +166,25 @@ class a11yNavbar {
       menuitems[j].addEventListener('touchstart', this.handleTouchstartMenuitem.bind(this));
       menuitems[j].addEventListener('touchmove', this.handleTouchmoveMenuitem.bind(this));
       menuitems[j].addEventListener('touchend', this.handleTouchendMenuitem.bind(this));
+    }
+    
+    // Attributes for all submenus.
+    let submenus = menubar.querySelectorAll('li > a + ul');
+    
+    for (let k = 0; k < submenus.length; k++) {
+      // Get aria-label from anchor sibing.
+      let submenuLiElem = submenus[k].parentNode;
+      let aElem = submenuLiElem.querySelector('a');
+      let aElemText = aElem.textContent;
       
-      // TODO: If submenus are closed due to non-keyboard (e.g. mouse) interaction, add focusin event to open all relevant submenus.
+      aElem.setAttribute('aria-haspopup', 'true');
+      aElem.setAttribute('aria-expanded', 'false');
+      
+      submenus[k].setAttribute('id', this._id + '-submenu-' + k);
+      submenus[k].setAttribute('role', 'menu');
+      submenus[k].setAttribute('aria-label', aElemText);
+      submenus[k].classList.add('a11y-navbar-submenu');
+      submenus[k].classList.add('a11y-navbar-menu-closed');
     }
     
     // All li elements should have an aria role of "none".
@@ -208,7 +207,6 @@ class a11yNavbar {
     
     // Check if the menu should be resized on page load.
     this.menubarResize();
-    
   }
   
   destroy () {
@@ -585,11 +583,19 @@ class a11yNavbar {
   }
   
   handleFocusinMenuitem (event) {
+    if (event.defaultPrevented) {
+      return;
+    }
+    
     let menuitem = event.target;
     this.openParentSubmenus(menuitem);
   }
   
   handleFocusoutNavElem (event) {
+    if (event.defaultPrevented) {
+      return;
+    }
+    
     let newTarget = event.relatedTarget;
     
     if (newTarget == null || !(this._navElem.contains(newTarget))) {
@@ -597,6 +603,25 @@ class a11yNavbar {
       this.updateCurrentMenuitem(this._menubarMenuitems[0]);
       this._currentMenubarIndex = 0;
       this.closeAllSubmenus();
+    }
+  }
+  
+  handleClickSubmenuToggle (event) {
+    if (event.defaultPrevented) {
+      return;
+    }
+    
+    event.preventDefault();
+    
+    let button = event.target;
+    let menuitem = button.parentNode.querySelector('a[role=menuitem]');
+    let ariaExpanded = menuitem.getAttribute('aria-expanded');
+    
+    if (ariaExpanded == 'false') {
+      this.openSubmenu(menuitem);
+    }
+    else if (ariaExpanded == 'true') {
+      this.closeSubmenu(menuitem);
     }
   }
   
@@ -608,10 +633,12 @@ class a11yNavbar {
     if (viewportWidth <= this._options.breakpointMinWidth) {
       // Show menubar toggle.
       this.addMenubarToggle();
+      this.addSubmenuToggles();
     }
     else {
       // Hide menubar toggle.
       this.removeMenubarToggle();
+      this.removeSubmenuToggles();
     }
   }
   
@@ -633,6 +660,39 @@ class a11yNavbar {
       this._navElem.classList.remove('a11y-navbar-open');
       this._navElem.classList.remove('a11y-navbar-closed');
       this._menubarToggle.setAttribute('aria-expanded', 'false');
+    }
+  }
+  
+  addSubmenuToggles() {
+    let menubar = this._navElem.querySelector('ul');
+    let submenuToggles = menubar.querySelectorAll('button.a11y-navbar-submenu-toggle');
+    
+    // Only add if they aren't already there.
+    if (!submenuToggles.length) {
+      let menuitems = menubar.querySelectorAll('a[aria-haspopup=true]');
+      
+      for (let i = 0; i < menuitems.length; i++) {
+        let submenuToggle = this._options.domObj.createElement('button');
+        
+        submenuToggle.classList.add('a11y-navbar-submenu-toggle');
+        //submenuToggle.setAttribute('id', '' + '-submenu-toggle');
+        //submenuToggle.setAttribute('aria-expanded', 'false');
+        //submenuToggle.setAttribute('aria-controls', '');
+        submenuToggle.textContent = menuitems[i].textContent;
+        submenuToggle.addEventListener('click', this.handleClickSubmenuToggle.bind(this));
+        let liElem = menuitems[i].parentNode;
+        liElem.appendChild(submenuToggle);
+      }
+    }
+  }
+  
+  removeSubmenuToggles() {
+    let menubar = this._navElem.querySelector('ul');
+    let submenuToggles = menubar.querySelectorAll('button.a11y-navbar-submenu-toggle');
+    
+    for (let i = 0; i < submenuToggles.length; i++) {
+      let liElem = submenuToggles[i].parentNode;
+      liElem.removeChild(submenuToggles[i]);
     }
   }
   
