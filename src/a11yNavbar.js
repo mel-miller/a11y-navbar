@@ -32,7 +32,7 @@ class a11yNavbar {
       'orientation' : 'horizontal',
       'breakpointMinWidth' : 500,
       'responsiveToggleText' : 'Menu',
-      'responsiveSubmenuToggles': true,
+      'responsiveSubmenuToggles': false,
       'mode' : 'standard'
     };
     this._options = Object.assign(this._defaultOptions, options);
