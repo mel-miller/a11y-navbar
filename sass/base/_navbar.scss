@@ -306,6 +306,49 @@ nav.a11y-navbar {
 							}
 						}
 					}
+					
+					button.a11y-navbar-submenu-toggle {
+						position:absolute;
+						right:0;
+						top:0;
+						height:1.5rem;
+						width:2rem;
+						z-index:9999;
+						
+						box-shadow:none;
+						border:none;
+						border-radius:0;
+						
+						background-color:$dk-gray;
+						padding:0;
+						
+						span {
+							@include visually-hidden();
+						}
+						
+						&::after {
+							// Pure CSS Chevron.
+							content:'';
+							display:inline-block;
+							border-right:2px solid $lt-gray;
+							border-bottom:2px solid $lt-gray;
+							width:10px;
+							height:10px;
+							background-color:transparent;
+						}
+						
+						&[aria-expanded=true] {
+							&::after {
+								transform:rotate(225deg);
+							}
+						}
+						
+						&[aria-expanded=false] {
+							&::after {
+								transform:rotate(45deg);
+							}
+						}
+					}
 				}
 			}
 		}

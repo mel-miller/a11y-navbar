@@ -32,6 +32,7 @@ class a11yNavbar {
       'orientation' : 'horizontal',
       'breakpointMinWidth' : 500,
       'responsiveToggleText' : 'Menu',
+      'responsiveSubmenuToggles': true,
       'mode' : 'standard'
     };
     this._options = Object.assign(this._defaultOptions, options);
@@ -112,7 +113,7 @@ class a11yNavbar {
     let menubarMenuitems = menubar.children;
     
     for (let i = 0; i < menubarMenuitems.length; i++) {
-      let menubarMenuitem = menubarMenuitems[i].firstElementChild;
+      let menubarMenuitem = menubarMenuitems[i].querySelector('a');
       menubarMenuitem.classList.add('a11y-navbar-menuitem');
       
       // collect these as an Array or something and store in the class.
@@ -266,7 +267,7 @@ class a11yNavbar {
       // Opens submenu and moves focus to first item in the submenu.
       this.closeAllSubmenus();
       this.openSubmenu(menuitem);
-      let firstMenuitem = menuitem.parentNode.querySelector('ul[role=menu] > li').firstElementChild;
+      let firstMenuitem = menuitem.parentNode.querySelector('ul[role=menu] > li').querySelector('a');
       
       if (firstMenuitem != null) {
         firstMenuitem.focus();
@@ -372,7 +373,7 @@ class a11yNavbar {
       if (this.hasSubmenu(menuitem)) {
         // Open the submenu and place focus on the first item.
         this.openSubmenu(menuitem);
-        let firstMenuitem = menuitem.parentNode.querySelector('ul[role=menu] > li').firstElementChild;
+        let firstMenuitem = menuitem.parentNode.querySelector('ul[role=menu] > li').querySelector('a');
         
         if (firstMenuitem != null) {
           firstMenuitem.focus();
@@ -633,12 +634,18 @@ class a11yNavbar {
     if (viewportWidth <= this._options.breakpointMinWidth) {
       // Show menubar toggle.
       this.addMenubarToggle();
-      this.addSubmenuToggles();
+      
+      if (this._options.responsiveSubmenuToggles) {
+        this.addSubmenuToggles();
+      }
     }
     else {
       // Hide menubar toggle.
       this.removeMenubarToggle();
-      this.removeSubmenuToggles();
+      
+      if (this._options.responsiveSubmenuToggles) {
+        this.removeSubmenuToggles();
+      }
     }
   }
   
@@ -673,15 +680,18 @@ class a11yNavbar {
       
       for (let i = 0; i < menuitems.length; i++) {
         let submenuToggle = this._options.domObj.createElement('button');
+        let submenu = menuitems[i].parentNode.querySelector('ul');
+        let submenuId = submenu.getAttribute('id');
         
         submenuToggle.classList.add('a11y-navbar-submenu-toggle');
-        //submenuToggle.setAttribute('id', '' + '-submenu-toggle');
-        //submenuToggle.setAttribute('aria-expanded', 'false');
-        //submenuToggle.setAttribute('aria-controls', '');
-        submenuToggle.textContent = menuitems[i].textContent;
+        submenuToggle.setAttribute('id', submenuId + '-submenu-toggle');
+        submenuToggle.setAttribute('tabindex', '-1');
+        submenuToggle.setAttribute('aria-expanded', 'false');
+        submenuToggle.setAttribute('aria-controls', submenuId);
+        submenuToggle.innerHTML = '<span>' + menuitems[i].textContent + '</span>';
         submenuToggle.addEventListener('click', this.handleClickSubmenuToggle.bind(this));
         let liElem = menuitems[i].parentNode;
-        liElem.appendChild(submenuToggle);
+        liElem.insertBefore(submenuToggle, menuitems[i]);
       }
     }
   }
@@ -750,6 +760,13 @@ class a11yNavbar {
       menu.classList.remove('a11y-navbar-menu-closed');
       menu.classList.add('a11y-navbar-menu-open');
       menuitem.setAttribute('aria-expanded', 'true');
+      
+      // If button exists, update attributes.
+      let button = liElem.querySelector('button.a11y-navbar-submenu-toggle');
+      
+      if (button != null) {
+        button.setAttribute('aria-expanded', 'true');
+      }
     }
   }
   
@@ -776,6 +793,13 @@ class a11yNavbar {
       menu.classList.remove('a11y-navbar-menu-open');
       menu.classList.add('a11y-navbar-menu-closed');
       menuitem.setAttribute('aria-expanded', 'false');
+      
+      // If button exists, update attributes.
+      let button = liElem.querySelector('button.a11y-navbar-submenu-toggle');
+      
+      if (button != null) {
+        button.setAttribute('aria-expanded', 'false');
+      }
     }
   }
   
@@ -805,6 +829,12 @@ class a11yNavbar {
       aElem.setAttribute('aria-expanded', 'false');
       openSubmenus[i].classList.remove('a11y-navbar-menu-open');
       openSubmenus[i].classList.add('a11y-navbar-menu-closed');
+      
+      // If buttons exist, update attributes.
+      let button = openSubmenus[i].parentNode.querySelector('button.a11y-navbar-submenu-toggle');
+      if (button != null) {
+        button.setAttribute('aria-expanded', 'false');
+      }
     }
   }
   
