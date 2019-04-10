@@ -83,6 +83,7 @@ var test = new a11yNavbar('main-nav', options);
   'orientation' : 'horizontal',
   'breakpointMinWidth' : 500,
   'responsiveToggleText' : 'Menu',
+  'responsiveSubmenuToggles': false,
   'mode' : 'standard'
 }
 ```
@@ -94,6 +95,7 @@ var test = new a11yNavbar('main-nav', options);
 * *orientation* is the direction the navbar flows. Valid values are either "horizontal" (which is the default) or "vertical".
 * *breakpointMinWidth* is the width in pixels at which the menu transforms into a "mobile friendly" compact menu. The default is 500px.
 * *responsiveToggleText* is the text for the menu button when the "mobile friendly" compact menu is active. It defaults to "Menu".
+* *responsiveSubmenuToggles* a boolean value when set to `true` will add buttons elements to the responsive "mobile friendly" menu. This feature will allow users to both open and close submenus using a touch interface.
 * *mode* can be set to either "standard" (for behavior strictly following the navbar design pattern) or "dualAction" (in which menuitems with submenus can be activated with Enter/Space, or expanded with the appropriate arrow key).
 
  
