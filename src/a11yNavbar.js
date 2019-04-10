@@ -622,8 +622,12 @@ class a11yNavbar {
       return;
     }
     
-    // Close submenus when click occurs anywhere outside of navbar.
-    this.resetNavbar();
+    // Only reset menu when clicking elsewhere in document if responsive menu not active.
+    let isResponsiveMenu = this._navElem.classList.contains('a11y-navbar-responsive');
+    if (!isResponsiveMenu) {
+      // Close submenus, etc. when click occurs anywhere outside of navbar.
+      this.resetNavbar();
+    }
   }
   
   handleClickSubmenuToggle (event) {
