@@ -803,6 +803,19 @@ class a11yNavbar {
     }
   }
   
+  closeChildSubmenus (menuitem) {
+    // Close all submenus below and including the menuitem.
+    let submenu = menuitem.parentNode.parentNode;
+    
+    if (submenu.classList.contains('a11y-navbar-menu-open')) {
+      let childMenuitems = submenu.querySelectorAll('a[aria-expanded="true"]');
+      
+      for (let i = 0; i < childMenuitems.length; i++) {
+        this.closeSubmenu(menuitem);
+      }
+    }
+  }
+  
   closeSubmenu (menuitem) {
     let liElem = menuitem.parentNode;
     let menu = liElem.querySelector('ul');
@@ -864,6 +877,7 @@ class a11yNavbar {
   }
   
   clickMenuitem (menuitem) {
+    console.log("clickMenuitem");
     let hasAriaExpanded = menuitem.hasAttribute('aria-expanded');
     
     if (hasAriaExpanded) {
@@ -874,6 +888,15 @@ class a11yNavbar {
         this.performClick(menuitem);
       }
       else {
+        // If not in responsive menu, close other open top-level submenus.
+        let isResponsiveMenu = this._navElem.classList.contains('a11y-navbar-responsive');
+        if (!isResponsiveMenu) {
+          // If menuitem is a top-level menu item, close submenus.
+          if (this._menubarMenuitems.indexOf(menuitem) != -1) {
+            this.closeAllSubmenus();
+          }
+        }
+        
         // Open the submenu.
         this.openSubmenu(menuitem);
       }
