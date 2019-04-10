@@ -46,6 +46,10 @@ class a11yNavbar {
     // Reset navbar when navbar loses focus.
     this._navElem.addEventListener('focusout', this.handleFocusoutNavElem.bind(this));
     
+    // Reset navbar when touchend event occurs outside navbar.
+    this._options.domObj.addEventListener('touchend', this.handleTouchendDocument.bind(this));
+    this._navElem.addEventListener('touchend', this.handleTouchendNavElem.bind(this));
+    
     if (this._options.mode == 'dualAction') {
       // Add element to explain alternate instructions for mode dualAction.
       this._menubarInstructions = this._options.domObj.createElement('div');
@@ -600,11 +604,26 @@ class a11yNavbar {
     let newTarget = event.relatedTarget;
     
     if (newTarget == null || !(this._navElem.contains(newTarget))) {
-      // Reset navbar.
-      this.updateCurrentMenuitem(this._menubarMenuitems[0]);
-      this._currentMenubarIndex = 0;
-      this.closeAllSubmenus();
+      this.resetNavbar();
     }
+  }
+  
+  handleTouchendNavElem (event) {
+    if (event.defaultPrevented) {
+      return;
+    }
+    
+    // Stop click event in navbar from bubbling above element.
+    event.stopPropagation();
+  }
+  
+  handleTouchendDocument (event) {
+    if (event.defaultPrevented) {
+      return;
+    }
+    
+    // Close submenus when click occurs anywhere outside of navbar.
+    this.resetNavbar();
   }
   
   handleClickSubmenuToggle (event) {
@@ -863,6 +882,12 @@ class a11yNavbar {
       // Just perform click (menuitem does not have submenu).
       this.performClick(menuitem);
     }
+  }
+  
+  resetNavbar () {
+    this.updateCurrentMenuitem(this._menubarMenuitems[0]);
+    this._currentMenubarIndex = 0;
+    this.closeAllSubmenus();
   }
   
   normalizeKey (key) {
