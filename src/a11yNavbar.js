@@ -877,7 +877,6 @@ class a11yNavbar {
   }
   
   clickMenuitem (menuitem) {
-    console.log("clickMenuitem");
     let hasAriaExpanded = menuitem.hasAttribute('aria-expanded');
     
     if (hasAriaExpanded) {
