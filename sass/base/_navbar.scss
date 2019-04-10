@@ -373,6 +373,23 @@ button.a11y-navbar-toggle {
 	text-align:left;
 	position:relative;
 	
+	&:focus,
+	&:hover
+	{
+		background-color:$lt-gray;
+		color:$dk-gray;
+		outline-color:$dk-gray;
+		
+		span {
+			&,
+			&::before,
+			&::after
+			{
+				background:$dk-gray;
+			}
+		}
+	}
+	
 	// Hamburger icon.
 	span {
 		position: absolute;
@@ -383,14 +400,14 @@ button.a11y-navbar-toggle {
 		&::before,
 		&::after
 		{
-			cursor: pointer;
-			border-radius: 1px;
-			height: 3px;
-			width: 20px;
-			background: $lt-gray;
-			position: absolute;
-			display: block;
-			content: '';
+			cursor:pointer;
+			border-radius:1px;
+			height:3px;
+			width:20px;
+			background:$lt-gray;
+			position:absolute;
+			display:block;
+			content:'';
 		}
 		
 		&::before {
