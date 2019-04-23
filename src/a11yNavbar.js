@@ -807,20 +807,24 @@ class a11yNavbar {
     }
   }
   
-  closeChildSubmenus (menuitem) {
+  closeSubmenus (menuitem) {
     // Close all submenus below and including the menuitem.
-    let submenu = menuitem.parentNode.parentNode;
+    let submenu = menuitem.parentNode.querySelector('ul.a11y-navbar-submenu');
     
-    if (submenu.classList.contains('a11y-navbar-menu-open')) {
+    if (submenu != null && submenu.classList.contains('a11y-navbar-menu-open')) {
       let childMenuitems = submenu.querySelectorAll('a[aria-expanded="true"]');
       
       for (let i = 0; i < childMenuitems.length; i++) {
-        this.closeSubmenu(menuitem);
+        this.closeSubmenu(childMenuitems[i]);
       }
+      
+      // Close menuitem itself.
+      this.closeSubmenu(menuitem);
     }
   }
   
   closeSubmenu (menuitem) {
+    // Close a single submenu.
     let liElem = menuitem.parentNode;
     let menu = liElem.querySelector('ul');
     
@@ -840,19 +844,12 @@ class a11yNavbar {
   }
   
   closeSiblingSubmenus (menuitem) {
-    let ulElem = menuitem.parentNode.parentNode;
-    let siblings = ulElem.querySelectorAll('li > a[role=menuitem]');
-    let siblingsArray = [];
+    // Close all submenus in current submenu except under current menuitem.
+    let siblingMenuitems = this.getSiblingMenuitems(menuitem);
     
-    // Remove menuitem from siblings.
-    for (let i = 0; i < siblings.length; i++) {
-      if (siblings[i] !== menuitem) {
-        siblingsArray.push(siblings[i]);
-      }
-    }
-    
-    for (let j = 0; j < siblingsArray.length; j++) {
-      this.closeSubmenu(siblingsArray[j]);
+    for (let i = 0; i < siblingMenuitems.length; i++) {
+      // Close sibling menuitem and any open child submenus in sibling.
+      this.closeSubmenus(siblingMenuitems[i]);
     }
   }
   
@@ -891,7 +888,7 @@ class a11yNavbar {
         this.performClick(menuitem);
       }
       else {
-        // If not in responsive menu, close other open top-level submenus.
+        // If not in responsive menu, close other open submenus.
         let isResponsiveMenu = this._navElem.classList.contains('a11y-navbar-responsive');
         if (!isResponsiveMenu) {
           // If menuitem is a top-level menu item, close submenus.
@@ -914,6 +911,23 @@ class a11yNavbar {
     this.updateCurrentMenuitem(this._menubarMenuitems[0]);
     this._currentMenubarIndex = 0;
     this.closeAllSubmenus();
+  }
+  
+  getSiblingMenuitems (menuitem) {
+    // Get immediate siblings of menuitem.
+    let menu = menuitem.parentNode.parentNode;
+    let liElems = menu.children;
+    let siblingMenuitems = [];
+    
+    // Siblings are every child of menu that isn't the given menuitem.
+    for (let i = 0; i < liElems.length; i++) {
+      let childMenuitem = liElems[i].querySelector('a[role=menuitem]');
+      if (childMenuitem != menuitem) {
+        siblingMenuitems.push(childMenuitem);
+      }
+    }
+    
+    return siblingMenuitems;
   }
   
   normalizeKey (key) {
