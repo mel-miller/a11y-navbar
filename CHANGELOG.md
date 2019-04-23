@@ -6,11 +6,17 @@
 * Implement destroy() function in a11yNavbar class.
 * Implement mouse events for li[role="none"] elements that are identical to the a[role="menuitem"] mouse events.
 
+## v0.5.9
+
+**Apr 23, 2019**
+
+* Bugfix: Fixes issue in which sibling submenus were not closing when opening another submenu on the same level.
+
 ## v0.5.8
 
 **Apr 10, 2019**
 
-* Fixes issue on touch devices in which menus would not close when clicking elsewhere in the document.
+* Bugfix: Fixes issue on touch devices in which menus would not close when clicking elsewhere in the document.
 
 ## v0.5.7
 
