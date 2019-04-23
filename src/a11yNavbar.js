@@ -891,10 +891,8 @@ class a11yNavbar {
         // If not in responsive menu, close other open submenus.
         let isResponsiveMenu = this._navElem.classList.contains('a11y-navbar-responsive');
         if (!isResponsiveMenu) {
-          // If menuitem is a top-level menu item, close submenus.
-          if (this._menubarMenuitems.indexOf(menuitem) != -1) {
-            this.closeAllSubmenus();
-          }
+          // Close sibling submenus.
+          this.closeSiblingSubmenus(menuitem);
         }
         
         // Open the submenu.
