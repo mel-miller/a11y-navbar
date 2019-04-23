@@ -6,6 +6,12 @@
 * Implement destroy() function in a11yNavbar class.
 * Implement mouse events for li[role="none"] elements that are identical to the a[role="menuitem"] mouse events.
 
+## v0.5.10
+
+**Apr 23, 2019**
+
+* Adds package-lock.json to maintain reproducible dependency tree. Updates dependencies.
+
 ## v0.5.9
 
 **Apr 23, 2019**
