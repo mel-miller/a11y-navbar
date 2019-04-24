@@ -711,7 +711,7 @@ class a11yNavbar {
         submenuToggle.setAttribute('tabindex', '-1');
         submenuToggle.setAttribute('aria-expanded', 'false');
         submenuToggle.setAttribute('aria-controls', submenuId);
-        submenuToggle.innerHTML = '<span>' + menuitems[i].textContent + '</span>';
+        submenuToggle.innerHTML = '<span>Open/Close ' + menuitems[i].textContent + ' Submenu</span>';
         submenuToggle.addEventListener('click', this.handleClickSubmenuToggle.bind(this));
         let liElem = menuitems[i].parentNode;
         liElem.insertBefore(submenuToggle, menuitems[i]);
