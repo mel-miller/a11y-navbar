@@ -6,6 +6,13 @@
 * Implement destroy() function in a11yNavbar class.
 * Implement mouse events for li[role="none"] elements that are identical to the a[role="menuitem"] mouse events.
 
+## v0.5.12
+
+**Apr 24, 2019**
+
+* Bugfix: Fixes IE11/Edge keyboard input. (It happens that IE11/Edge report key values 'Right', 'Left', 'Up', 'Down' for arrow keys and IE11 reports 'Spacebar' for spaces.)
+* Bugfix: Fixes issue where items in menubar would attempt to open non-existent submenus in 'standard' mode. Realistically, this would be a poorly constructed menu given the standard specs don't support menubar items without submenus, but it seemed worth correcting the error in the console.)
+
 ## v0.5.11
 
 **Apr 24, 2019**
