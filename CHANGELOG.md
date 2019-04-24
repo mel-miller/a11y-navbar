@@ -6,6 +6,13 @@
 * Implement destroy() function in a11yNavbar class.
 * Implement mouse events for li[role="none"] elements that are identical to the a[role="menuitem"] mouse events.
 
+## v0.5.11
+
+**Apr 24, 2019**
+
+* Updates package dependencies.
+* Improves submenu toggle button text.
+
 ## v0.5.10
 
 **Apr 23, 2019**
