@@ -948,6 +948,7 @@ class a11yNavbar {
         normalizedKey = this._keyCode.ESC;
         break;
       
+      case 'Spacebar':
       case ' ':
       case 32:
         normalizedKey = this._keyCode.SPACE;
@@ -962,21 +963,25 @@ class a11yNavbar {
         normalizedKey = this._keyCode.HOME;
         break;
       
+      case 'Left':
       case 'ArrowLeft':
       case 37:
         normalizedKey = this._keyCode.ARROW_LEFT;
         break;
       
+      case 'Up':
       case 'ArrowUp':
       case 38:
         normalizedKey = this._keyCode.ARROW_UP;
         break;
       
+      case 'Right':
       case 'ArrowRight':
       case 39:
         normalizedKey = this._keyCode.ARROW_RIGHT;
         break;
       
+      case 'Down':
       case 'ArrowDown':
       case 40:
         normalizedKey = this._keyCode.ARROW_DOWN;
