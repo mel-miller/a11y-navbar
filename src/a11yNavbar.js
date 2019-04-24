@@ -268,14 +268,16 @@ class a11yNavbar {
       (this._options.orientation == 'vertical' && key == this._keyCode.ARROW_RIGHT)
     )
     {
-      // Opens submenu and moves focus to first item in the submenu.
       this.closeAllSubmenus();
-      this.openSubmenu(menuitem);
-      let firstMenuitem = menuitem.parentNode.querySelector('ul[role=menu] > li').querySelector('a');
-      
-      if (firstMenuitem != null) {
-        firstMenuitem.focus();
-        this.updateCurrentMenuitem(firstMenuitem);
+      if (this.hasSubmenu(menuitem)) {
+        // Opens submenu and moves focus to first item in the submenu.
+        this.openSubmenu(menuitem);
+        let firstMenuitem = menuitem.parentNode.querySelector('ul[role=menu] > li').querySelector('a');
+        
+        if (firstMenuitem != null) {
+          firstMenuitem.focus();
+          this.updateCurrentMenuitem(firstMenuitem);
+        }
       }
       preventDefault = true;
     }
