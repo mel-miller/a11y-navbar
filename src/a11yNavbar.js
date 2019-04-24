@@ -959,6 +959,7 @@ class a11yNavbar {
       case 'End':
       case 35:
         normalizedKey = this._keyCode.END;
+        break;
       
       case 'Home':
       case 36:
