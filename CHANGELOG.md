@@ -6,6 +6,12 @@
 * Implement destroy() function in a11yNavbar class.
 * Implement mouse events for li[role="none"] elements that are identical to the a[role="menuitem"] mouse events.
 
+## v0.5.13
+
+**Apr 24, 2019**
+
+* Bugfix: Fixes handling of 'End' key.
+
 ## v0.5.12
 
 **Apr 24, 2019**

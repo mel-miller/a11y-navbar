@@ -1,6 +1,6 @@
 {
   "name": "a11y-navbar",
-  "version": "0.5.12",
+  "version": "0.5.13",
   "description": "A script which creates a navigation menu complying with the WAI-ARIA Menubar pattern.",
   "main": "src/a11yNavbar.js",
   "scripts": {
