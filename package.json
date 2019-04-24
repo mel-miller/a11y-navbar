@@ -5,7 +5,7 @@
   "main": "src/a11yNavbar.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "babel src --out-file dist/a11yNavbar.min.js --presets=@babel/env && cp node_modules/hoverintent/dist/hoverintent.min.js dist && cp node_modules/@babel/polyfill/dist/polyfill.min.js dist"
+    "build": "$(npm bin)/babel src --out-file dist/a11yNavbar.min.js --presets=@babel/preset-env && cp node_modules/hoverintent/dist/hoverintent.min.js dist && cp node_modules/@babel/polyfill/dist/polyfill.min.js dist"
   },
   "repository": {
     "type": "git",
@@ -14,18 +14,18 @@
   "author": "Joe Bondra",
   "license": "ISC",
   "devDependencies": {
-    "@babel/cli": "^7.1.2",
-    "@babel/core": "^7.1.2",
+    "@babel/cli": "^7.4.3",
+    "@babel/core": "^7.4.3",
     "@babel/plugin-transform-object-assign": "^7.2.0",
-    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-env": "^7.4.3",
     "babel-preset-minify": "^0.5.0",
     "gulp": "^4.0.1",
     "gulp-sass": "^4.0.2",
     "gulp-sass-glob": "^1.0.9",
-    "node-sass": "^4.10.0"
+    "node-sass": "^4.11.0"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.0.0",
+    "@babel/polyfill": "^7.4.3",
     "hoverintent": "^2.2.0"
   }
 }
