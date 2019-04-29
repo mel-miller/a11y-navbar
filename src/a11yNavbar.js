@@ -163,14 +163,27 @@ class a11yNavbar {
         menuitems[j].addEventListener('mouseover', this.handleMouseoverMenuitem.bind(this));
       }
       
-      // @see https://w3c.github.io/touch-events/#mouse-events
-      // Override click event for all menuitems.
-      menuitems[j].addEventListener('click', this.handleClickMenuitem.bind(this));
-      
-      // Override touch events for all menuitems.
-      menuitems[j].addEventListener('touchstart', this.handleTouchstartMenuitem.bind(this));
-      menuitems[j].addEventListener('touchmove', this.handleTouchmoveMenuitem.bind(this));
-      menuitems[j].addEventListener('touchend', this.handleTouchendMenuitem.bind(this));
+      // Default to supporting Touch events if they are available.
+      if (this._options.domObj.documentElement.ontouchstart !== undefined) {
+        // @see https://w3c.github.io/touch-events/#mouse-events
+        // Override click event for all menuitems.
+        menuitems[j].addEventListener('click', this.handleClickMenuitem.bind(this));
+        
+        // Support touch events for all menuitems.
+        menuitems[j].addEventListener('touchstart', this.handleTouchstartMenuitem.bind(this));
+        menuitems[j].addEventListener('touchmove', this.handleTouchmoveMenuitem.bind(this));
+        menuitems[j].addEventListener('touchend', this.handleTouchendMenuitem.bind(this));
+      }
+      else if (this._options.domObj.documentElement.onpointerdown !== undefined) {
+        // Pointer events have less support, so only support them if touch events are not available.
+        // Disable click event for all menuitems and handle clicks during pointerup event.
+        menuitems[j].addEventListener('click', function (event) {
+          event.preventDefault();
+        });
+        
+        // Pointer event support.
+        menuitems[j].addEventListener('pointerup', this.handlePointerupMenuitem.bind(this));
+      }
     }
     
     // Attributes for all submenus.
@@ -587,6 +600,18 @@ class a11yNavbar {
       this.clickMenuitem(menuitem);
     }
     
+  }
+  
+  // Support pointer events.
+  handlePointerupMenuitem (event) {
+    if (event.defaultPrevented) {
+      return;
+    }
+    
+    event.preventDefault();
+    
+    let menuitem = event.target;
+    this.clickMenuitem(menuitem);
   }
   
   handleFocusinMenuitem (event) {

@@ -6,6 +6,12 @@
 * Implement destroy() function in a11yNavbar class.
 * Implement mouse events for li[role="none"] elements that are identical to the a[role="menuitem"] mouse events.
 
+## v0.5.14
+
+**Apr 29, 2019**
+
+* Adds Pointer Event support. Primarily this was added because IE11/Edge would not open the menu on touch devices since IE11 does not support Touch Events, and Edge requires enabling Touch Event support manually. This really is an attempt to cover an edge case of a user using IE11/Edge on a touch-capable device.
+
 ## v0.5.13
 
 **Apr 24, 2019**
