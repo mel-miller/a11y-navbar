@@ -47,8 +47,14 @@ class a11yNavbar {
     this._navElem.addEventListener('focusout', this.handleFocusoutNavElem.bind(this));
     
     // Reset navbar when touchend event occurs outside navbar.
-    this._options.domObj.addEventListener('touchend', this.handleTouchendDocument.bind(this));
-    this._navElem.addEventListener('touchend', this.handleTouchendNavElem.bind(this));
+    if (this._options.domObj.documentElement.ontouchstart !== undefined) {
+      this._options.domObj.addEventListener('touchend', this.handleTouchendDocument.bind(this));
+      this._navElem.addEventListener('touchend', this.handleTouchendNavElem.bind(this));
+    }
+    else if (this._options.domObj.documentElement.onpointerdown !== undefined) {
+      this._options.domObj.addEventListener('pointerup', this.handlePointerupDocument.bind(this));
+      this._navElem.addEventListener('pointerup', this.handlePointerupNavElem.bind(this));
+    }
     
     if (this._options.mode == 'dualAction') {
       // Add element to explain alternate instructions for mode dualAction.
@@ -645,6 +651,28 @@ class a11yNavbar {
   }
   
   handleTouchendDocument (event) {
+    if (event.defaultPrevented) {
+      return;
+    }
+    
+    // Only reset menu when clicking elsewhere in document if responsive menu not active.
+    let isResponsiveMenu = this._navElem.classList.contains('a11y-navbar-responsive');
+    if (!isResponsiveMenu) {
+      // Close submenus, etc. when click occurs anywhere outside of navbar.
+      this.resetNavbar();
+    }
+  }
+  
+  handlePointerupNavElem (event) {
+    if (event.defaultPrevented) {
+      return;
+    }
+    
+    // Stop click event in navbar from bubbling above element.
+    event.stopPropagation();
+  }
+  
+  handlePointerupDocument (event) {
     if (event.defaultPrevented) {
       return;
     }
