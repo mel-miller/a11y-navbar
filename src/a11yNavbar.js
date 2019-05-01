@@ -188,6 +188,7 @@ class a11yNavbar {
         });
         
         // Pointer event support.
+        menuitems[j].addEventListener('pointerdown', this.handlePointerdownMenuitem.bind(this));
         menuitems[j].addEventListener('pointerup', this.handlePointerupMenuitem.bind(this));
       }
     }
@@ -609,6 +610,14 @@ class a11yNavbar {
   }
   
   // Support pointer events.
+  handlePointerdownMenuitem (event) {
+    if (event.defaultPrevented) {
+      return;
+    }
+    
+    event.preventDefault();
+  }
+  
   handlePointerupMenuitem (event) {
     if (event.defaultPrevented) {
       return;
