@@ -615,6 +615,7 @@ class a11yNavbar {
       return;
     }
     
+    // Prevent compatibility mouse events. @see https://www.w3.org/TR/pointerevents/#the-pointerdown-event
     event.preventDefault();
   }
   

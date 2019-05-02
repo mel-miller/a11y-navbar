@@ -38,6 +38,8 @@ nav.a11y-navbar {
 					color:$lt-gray;
 					background-color:$dk-gray;
 				}
+				
+				touch-action:manipulation;
 			}
 			
 			ul[role=menu] {
@@ -314,6 +316,7 @@ nav.a11y-navbar {
 						height:1.5rem;
 						width:2rem;
 						z-index:9999;
+						touch-action:manipulation;
 						
 						box-shadow:none;
 						border:none;
@@ -372,6 +375,7 @@ button.a11y-navbar-toggle {
 	padding:0.5rem;
 	text-align:left;
 	position:relative;
+	touch-action:manipulation;
 	
 	&:focus,
 	&:hover
