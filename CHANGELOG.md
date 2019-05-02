@@ -6,6 +6,15 @@
 * Implement destroy() function in a11yNavbar class.
 * Implement mouse events for li[role="none"] elements that are identical to the a[role="menuitem"] mouse events.
 
+## v0.5.15
+
+**May 2, 2019**
+
+* Bugfix: Fixes touch issues in IE11.
+* Adds pointer events to close all menus when clicking outside navbar.
+* Adds appropriate DOCTYPE declarations to all demo HTML files.
+* Changes Babel configuration to only support IE11 and above.
+
 ## v0.5.14
 
 **Apr 29, 2019**
