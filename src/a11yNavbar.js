@@ -59,8 +59,8 @@ class a11yNavbar {
     if (this._options.mode == 'dualAction') {
       // Add element to explain alternate instructions for mode dualAction.
       this._menubarInstructions = this._options.domObj.createElement('div');
-      this._menubarInstructions.innerHTML = "<p>Use <strong>Enter</strong> or <strong>Space</strong> to activate links.</p>" +
-      		"<p>Use appropriate arrow key to open or close submenus.</p>";
+      this._menubarInstructions.innerHTML = "<p>Use appropriate arrow key to open or close submenus.</p>" +
+        "<p>Use <strong>Enter</strong> or <strong>Space</strong> to activate links.</p>";
       this._menubarInstructions.setAttribute('id', this._id + '-menubar-instructions');
       this._menubarInstructions.classList.add('a11y-navbar-instructions');
       this._navElem.insertBefore(this._menubarInstructions, this._navElem.firstElementChild);
