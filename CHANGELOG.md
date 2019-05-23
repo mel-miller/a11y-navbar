@@ -6,6 +6,12 @@
 * Implement destroy() function in a11yNavbar class.
 * Implement mouse events for li[role="none"] elements that are identical to the a[role="menuitem"] mouse events.
 
+## v0.5.16
+
+**May 23, 2019**
+
+* Reorders screen-reader instructions for clarity in `dualAction` mode.
+
 ## v0.5.15
 
 **May 2, 2019**
