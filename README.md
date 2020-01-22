@@ -88,14 +88,14 @@ var test = new a11yNavbar('main-nav', options);
 }
 ```
 
-* *windowObj* is the window object being used. If this isn't just *window* don't worry about it.
-* *domObj* is the DOM object being used to both find and manipulate the appropriate HTML. If this isn't just *document* than you really don't have to worry about it.
-* *ariaLabel* is the ARIA label for the navbar. This should be whatever brief, meaningful identifier that will describe the navigation bar.
-* *hoverintent* is the implementation of hoverintent you're using. If for some unknown reason (maybe you're crazy) it isn't the included version of hoverintent you can change it here.
-* *orientation* is the direction the navbar flows. Valid values are either "horizontal" (which is the default) or "vertical".
-* *breakpointMinWidth* is the width in pixels at which the menu transforms into a "mobile friendly" compact menu. The default is 500px.
-* *responsiveToggleText* is the text for the menu button when the "mobile friendly" compact menu is active. It defaults to "Menu".
-* *responsiveSubmenuToggles* a boolean value when set to `true` will add buttons elements to the responsive "mobile friendly" menu. This feature will allow users to both open and close submenus using a touch interface.
-* *mode* can be set to either "standard" (for behavior strictly following the navbar design pattern) or "dualAction" (in which menuitems with submenus can be activated with Enter/Space, or expanded with the appropriate arrow key).
+* **windowObj** is the window object being used. If this isn't just *window* don't worry about it.
+* **domObj** is the DOM object being used to both find and manipulate the appropriate HTML. If this isn't just *document* than you really don't have to worry about it.
+* **ariaLabel** is the ARIA label for the navbar. This should be whatever brief, meaningful identifier that will describe the navigation bar.
+* **hoverintent** is the implementation of hoverintent you're using. If for some unknown reason (maybe you're crazy) it isn't the included version of hoverintent you can change it here.
+* **orientation** is the direction the navbar flows. Valid values are either "horizontal" (which is the default) or "vertical".
+* **breakpointMinWidth** is the width in pixels at which the menu transforms into a "mobile friendly" compact menu. The default is 500px.
+* **responsiveToggleText** is the text for the menu button when the "mobile friendly" compact menu is active. It defaults to "Menu".
+* **responsiveSubmenuToggles** a boolean value when set to `true` will add buttons elements to the responsive "mobile friendly" menu. This feature will allow users to both open and close submenus using a touch interface.
+* **mode** can be set to either "standard" (for behavior strictly following the navbar design pattern) or "dualAction" (in which menuitems with submenus can be activated with Enter/Space, or expanded with the appropriate arrow key).
 
  
