@@ -6,6 +6,13 @@
 * Implement destroy() function in a11yNavbar class.
 * Implement mouse events for li[role="none"] elements that are identical to the a[role="menuitem"] mouse events.
 
+## v0.5.17
+
+**Apr 27, 2021**
+
+* Updates dependencies.
+* Allows for use of `<span>` elements as well as `<a>` elements for `menuitems` in HTML source. 
+
 ## v0.5.16
 
 **May 23, 2019**

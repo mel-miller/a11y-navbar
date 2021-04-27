@@ -59,8 +59,7 @@ class a11yNavbar {
     if (this._options.mode == 'dualAction') {
       // Add element to explain alternate instructions for mode dualAction.
       this._menubarInstructions = this._options.domObj.createElement('div');
-      this._menubarInstructions.innerHTML = "<p>Use appropriate arrow key to open or close submenus.</p>" +
-        "<p>Use <strong>Enter</strong> or <strong>Space</strong> to activate links.</p>";
+      this._menubarInstructions.innerHTML = '<p>Use appropriate arrow key to open or close submenus.</p><p>Use <strong>Enter</strong> or <strong>Space</strong> to activate links.</p>';
       this._menubarInstructions.setAttribute('id', this._id + '-menubar-instructions');
       this._menubarInstructions.classList.add('a11y-navbar-instructions');
       this._navElem.insertBefore(this._menubarInstructions, this._navElem.firstElementChild);
@@ -123,7 +122,7 @@ class a11yNavbar {
     let menubarMenuitems = menubar.children;
     
     for (let i = 0; i < menubarMenuitems.length; i++) {
-      let menubarMenuitem = menubarMenuitems[i].querySelector('a');
+      let menubarMenuitem = menubarMenuitems[i].querySelector('a, span');
       menubarMenuitem.classList.add('a11y-navbar-menuitem');
       
       // collect these as an Array or something and store in the class.
@@ -134,7 +133,7 @@ class a11yNavbar {
     }
     
     // Add keydown handler to submenu menuitems (bound to a11yNavbar instance).
-    let submenuMenuitems = this._navElem.querySelectorAll('a + ul > li > a');
+    let submenuMenuitems = this._navElem.querySelectorAll('a + ul > li > a, a + ul > li > span, span + ul > li > a, span + ul > li > span');
     
     for (let i = 0; i < submenuMenuitems.length; i++) {
       submenuMenuitems[i].addEventListener('keydown', this.handleKeydownSubmenu.bind(this));
@@ -144,7 +143,7 @@ class a11yNavbar {
     }
     
     // Attributes for all menuitems.
-    let menuitems = menubar.querySelectorAll('li > a');
+    let menuitems = menubar.querySelectorAll('li > a, li > span');
     
     for (let j = 0; j < menuitems.length; j++) {
       menuitems[j].setAttribute('role', 'menuitem');
@@ -194,20 +193,20 @@ class a11yNavbar {
     }
     
     // Attributes for all submenus.
-    let submenus = menubar.querySelectorAll('li > a + ul');
+    let submenus = menubar.querySelectorAll('li > a + ul, li > span + ul');
     
     for (let k = 0; k < submenus.length; k++) {
       // Get aria-label from anchor sibing.
       let submenuLiElem = submenus[k].parentNode;
-      let aElem = submenuLiElem.querySelector('a');
-      let aElemText = aElem.textContent;
+      let menuitemElem = submenuLiElem.querySelector('a, span');
+      let menuitemElemText = menuitemElem.textContent;
       
-      aElem.setAttribute('aria-haspopup', 'true');
-      aElem.setAttribute('aria-expanded', 'false');
+      menuitemElem.setAttribute('aria-haspopup', 'true');
+      menuitemElem.setAttribute('aria-expanded', 'false');
       
       submenus[k].setAttribute('id', this._id + '-submenu-' + k);
       submenus[k].setAttribute('role', 'menu');
-      submenus[k].setAttribute('aria-label', aElemText);
+      submenus[k].setAttribute('aria-label', menuitemElemText);
       submenus[k].classList.add('a11y-navbar-submenu');
       submenus[k].classList.add('a11y-navbar-menu-closed');
     }
@@ -292,7 +291,7 @@ class a11yNavbar {
       if (this.hasSubmenu(menuitem)) {
         // Opens submenu and moves focus to first item in the submenu.
         this.openSubmenu(menuitem);
-        let firstMenuitem = menuitem.parentNode.querySelector('ul[role=menu] > li').querySelector('a');
+        let firstMenuitem = menuitem.parentNode.querySelector('ul[role=menu] > li').querySelector('a, span');
         
         if (firstMenuitem != null) {
           firstMenuitem.focus();
@@ -399,7 +398,7 @@ class a11yNavbar {
       if (this.hasSubmenu(menuitem)) {
         // Open the submenu and place focus on the first item.
         this.openSubmenu(menuitem);
-        let firstMenuitem = menuitem.parentNode.querySelector('ul[role=menu] > li').querySelector('a');
+        let firstMenuitem = menuitem.parentNode.querySelector('ul[role=menu] > li').querySelector('a, span');
         
         if (firstMenuitem != null) {
           firstMenuitem.focus();
@@ -423,7 +422,7 @@ class a11yNavbar {
         -Closes submenu.
         -Moves focus to parent menubar item.
        */
-      let parentMenuitem = menuitem.parentNode.parentNode.parentNode.querySelector('a[role=menuitem]');
+      let parentMenuitem = menuitem.parentNode.parentNode.parentNode.querySelector('a[role=menuitem], span[role=menuitem]');
       this.closeSubmenu(parentMenuitem);
       parentMenuitem.focus();
       this.updateCurrentMenuitem(parentMenuitem);
@@ -438,7 +437,7 @@ class a11yNavbar {
             -Opens submenu of newly focused menubar item, keeping focus on that parent menubar item.
        */
       if (this.hasSubmenu(menuitem)) {
-        let firstSubmenuItem = menuitem.parentNode.querySelector('a + ul').querySelector('li > a');
+        let firstSubmenuItem = menuitem.parentNode.querySelector('a + ul, span + ul').querySelector('li > a, li > span');
         this.openSubmenu(menuitem);
         firstSubmenuItem.focus();
         this.updateCurrentMenuitem(firstSubmenuItem);
@@ -463,7 +462,7 @@ class a11yNavbar {
             -moves focus to previous item in the menubar.
             -Opens submenu of newly focused menubar item, keeping focus on that parent menubar item.
        */
-      let submenuParentMenuitem = menuitem.parentNode.parentNode.parentNode.querySelector('a[role=menuitem]');
+      let submenuParentMenuitem = menuitem.parentNode.parentNode.parentNode.querySelector('a[role=menuitem], span[role=menuitem]');
       this.closeSubmenu(submenuParentMenuitem);
       submenuParentMenuitem.focus();
       this.updateCurrentMenuitem(submenuParentMenuitem);
@@ -487,7 +486,7 @@ class a11yNavbar {
       let nextSubmenuItem = undefined;
       let nextSubmenuLiElem = menuitem.parentNode.nextElementSibling;
       if (nextSubmenuLiElem == null) {
-        nextSubmenuItem = menuitem.parentNode.parentNode.firstElementChild.querySelector('a');
+        nextSubmenuItem = menuitem.parentNode.parentNode.firstElementChild.querySelector('a, span');
       }
       else {
         nextSubmenuItem = nextSubmenuLiElem.querySelector('a');
@@ -504,7 +503,7 @@ class a11yNavbar {
       let prevSubmenuItem = undefined;
       let prevSubmenuLiElem = menuitem.parentNode.previousElementSibling;
       if (prevSubmenuLiElem == null) {
-        prevSubmenuItem = menuitem.parentNode.parentNode.lastElementChild.querySelector('a');
+        prevSubmenuItem = menuitem.parentNode.parentNode.lastElementChild.querySelector('a, span');
       }
       else {
         prevSubmenuItem = prevSubmenuLiElem.querySelector('a');
@@ -515,14 +514,14 @@ class a11yNavbar {
     }
     else if (key == this._keyCode.HOME) {
       // Moves focus to the first item in the submenu.
-      let firstSubmenuItem = menuitem.parentNode.parentNode.firstElementChild.querySelector('a');
+      let firstSubmenuItem = menuitem.parentNode.parentNode.firstElementChild.querySelector('a, span');
       firstSubmenuItem.focus();
       this.updateCurrentMenuitem(firstSubmenuItem);
       preventDefault = true;
     }
     else if (key == this._keyCode.END) {
       // Moves focus to the last item in the submenu.
-      let lastSubmenuItem = menuitem.parentNode.parentNode.lastElementChild.querySelector('a');
+      let lastSubmenuItem = menuitem.parentNode.parentNode.lastElementChild.querySelector('a, span');
       lastSubmenuItem.focus();
       this.updateCurrentMenuitem(lastSubmenuItem);
       preventDefault = true;
@@ -703,7 +702,7 @@ class a11yNavbar {
     event.preventDefault();
     
     let button = event.target;
-    let menuitem = button.parentNode.querySelector('a[role=menuitem]');
+    let menuitem = button.parentNode.querySelector('a[role=menuitem], span[role=menuitem]');
     let ariaExpanded = menuitem.getAttribute('aria-expanded');
     
     if (ariaExpanded == 'false') {
@@ -833,7 +832,7 @@ class a11yNavbar {
   
   hasSubmenu (menuitem) {
     let liElem = menuitem.parentNode;
-    let menu = liElem.querySelector('a + ul');
+    let menu = liElem.querySelector('a + ul, span + ul');
     let response = (menu == null) ? false : true;
     
     return response;
@@ -877,7 +876,7 @@ class a11yNavbar {
     let submenu = menuitem.parentNode.querySelector('ul.a11y-navbar-submenu');
     
     if (submenu != null && submenu.classList.contains('a11y-navbar-menu-open')) {
-      let childMenuitems = submenu.querySelectorAll('a[aria-expanded="true"]');
+      let childMenuitems = submenu.querySelectorAll('a[aria-expanded="true"], span[aria-expanded="true"]');
       
       for (let i = 0; i < childMenuitems.length; i++) {
         this.closeSubmenu(childMenuitems[i]);
@@ -923,7 +922,7 @@ class a11yNavbar {
     let openSubmenus = this._navElem.querySelectorAll('ul.a11y-navbar-menu-open');
     
     for (let i = 0; i < openSubmenus.length; i++) {
-      let aElem = openSubmenus[i].parentNode.querySelector('a');
+      let aElem = openSubmenus[i].parentNode.querySelector('a, span');
       aElem.setAttribute('aria-expanded', 'false');
       openSubmenus[i].classList.remove('a11y-navbar-menu-open');
       openSubmenus[i].classList.add('a11y-navbar-menu-closed');
@@ -935,13 +934,15 @@ class a11yNavbar {
       }
     }
   }
-  
+
   performClick (menuitem) {
     let href = menuitem.getAttribute('href');
-    
-    window.location = href;
+
+    if (href) {
+      window.location = href;
+    }
   }
-  
+
   clickMenuitem (menuitem) {
     let hasAriaExpanded = menuitem.hasAttribute('aria-expanded');
     
@@ -984,7 +985,7 @@ class a11yNavbar {
     
     // Siblings are every child of menu that isn't the given menuitem.
     for (let i = 0; i < liElems.length; i++) {
-      let childMenuitem = liElems[i].querySelector('a[role=menuitem]');
+      let childMenuitem = liElems[i].querySelector('a[role=menuitem], span[role=menuitem]');
       if (childMenuitem != menuitem) {
         siblingMenuitems.push(childMenuitem);
       }

@@ -25,7 +25,7 @@ nav.a11y-navbar {
 			list-style-type: none;
 			position: relative;
 			
-			a[role=menuitem] {
+			a[role=menuitem], span[role=menuitem] {
 				color:$dk-gray;
 				text-decoration:none;
 				background-color:$lt-gray;
@@ -56,7 +56,7 @@ nav.a11y-navbar {
 						display:block;
 						width:100%;
 						
-						a[aria-haspopup=true] {
+						a[aria-haspopup=true], span[aria-haspopup=true] {
 							&::after {
 								// Right arrows
 								content: '';
@@ -89,7 +89,7 @@ nav.a11y-navbar {
 			li {
 				display:inline-block;
 				
-				a[role=menuitem] {
+				a[role=menuitem], span[role=menuitem] {
 					&.a11y-navbar-menuitem {
 						border-right:1px solid $md-gray;
 						border-bottom:none;
@@ -139,7 +139,7 @@ nav.a11y-navbar {
 		&.a11y-navbar-orientation-vertical {
 			width:10rem;
 			
-			a[role=menuitem] {
+			a[role=menuitem], span[role=menuitem] {
 				&[aria-haspopup=true] {
 					&::after {
 						// Right arrows
@@ -194,7 +194,7 @@ nav.a11y-navbar {
 					
 					display:block;
 					
-					a[role=menuitem] {
+					a[role=menuitem], span[role=menuitem] {
 						&.a11y-navbar-menuitem {
 							border-right:none;
 							border-bottom:1px solid $md-gray;
@@ -243,7 +243,7 @@ nav.a11y-navbar {
 						width:100%;
 						
 						li {
-							a[role=menuitem] {
+							a[role=menuitem], span[role=menuitem] {
 								// Second-level menuitems.
 								background-color:darken($lt-gray,30%);
 								color:lighten($lt-gray,20%);
@@ -279,7 +279,7 @@ nav.a11y-navbar {
 							
 							ul[role=menu] {
 								li {
-									a[role=menuitem] {
+									a[role=menuitem], span[role=menuitem] {
 										// Third-level menuitems.
 										background-color:darken($lt-gray,60%);
 										color:lighten($lt-gray,30%);
@@ -292,7 +292,7 @@ nav.a11y-navbar {
 									
 									ul[role=menu] {
 										li {
-											a[role=menuitem] {
+											a[role=menuitem], span[role=menuitem] {
 												// Fourth-level menuitems.
 												background-color:darken($lt-gray,90%);
 												color:lighten($lt-gray,40%);
