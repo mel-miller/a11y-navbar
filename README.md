@@ -49,7 +49,7 @@ If you look at demo.js you can see the basic usage of the navbar. Though, essent
 var test = new a11yNavbar('main-nav');
 ```
 
-...where 'main-nav' is the id attribute of whichever NAV element is to be converted by the script into a navbar. The NAV element should contain a simple unordered list of anchor elements to function properly. See the markup in demo/demo.html as an example.
+...where 'main-nav' is the id attribute of whichever NAV element is to be converted by the script into a navbar. The NAV element should contain a simple unordered list of anchor (or span) elements to function properly. See the markup in demo/demo.html as an example.
 
 Since the initial motivation for creating A11y Navbar was for use in a [Drupal 8](https://drupal.org) based website, you'll also find demo/demo-drupal-markup.html which contains some default markup from the Drupal 8 menu system.
 
@@ -84,7 +84,8 @@ var test = new a11yNavbar('main-nav', options);
   'breakpointMinWidth' : 500,
   'responsiveToggleText' : 'Menu',
   'responsiveSubmenuToggles': false,
-  'mode' : 'standard'
+  'mode' : 'standard',
+  'menubarInstructionsText' : '<p>Use appropriate arrow key to open or close submenus.</p><p>Use <strong>Enter</strong> or <strong>Space</strong> to activate links.</p>'
 }
 ```
 
@@ -97,5 +98,6 @@ var test = new a11yNavbar('main-nav', options);
 * **responsiveToggleText** is the text for the menu button when the "mobile friendly" compact menu is active. It defaults to "Menu".
 * **responsiveSubmenuToggles** a boolean value when set to `true` will add buttons elements to the responsive "mobile friendly" menu. This feature will allow users to both open and close submenus using a touch interface.
 * **mode** can be set to either "standard" (for behavior strictly following the navbar design pattern) or "dualAction" (in which menuitems with submenus can be activated with Enter/Space, or expanded with the appropriate arrow key).
+* **menubarInstructionsText** A _*sanitized*_ string to use for the non-standard instruction text in "dualAction" mode. (*Note*: Make sure this string is properly sanitized since it is not in the scope of this script's functionality to do so.)
 
  
