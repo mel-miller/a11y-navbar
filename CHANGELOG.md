@@ -6,6 +6,12 @@
 * Implement destroy() function in a11yNavbar class.
 * Implement mouse events for li[role="none"] elements that are identical to the a[role="menuitem"] mouse events.
 
+## v0.5.19
+
+**Jun 30, 2021**
+
+* Adds support for `target` attribute on `menuitems`.
+
 ## v0.5.18
 
 **Apr 29, 2021**

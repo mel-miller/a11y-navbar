@@ -938,9 +938,15 @@ class a11yNavbar {
 
   performClick (menuitem) {
     let href = menuitem.getAttribute('href');
+    let target = menuitem.getAttribute('target');
 
     if (href) {
-      window.location = href;
+      if (target) {
+        window.open(href, target);
+      }
+      else {
+        window.location = href;
+      }
     }
   }
 
